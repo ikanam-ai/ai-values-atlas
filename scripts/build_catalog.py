@@ -6,6 +6,10 @@ from __future__ import annotations
 import collections
 import json
 import pathlib
+import re
+
+from build_readme import START as CATALOG_START
+from build_readme import anchor_for, publication_group
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -35,6 +39,19 @@ def main() -> int:
     generated_at = source_snapshot_time()
     sources = json.loads((ROOT / "data" / "catalog_sources.json").read_text())["sources"]
     links = read_jsonl(LINKS)
+    readme_guide = (ROOT / "README.md").read_text().split(CATALOG_START, 1)[0]
+    featured_urls = set(re.findall(r"\]\((https?://[^)]+)\)", readme_guide))
+    site_links = []
+    for original in links:
+        row = dict(original)
+        row["featured"] = row["url"] in featured_urls
+        if row["link_type_guess"] == "publication":
+            row["research_class"] = publication_group(row)
+            row["research_class_id"] = anchor_for(row["research_class"])
+        else:
+            row["research_class"] = None
+            row["research_class_id"] = None
+        site_links.append(row)
     axiologies = json.loads((ROOT / "data" / "curated" / "axiologies.json").read_text())["axiologies"]
     instruments = json.loads((ROOT / "data" / "curated" / "instruments.json").read_text())["instruments"]
     models = read_jsonl(ROOT / "data" / "curated" / "models.jsonl")
@@ -81,13 +98,13 @@ def main() -> int:
     REPORT.write_text("\n".join(lines))
 
     SITE_DATA.parent.mkdir(parents=True, exist_ok=True)
-    SITE_JSONL.write_text(LINKS.read_text() if LINKS.exists() else "")
+    SITE_JSONL.write_text("".join(json.dumps(row, ensure_ascii=False, sort_keys=True) + "\n" for row in site_links))
     SITE_DATA.write_text(
         json.dumps(
             {
                 "generated_at": generated_at,
-                "counts": {"links": len(links), "axiologies": len(axiologies), "instruments": len(instruments), "models": len(models), "datasets": len(datasets), "works": len(works), "studies": len(studies)},
-                "links": links,
+                "counts": {"links": len(links), "featured": sum(row["featured"] for row in site_links), "axiologies": len(axiologies), "instruments": len(instruments), "models": len(models), "datasets": len(datasets), "works": len(works), "studies": len(studies)},
+                "links": site_links,
                 "sources": sources,
                 "works": works,
                 "studies": studies,

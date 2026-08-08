@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 import sys
 import urllib.parse
 
@@ -85,14 +86,36 @@ def main() -> int:
         link_urls.add(row.get("url"))
         if not valid_url(row.get("url", "")):
             errors.append(f"Invalid link URL {row.get('url')}")
+        if row.get("link_type_guess") == "publication":
+            year = row.get("publication_year")
+            if not isinstance(year, int) or not 1950 <= year <= 2026:
+                errors.append(f"Publication {row.get('id')} has missing or invalid year: {year}")
+            title = (row.get("context_title") or row.get("label") or "").strip()
+            if not title or title.lower() in {"paper", "pdf", "link"} or re.fullmatch(r"(?:\d{4}\.[\w.-]+/?|\d{6,}\.\d{6,})", title):
+                errors.append(f"Publication {row.get('id')} has a weak title: {title}")
+        parsed_url = urllib.parse.urlsplit(row.get("url", ""))
+        if parsed_url.netloc == "openreview.net" and parsed_url.path in {"/forum", "/pdf"}:
+            if not urllib.parse.parse_qs(parsed_url.query).get("id"):
+                errors.append(f"OpenReview identity URL lost its id parameter: {row.get('url')}")
         for occurrence in row.get("occurrences", []):
             if occurrence.get("catalog_id") not in source_ids:
                 errors.append(f"Link {row.get('id')} references unknown catalog {occurrence.get('catalog_id')}")
 
-    readme = (ROOT / "README.md").read_text()
-    missing_readme_urls = sorted(row["url"] for row in links if row.get("url") not in readme)
-    if missing_readme_urls:
-        errors.append(f"README complete catalog is missing {len(missing_readme_urls)} discovered URLs")
+    for readme_name in ("README.md", "README_RU.md"):
+        readme = (ROOT / readme_name).read_text()
+        catalog = readme.split("<!-- complete-catalog:start -->", 1)[-1].split("<!-- complete-catalog:end -->", 1)[0]
+        catalog_urls = re.findall(r"\]\((https?://[^)]+)\)", catalog)
+        catalog_url_counts = {url: catalog_urls.count(url) for url in set(catalog_urls)}
+        missing_readme_urls = sorted(row["url"] for row in links if row.get("url") not in catalog_url_counts)
+        if missing_readme_urls:
+            errors.append(f"{readme_name} complete catalog is missing {len(missing_readme_urls)} discovered URLs")
+        duplicate_readme_urls = [row["url"] for row in links if catalog_url_counts.get(row["url"]) != 1]
+        if duplicate_readme_urls:
+            errors.append(f"{readme_name} complete catalog has {len(duplicate_readme_urls)} URLs appearing other than once")
+        if "<sub>" in catalog or re.search(r"^- \*\*\[", catalog, re.M):
+            errors.append(f"{readme_name} catalog uses the deprecated mixed-font or linked-title format")
+    if "README_RU.md" not in (ROOT / "README.md").read_text() or "README.md" not in (ROOT / "README_RU.md").read_text():
+        errors.append("README language switch is incomplete")
 
     models = load_jsonl(ROOT / "data" / "curated" / "models.jsonl")
     model_ids = [row.get("id") for row in models]
@@ -155,6 +178,17 @@ def main() -> int:
         for relation in row.get("model_relations", []):
             if relation.get("model_id") not in model_ids:
                 errors.append(f"Study {row.get('id')} references unknown model {relation.get('model_id')}")
+
+    site_data = load_json(ROOT / "site" / "data.json")
+    site_links = site_data.get("links", [])
+    if len(site_links) != len(links):
+        errors.append(f"Site index has {len(site_links)} links but raw catalog has {len(links)}")
+    site_publications = [row for row in site_links if row.get("link_type_guess") == "publication"]
+    if any(not row.get("research_class") or not row.get("research_class_id") for row in site_publications):
+        errors.append("Site publication index has entries without a research class")
+    featured_count = sum(bool(row.get("featured")) for row in site_publications)
+    if not 0 < featured_count < len(site_publications):
+        errors.append(f"Site featured-work count is implausible: {featured_count}")
 
     if errors:
         print("VALIDATION FAILED")

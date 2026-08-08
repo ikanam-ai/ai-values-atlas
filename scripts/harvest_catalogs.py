@@ -23,6 +23,7 @@ DEFAULT_CACHE = ROOT / ".cache" / "catalog-sources"
 OUTPUT = ROOT / "data" / "raw" / "catalog_links.jsonl"
 REPORT = ROOT / "data" / "raw" / "harvest_report.json"
 TITLE_OVERRIDES = ROOT / "data" / "title_overrides.json"
+YEAR_OVERRIDES = ROOT / "data" / "year_overrides.json"
 
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*?)\s*$")
 MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[{1,2}([^\]]+)\]\]?\((https?://[^\s)]+)\)")
@@ -61,13 +62,23 @@ def normalize_heading(value: str) -> str:
 
 
 def canonicalize_url(raw: str) -> str:
-    raw = html.unescape(raw).strip().rstrip(".,;")
+    # Decode escaped ampersands without applying HTML named-entity parsing to
+    # query keys such as `noteId` (`&not...` would otherwise become `¬...`).
+    raw = raw.replace("&amp;", "&").replace("&#38;", "&").replace("&#x26;", "&")
+    raw = raw.strip().rstrip(".,;\\")
     parsed = urllib.parse.urlsplit(raw)
     scheme = parsed.scheme.lower()
     host = parsed.netloc.lower()
     if host.startswith("www."):
         host = host[4:]
+    if host == "browse.arxiv.org":
+        host = "arxiv.org"
+    if host == "dx.doi.org":
+        host = "doi.org"
+    if host in {"doi.org", "arxiv.org", "aclanthology.org", "openreview.net"}:
+        scheme = "https"
     path = re.sub(r"/{2,}", "/", parsed.path)
+    query = ""
 
     if host == "arxiv.org":
         match = re.match(r"/(?:abs|pdf)/([^/]+?)(?:\.pdf)?$", path)
@@ -81,7 +92,64 @@ def canonicalize_url(raw: str) -> str:
     elif host == "github.com":
         path = path.rstrip("/")
 
-    return urllib.parse.urlunsplit((scheme, host, path, "", ""))
+    query_values = urllib.parse.parse_qs(parsed.query)
+    if host == "openreview.net" and query_values.get("id"):
+        path = "/forum"
+        query = urllib.parse.urlencode({"id": query_values["id"][0]})
+    elif host == "papers.ssrn.com" and query_values.get("abstract_id"):
+        query = urllib.parse.urlencode({"abstract_id": query_values["abstract_id"][0]})
+    elif host.endswith("journals.plos.org") and query_values.get("id"):
+        query = urllib.parse.urlencode({"id": query_values["id"][0]})
+    elif host in {"books.google.com", "books.google.co.kr"} and query_values.get("id"):
+        query = urllib.parse.urlencode({"id": query_values["id"][0]})
+    elif host == "microsoft.com" and query_values.get("id"):
+        query = urllib.parse.urlencode({"id": query_values["id"][0]})
+    elif host == "aeaweb.org" and query_values.get("id"):
+        query = urllib.parse.urlencode({"id": query_values["id"][0]})
+
+    return urllib.parse.urlunsplit((scheme, host, path, query, ""))
+
+
+def infer_publication_year(record: dict, overrides: dict[str, int]) -> int | None:
+    if record.get("link_type_guess") != "publication":
+        return None
+    url = record["url"]
+    if url in overrides:
+        return int(overrides[url])
+    if record.get("year_hint"):
+        return int(record["year_hint"])
+
+    match = re.search(r"arxiv\.org/(?:abs|pdf)/(\d{2})\d{2}\.", url)
+    if match:
+        return 2000 + int(match.group(1))
+    match = re.search(r"aclanthology\.org/(20\d{2})\.", url)
+    if match:
+        return int(match.group(1))
+    match = re.search(r"aclanthology\.org/[A-Z](\d{2})-", url, re.I)
+    if match:
+        return 2000 + int(match.group(1))
+
+    text = " ".join((record.get("context_title", ""), record.get("label", "")))
+    years = [int(value) for value in re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", text)]
+    years = [year for year in years if 1950 <= year <= 2026]
+    if years:
+        return max(years)
+    url_years = [int(value) for value in re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", url)]
+    url_years = [year for year in url_years if 1950 <= year <= 2026]
+    if url_years:
+        return max(url_years)
+    short_year = re.search(r"(?:^|[\s(])['’](\d{2})(?:\D|$)", text)
+    if short_year:
+        value = int(short_year.group(1))
+        return 2000 + value if value <= 26 else 1900 + value
+
+    host = urllib.parse.urlsplit(url).netloc
+    if host in {"nature.com", "link.springer.com"}:
+        match = re.search(r"-[0]?((?:19|20)?\d{2})-", url)
+        if match:
+            value = int(match.group(1))
+            return value if value >= 1900 else (2000 + value if value <= 26 else 1900 + value)
+    return None
 
 
 def should_skip(url: str) -> bool:
@@ -155,6 +223,12 @@ def row_title(raw: str, links: list[tuple[str, str]]) -> str:
     return prefix if len(prefix) > 5 else ""
 
 
+def year_hint(raw: str) -> int | None:
+    years = [int(value) for value in re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", raw)]
+    years = [year for year in years if 1950 <= year <= 2026]
+    return max(years) if years else None
+
+
 def extract_links(line: str) -> list[tuple[str, str]]:
     result: list[tuple[str, str]] = []
     seen = set()
@@ -212,6 +286,7 @@ def harvest_source(source: dict, cache: pathlib.Path) -> list[dict]:
                     "context_title": recovered_title,
                     "link_type_guess": classify_link(url, label),
                     "scope_tier_guess": source["scope_tier_guess"],
+                    "year_hint": year_hint(raw),
                     "occurrence": {
                         "catalog_id": source["id"],
                         "section": section,
@@ -241,6 +316,7 @@ def harvest_snapshot(source: dict) -> list[dict]:
                 "context_title": item.get("context_title", ""),
                 "link_type_guess": item.get("link_type_guess") or classify_link(url, item.get("label", "paper")),
                 "scope_tier_guess": item.get("scope_tier_guess", source["scope_tier_guess"]),
+                "year_hint": item.get("publication_year"),
                 "occurrence": {
                     "catalog_id": source["id"],
                     "section": item.get("section", "references"),
@@ -257,7 +333,10 @@ def main() -> int:
     args = parser.parse_args()
 
     config = json.loads(CONFIG.read_text())
-    title_overrides = json.loads(TITLE_OVERRIDES.read_text()) if TITLE_OVERRIDES.exists() else {}
+    loaded_titles = json.loads(TITLE_OVERRIDES.read_text()) if TITLE_OVERRIDES.exists() else {}
+    loaded_years = json.loads(YEAR_OVERRIDES.read_text()) if YEAR_OVERRIDES.exists() else {}
+    title_overrides = {canonicalize_url(url): title for url, title in loaded_titles.items()}
+    year_overrides = {canonicalize_url(url): year for url, year in loaded_years.items()}
     by_url: dict[str, dict] = {}
     per_source = defaultdict(int)
 
@@ -281,11 +360,15 @@ def main() -> int:
                 record["context_title"] = row["context_title"]
             if row["scope_tier_guess"] == "core":
                 record["scope_tier_guess"] = "core"
+            if not record.get("year_hint") and row.get("year_hint"):
+                record["year_hint"] = row["year_hint"]
 
     records = sorted(by_url.values(), key=lambda item: (item["link_type_guess"], item["context_title"].lower(), item["url"]))
     for record in records:
         if record["url"] in title_overrides:
             record["context_title"] = title_overrides[record["url"]]
+        record["publication_year"] = infer_publication_year(record, year_overrides)
+        record.pop("year_hint", None)
     records.sort(key=lambda item: (item["link_type_guess"], item["context_title"].lower(), item["url"]))
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT.open("w") as handle:

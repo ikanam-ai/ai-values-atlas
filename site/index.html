@@ -14,6 +14,7 @@
         <div class="nav-links">
           <a href="https://github.com/ikanam-ai/ai-values-atlas#field-map">Field guide</a>
           <a href="catalog_links.jsonl">Download data</a>
+          <span class="language-switch"><a class="active" href="https://github.com/ikanam-ai/ai-values-atlas/blob/main/README.md">EN</a><a href="https://github.com/ikanam-ai/ai-values-atlas/blob/main/README_RU.md">RU</a></span>
           <a class="nav-cta" href="https://github.com/ikanam-ai/ai-values-atlas">GitHub</a>
         </div>
       </nav>
@@ -44,6 +45,7 @@
 
       <div class="shell headline-stats" aria-label="Atlas coverage">
         <div><strong id="metricPublications">—</strong><span>publication links</span></div>
+        <div><strong id="metricFeatured">—</strong><span>featured works</span></div>
         <div><strong id="metricResources">—</strong><span>deduplicated resources</span></div>
         <div><strong id="metricSources">—</strong><span>source catalogs</span></div>
       </div>
@@ -92,6 +94,15 @@
               <p id="resultCount">Loading index…</p>
             </div>
 
+            <section class="timeline-panel" id="timelinePanel" aria-labelledby="timelineTitle">
+              <div class="timeline-heading">
+                <div><p class="eyebrow">PUBLICATION HISTORY</p><h3 id="timelineTitle">Research over time</h3></div>
+                <p id="timelineSummary">Loading publication years…</p>
+              </div>
+              <div class="year-chart" id="yearChart" aria-label="Publications by year"></div>
+              <p class="timeline-note">Select a year to filter the index. Bar heights respond to the active scope, class, provenance, and featured-work filters.</p>
+            </section>
+
             <div class="filters" id="filters">
               <label class="search-field">
                 <span>Search title, URL, section, or catalog</span>
@@ -100,6 +111,18 @@
               <label>
                 <span>Scope</span>
                 <select id="scopeFilter"><option value="">Core + adjacent</option><option value="core">Core</option><option value="adjacent">Adjacent</option></select>
+              </label>
+              <label class="publication-only">
+                <span>Curation</span>
+                <select id="importanceFilter"><option value="">All works</option><option value="featured">Featured works</option></select>
+              </label>
+              <label class="class-field publication-only">
+                <span>Research class</span>
+                <select id="classFilter"><option value="">All research classes</option></select>
+              </label>
+              <label class="publication-only">
+                <span>Year</span>
+                <select id="yearFilter"><option value="">All years</option></select>
               </label>
               <label>
                 <span>Provenance</span>

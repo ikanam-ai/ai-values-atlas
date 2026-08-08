@@ -12,11 +12,56 @@ import urllib.parse
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
+README_RU = ROOT / "README_RU.md"
 LINKS = ROOT / "data" / "raw" / "catalog_links.jsonl"
 START = "<!-- complete-catalog:start -->"
 END = "<!-- complete-catalog:end -->"
 
 GENERIC = {"paper", "pdf", "code", "github", "dataset", "data", "model", "project", "website", "link", "repository"}
+
+RU_LABELS = {
+    "🗺️ Surveys, reviews, and field overviews": "🗺️ Обзоры и карты исследовательского поля",
+    "🧭 Foundations and value theory": "🧭 Основания и теории ценностей",
+    "🗂️ Datasets and benchmarks": "🗂️ Датасеты и бенчмарки",
+    "🔬 Reliability, validity, and auditing": "🔬 Надёжность, валидность и аудит",
+    "🎯 Choice, action, and behavioral consistency": "🎯 Выбор, действие и поведенческая согласованность",
+    "🌍 Culture, language, and pluralism": "🌍 Культура, язык и плюрализм",
+    "🗣️ Preferences, opinions, and social simulation": "🗣️ Предпочтения, мнения и социальные симуляции",
+    "⚖️ Moral reasoning and value understanding": "⚖️ Моральное рассуждение и понимание ценностей",
+    "🧰 Alignment, steering, and preferences": "🧰 Алайнмент, управление и предпочтения",
+    "📐 Value representation and model internals": "📐 Представления ценностей и внутренние механизмы моделей",
+    "📏 Measurement and profiling": "📏 Измерение и профилирование",
+    "📎 Other and adjacent value research": "📎 Другие и смежные исследования ценностей",
+    "💾 Dataset and benchmark artifacts": "💾 Датасеты и артефакты бенчмарков",
+    "🧠 Model checkpoints and scorers": "🧠 Чекпойнты моделей и скореры",
+    "🧰 Code repositories": "🧰 Репозитории с кодом",
+    "🌐 Project pages": "🌐 Страницы проектов",
+    "📋 Survey resources": "📋 Опросные ресурсы",
+    "🔗 Additional resources": "🔗 Дополнительные ресурсы",
+}
+
+LINK_LABELS = {
+    "publication": ("paper", "статья"),
+    "dataset": ("data", "данные"),
+    "model": ("model", "модель"),
+    "repository": ("code", "код"),
+    "project": ("project", "проект"),
+    "survey_resource": ("survey", "опрос"),
+    "other": ("link", "ссылка"),
+}
+
+SOURCE_NAMES = {
+    "aidas-llm-values-pluralism": "AIDAS Values & Pluralism",
+    "alignment-goal-survey": "Alignment Goal Survey",
+    "awesome-cultural-nlp": "Awesome Cultural NLP",
+    "awesome-llm-datasets": "Awesome LLM Datasets",
+    "awesome-llm-safety": "Awesome LLM Safety",
+    "personalized-alignment": "Personalized Alignment",
+    "pluralistic-alignment": "Pluralistic Alignment",
+    "stonic-manuscript-bibliography": "STONIC bibliography",
+    "valuebyte-llm-psychometrics": "LLM Psychometrics",
+    "valuebyte-llm-social-science": "LLM Social Science",
+}
 
 PUBLICATION_GROUPS = [
     ("🗺️ Surveys, reviews, and field overviews", r"systematic (?:literature )?review|\bsurvey (?:of|on|about|paper)|field overview|perspective paper|position paper|survey & perspective papers|related survey|position and survey"),
@@ -106,23 +151,30 @@ def publication_group(row: dict) -> str:
     return "📎 Other and adjacent value research"
 
 
-def format_row(row: dict) -> str:
+def localized_label(label: str, language: str) -> str:
+    return RU_LABELS.get(label, label) if language == "ru" else label
+
+
+def format_row(row: dict, language: str) -> str:
     title = markdown_text(display_title(row))
-    sources = ", ".join(source_ids(row)) or "direct source"
-    metadata = f"{row['link_type_guess']} · {row['scope_tier_guess']} · {sources}"
-    return f"- **[{title}]({row['url']})** <sub>{metadata}</sub>"
+    sources = ", ".join(SOURCE_NAMES.get(source, source) for source in source_ids(row))
+    sources = sources or ("прямой источник" if language == "ru" else "direct source")
+    link_label = LINK_LABELS.get(row["link_type_guess"], LINK_LABELS["other"])[language == "ru"]
+    scope = {"core": "ядро", "adjacent": "смежная тема"}.get(row["scope_tier_guess"], row["scope_tier_guess"]) if language == "ru" else row["scope_tier_guess"]
+    via = "источник" if language == "ru" else "via"
+    year = f", {row['publication_year']}" if row.get("publication_year") else ""
+    return f"- **{title}**{year} — [[{link_label}]({row['url']})] · {scope} · {via}: {sources}"
 
 
-def section(label: str, rows: list[dict], noun: str = "resources") -> list[str]:
+def section(label: str, rows: list[dict], language: str) -> list[str]:
     rows = sorted(rows, key=lambda row: (display_title(row).casefold(), row["url"]))
-    count_noun = noun.removesuffix("s") if len(rows) == 1 else noun
-    result = [f'<a id="{anchor_for(label)}"></a>', "", f"#### {label}", "", f"<sub>{len(rows)} {count_noun}</sub>", ""]
-    result.extend(format_row(row) for row in rows)
+    result = [f'<a id="{anchor_for(label)}"></a>', "", f"#### {localized_label(label, language)} · {len(rows)}", ""]
+    result.extend(format_row(row, language) for row in rows)
     result.append("")
     return result
 
 
-def generate(rows: list[dict]) -> str:
+def generate(rows: list[dict], language: str) -> str:
     publications: dict[str, list[dict]] = collections.defaultdict(list)
     artifacts: dict[str, list[dict]] = collections.defaultdict(list)
     for row in rows:
@@ -131,32 +183,33 @@ def generate(rows: list[dict]) -> str:
         else:
             artifacts[row["link_type_guess"]].append(row)
 
-    lines = [
-        START,
-        "",
-        "> This section is generated from the deduplicated discovery index. Every",
-        "> URL appears exactly once here; provenance and scope labels remain visible.",
-        "",
-        "**Browse the taxonomy**",
-        "",
-        "| Research area | Publications |",
-        "|---|---:|",
-    ]
+    if language == "ru":
+        lines = [
+            START, "",
+            "> Раздел генерируется из дедуплицированного индекса. Каждый URL приведён",
+            "> ровно один раз; для записи сохранены тематический охват и происхождение.", "",
+            "**Навигация по таксономии**", "",
+            "| Направление | Публикации |", "|---|---:|",
+        ]
+    else:
+        lines = [
+            START, "",
+            "> This section is generated from the deduplicated discovery index. Every",
+            "> URL appears exactly once here; provenance and scope labels remain visible.", "",
+            "**Browse the taxonomy**", "",
+            "| Research area | Publications |", "|---|---:|",
+        ]
     ordered_labels = [label for label, _ in PUBLICATION_GROUPS] + ["📎 Other and adjacent value research"]
     for label in ordered_labels:
         if publications[label]:
-            lines.append(f"| [{label}](#{anchor_for(label)}) | {len(publications[label])} |")
-    lines.extend([
-        "",
-        "<sub>Scope labels distinguish value-focused `core` records from broader `adjacent` work. "
-        "The final label lists the source catalogs in which each record was discovered.</sub>",
-        "",
-        "### 📚 Publications by research topic",
-        "",
-    ])
+            lines.append(f"| [{localized_label(label, language)}](#{anchor_for(label)}) | {len(publications[label])} |")
+    if language == "ru":
+        lines.extend(["", "> **Легенда:** `ядро` — работа непосредственно о ценностях; `смежная тема` — более широкий контекст. После ссылки указаны каталоги-источники.", "", "### 📚 Публикации по направлениям", ""])
+    else:
+        lines.extend(["", "> **Legend:** `core` records focus directly on values; `adjacent` records provide broader context. Source catalogs follow each link.", "", "### 📚 Publications by research topic", ""])
     for label in ordered_labels:
         if publications[label]:
-            lines.extend(section(label, publications[label], "publications"))
+            lines.extend(section(label, publications[label], language))
 
     artifact_labels = {
         "dataset": "💾 Dataset and benchmark artifacts",
@@ -166,33 +219,68 @@ def generate(rows: list[dict]) -> str:
         "survey_resource": "📋 Survey resources",
         "other": "🔗 Additional resources",
     }
-    lines.extend(["### 🧩 Data, models, code, and additional resources", ""])
+    heading = "### 🧩 Данные, модели, код и дополнительные ресурсы" if language == "ru" else "### 🧩 Data, models, code, and additional resources"
+    lines.extend([heading, ""])
     for kind in ("dataset", "model", "repository", "project", "survey_resource", "other"):
         if artifacts[kind]:
-            lines.extend(section(artifact_labels[kind], artifacts[kind]))
+            lines.extend(section(artifact_labels[kind], artifacts[kind], language))
     lines.append(END)
     return "\n".join(lines)
 
 
-def main() -> int:
-    text = README.read_text()
+def add_curated_years(text: str, rows: list[dict]) -> str:
+    years = {}
+    for row in rows:
+        if not row.get("publication_year"):
+            continue
+        url = row["url"]
+        variants = {
+            url,
+            re.sub(r"^http://", "https://", url),
+            url.replace("https://doi.org/", "https://dx.doi.org/"),
+            url.replace("https://arxiv.org/abs/", "https://browse.arxiv.org/pdf/") + (".pdf" if "arxiv.org/abs/" in url else ""),
+        }
+        for variant in variants:
+            years[variant] = row["publication_year"]
+    pattern = re.compile(r"(- \*\*[^\n]+?\*\*)(?:, (\d{4}))? (\[\[(?:paper|статья)\]\((https?://[^)]+)\)\])")
+
+    def replace(match: re.Match) -> str:
+        year = years.get(match.group(4)) or match.group(2)
+        if not year:
+            url_years = [int(value) for value in re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", match.group(4))]
+            url_years = [value for value in url_years if 1950 <= value <= 2026]
+            year = max(url_years) if url_years else None
+        suffix = f", {year}" if year else ""
+        return f"{match.group(1)}{suffix} {match.group(3)}"
+
+    return pattern.sub(replace, text)
+
+
+def update_readme(path: pathlib.Path, rows: list[dict], language: str) -> None:
+    text = path.read_text()
     if START not in text or END not in text:
-        raise SystemExit(f"README must contain {START} and {END}")
-    rows = read_jsonl(LINKS)
+        raise SystemExit(f"{path.name} must contain {START} and {END}")
+    text = add_curated_years(text, rows)
     publication_count = sum(row["link_type_guess"] == "publication" for row in rows)
     text = re.sub(r"badge/resources-\d+-136f58", f"badge/resources-{len(rows)}-136f58", text)
     text = re.sub(r"badge/publication%20links-\d+-0d3f35", f"badge/publication%20links-{publication_count}-0d3f35", text)
     text = re.sub(r"\d+ deduplicated links harvested", f"{len(rows)} deduplicated links harvested", text)
     text = re.sub(r"Complete catalog — all \d+ links", f"Complete catalog — all {len(rows)} links", text)
-    generated = generate(rows)
+    generated = generate(rows, language)
     prefix, remainder = text.split(START, 1)
     _, suffix = remainder.split(END, 1)
     updated = prefix.rstrip() + "\n\n" + generated + suffix
     missing = [row["url"] for row in rows if row["url"] not in generated]
     if missing:
         raise SystemExit(f"Generated catalog omitted {len(missing)} URLs")
-    README.write_text(updated)
-    print(f"README catalog: {len(rows)} unique URLs, {sum(row['link_type_guess'] == 'publication' for row in rows)} publications")
+    path.write_text(updated)
+    print(f"{path.name} catalog: {len(rows)} unique URLs, {publication_count} publications")
+
+
+def main() -> int:
+    rows = read_jsonl(LINKS)
+    update_readme(README, rows, "en")
+    update_readme(README_RU, rows, "ru")
     return 0
 
 

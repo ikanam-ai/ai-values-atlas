@@ -1,18 +1,18 @@
 {
   "schema_version": "1.0.0",
-  "unique_links": 997,
+  "unique_links": 1018,
   "by_type": {
     "dataset": 28,
     "model": 5,
-    "other": 93,
+    "other": 88,
     "project": 10,
-    "publication": 760,
+    "publication": 786,
     "repository": 97,
     "survey_resource": 4
   },
   "by_scope": {
-    "adjacent": 316,
-    "core": 681
+    "adjacent": 325,
+    "core": 693
   },
   "harvested_occurrences_by_source": {
     "aidas-llm-values-pluralism": 415,
