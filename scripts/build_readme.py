@@ -210,6 +210,34 @@ def publication_metadata(row: dict) -> dict[str, str]:
     }
 
 
+def publication_status(metadata: dict[str, str]) -> dict[str, str]:
+    """Return a conservative visual status derived from displayed venue data."""
+    venue = metadata.get("venue", "").strip().casefold()
+    if venue in {"", "arxiv", "openreview", "research square", "venue not verified"}:
+        return {
+            "id": "preprint_or_unverified",
+            "icon": "📄",
+            "label": "preprint or venue not verified",
+        }
+    return {
+        "id": "venue_listed",
+        "icon": "⭐",
+        "label": "journal, conference, or workshop venue listed",
+    }
+
+
+def mark_curated_publications(text: str) -> str:
+    """Apply the same visual status language to hand-curated reading lists."""
+    result = []
+    for line in text.splitlines():
+        if line.startswith("- ") and "[[paper](" in line:
+            line = re.sub(r"^- (?:⭐|📄)\s+", "- ", line)
+            is_preprint = bool(re.search(r",\s*(?:arXiv|OpenReview),", line, re.I))
+            line = f"- {'📄' if is_preprint else '⭐'} {line[2:]}"
+        result.append(line)
+    return "\n".join(result)
+
+
 def occurrence_keys(row: dict) -> set[tuple[str, int]]:
     return {(item["catalog_id"], item["line"]) for item in row.get("occurrences", [])}
 
@@ -261,9 +289,10 @@ def format_row(row: dict, related: list[dict] | None = None) -> str:
     rendered_links = " ".join(f"[[{LINK_LABELS.get(item['link_type_guess'], 'link')}]({item['url']})]" for item in links)
     if row["link_type_guess"] == "publication":
         metadata = publication_metadata(row)
+        status = publication_status(metadata)
         prefix = f"({markdown_text(metadata['subdomain'])}) " if metadata["subdomain"] else ""
         details = ", ".join(markdown_text(value) for value in (metadata["venue"], metadata["date"]) if value)
-        return f"- {prefix}{markdown_text(metadata['title'])}, {details}, {rendered_links}"
+        return f"- {status['icon']} {prefix}{markdown_text(metadata['title'])}, {details}, {rendered_links}"
     return f"- {markdown_text(display_title(row))}, {rendered_links}"
 
 
@@ -288,7 +317,10 @@ def generate(rows: list[dict]) -> str:
     lines = [
         START, "",
         "Every resource appears once. Parenthetical tags are shown only when a source",
-        "identifies a concrete framework, instrument, or subdomain.", "",
+        "identifies a concrete framework, instrument, or subdomain.",
+        "Publication status: ⭐ = a journal, conference, or workshop venue is listed;",
+        "📄 = preprint or venue not verified. Status follows catalog metadata and is not",
+        "an independent peer-review audit.", "",
         "**Browse the taxonomy**", "",
         "| Research area | Publications |", "|---|---:|",
     ]
@@ -324,10 +356,12 @@ def update_readme(path: pathlib.Path, rows: list[dict]) -> None:
     publication_count = sum(row["link_type_guess"] == "publication" for row in rows)
     text = re.sub(r"badge/resources-\d+-136f58", f"badge/resources-{len(rows)}-136f58", text)
     text = re.sub(r"badge/publication%20links-\d+-0d3f35", f"badge/publication%20links-{publication_count}-0d3f35", text)
+    text = re.sub(r"Browse all \d+ resources", f"Browse all {len(rows)} resources", text)
     text = re.sub(r"\d+ deduplicated links harvested", f"{len(rows)} deduplicated links harvested", text)
     text = re.sub(r"Complete catalog — all \d+ links", f"Complete catalog — all {len(rows)} links", text)
     generated = generate(rows)
     prefix, remainder = text.split(START, 1)
+    prefix = mark_curated_publications(prefix)
     _, suffix = remainder.split(END, 1)
     updated = prefix.rstrip() + "\n\n" + generated + suffix
     missing = [row["url"] for row in rows if row["url"] not in generated]

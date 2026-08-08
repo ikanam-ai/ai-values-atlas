@@ -9,7 +9,7 @@ import pathlib
 import re
 
 from build_readme import START as CATALOG_START
-from build_readme import anchor_for, publication_group, publication_metadata, related_artifact_map
+from build_readme import anchor_for, publication_group, publication_metadata, publication_status, related_artifact_map
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -57,7 +57,9 @@ def main() -> int:
         if row["link_type_guess"] == "publication":
             row["research_class"] = publication_group(row)
             row["research_class_id"] = anchor_for(row["research_class"])
-            row.update(publication_metadata(row))
+            metadata = publication_metadata(row)
+            row.update(metadata)
+            row["publication_status"] = publication_status(metadata)
             row["related_artifacts"] = [
                 {"type": item["link_type_guess"], "url": item["url"]}
                 for item in related_artifacts.get(row["id"], [])

@@ -108,7 +108,7 @@ function renderDiscovery() {
     const section = link.occurrences[0]?.section?.split(" / ").slice(-2).join(" / ") || "catalog entry";
     const year = link.publication_year || "—";
     const evidence = link.link_type_guess === "publication"
-      ? `${link.featured ? '<span class="featured-tag">★ featured</span>' : ""}<strong>${year}</strong><span title="${escapeHtml(link.research_class || "")}">${escapeHtml(link.research_class || "unclassified")}</span>`
+      ? `${link.featured ? '<span class="featured-tag">◆ featured</span>' : ""}<strong>${year}</strong><span title="${escapeHtml(link.research_class || "")}">${escapeHtml(link.research_class || "unclassified")}</span>`
       : `<span class="tag">${escapeHtml(link.link_type_guess)}</span><span>${escapeHtml(link.scope_tier_guess)}</span>`;
     const publicationEntry = link.link_type_guess === "publication";
     const artifactLabels = { repository: "code", dataset: "dataset", model: "model", project: "project", other: "link" };
@@ -119,7 +119,7 @@ function renderDiscovery() {
     const resource = publicationEntry
       ? `<div class="resource-title publication-title">
           ${link.subdomain ? `<span class="subdomain">(${escapeHtml(link.subdomain)})</span>` : ""}
-          <strong>${escapeHtml(titleFor(link))}</strong>
+          <strong><span class="title-status" title="${escapeHtml(link.publication_status?.label || "")}">${escapeHtml(link.publication_status?.icon || "📄")}</span> ${escapeHtml(titleFor(link))}</strong>
           <small>${escapeHtml([link.venue, link.date].filter(Boolean).join(" · "))}</small>
           <span class="artifact-links">${artifactLinks}</span>
         </div>`
@@ -136,9 +136,11 @@ function renderDiscovery() {
 function renderAxiologies() {
   const rows = state.data.axiologies;
   resultCount.textContent = `${rows.length} mapped value representations`;
-  content.innerHTML = rows.map((item) => `<article class="index-row entity-row">
-    <div class="resource-title"><a href="${escapeHtml(item.primary_sources[0])}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a><small>${escapeHtml(item.origin_domain.replaceAll("_", " "))}</small></div>
-    <div class="evidence-cell"><span class="tag">${escapeHtml(item.representation_type.replaceAll("_", " "))}</span><span>${item.dimension_count ?? "open"} dimensions</span></div>
+  content.innerHTML = rows.map((item) => `<article class="index-row entity-row axiology-row">
+    <div class="resource-title"><a href="${escapeHtml(item.primary_sources[0])}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a><small>${escapeHtml(item.origin_domain.replaceAll("_", " "))}</small>
+      <details class="entity-details"><summary>Show dimensions and structure</summary><p>${escapeHtml(item.dimensions?.length ? item.dimensions.join(" · ") : "No fixed named dimensions")}</p><p>${escapeHtml(item.structure_notes || "")}</p></details>
+    </div>
+    <div class="evidence-cell"><span class="tag">${escapeHtml(item.representation_type.replaceAll("_", " "))}</span><span>${item.dimension_count ?? "open / variable"} dimensions</span></div>
     <div class="provenance-cell"><b>${escapeHtml(item.family.replaceAll("_", " "))}</b><span>${escapeHtml(item.interpretability)}</span></div>
   </article>`).join("");
   loadMore.hidden = true;

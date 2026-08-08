@@ -139,6 +139,14 @@ def main() -> int:
         bad_tail = [line for line in publication_lines if " — " in line or "**" in line or not re.search(r"\]\s*$", line)]
         if bad_tail:
             errors.append(f"{readme_name} has {len(bad_tail)} publication lines outside the concise comma-separated format")
+        bad_status = [line for line in publication_lines if not re.match(r"^- (?:⭐|📄) ", line)]
+        if bad_status:
+            errors.append(f"{readme_name} has {len(bad_status)} catalog publications without a status marker")
+        curated = readme.split("<!-- complete-catalog:start -->", 1)[0]
+        curated_publications = [line for line in curated.splitlines() if line.startswith("- ") and "[[paper](" in line]
+        bad_curated_status = [line for line in curated_publications if not re.match(r"^- (?:⭐|📄) ", line)]
+        if bad_curated_status:
+            errors.append(f"{readme_name} has {len(bad_curated_status)} curated publications without a status marker")
     if (ROOT / "README_RU.md").exists() or "README_RU.md" in (ROOT / "README.md").read_text():
         errors.append("Russian README references remain although the project is English-only")
 
@@ -215,6 +223,9 @@ def main() -> int:
         errors.append("Site publication index has entries without canonical display metadata")
     if any(not row.get("venue") for row in site_publications):
         errors.append("Site publication index has entries without a venue or an explicit unverified-venue marker")
+    valid_statuses = {"venue_listed", "preprint_or_unverified"}
+    if any(row.get("publication_status", {}).get("id") not in valid_statuses for row in site_publications):
+        errors.append("Site publication index has entries without a canonical publication status")
     featured_count = sum(bool(row.get("featured")) for row in site_publications)
     if not 0 < featured_count < len(site_publications):
         errors.append(f"Site featured-work count is implausible: {featured_count}")

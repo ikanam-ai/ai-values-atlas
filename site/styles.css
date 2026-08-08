@@ -112,6 +112,11 @@ input:focus, select:focus { border-color: var(--green); }
 .evidence-cell .tag { align-self: flex-start; color: var(--green); font-size: .59rem; font-weight: 800; text-transform: uppercase; letter-spacing: .055em; }
 .evidence-cell strong { color: var(--ink); font-family: var(--serif); font-size: 1.3rem; font-weight: 500; }
 .featured-tag { align-self: flex-start; color: #8b5c00; font-size: .58rem; font-weight: 850; letter-spacing: .04em; text-transform: uppercase; }
+.title-status { font-family: var(--sans); font-size: .78rem; }
+.entity-details { margin-top: 10px; color: var(--muted); font-family: var(--sans); font-size: .66rem; }
+.entity-details summary { color: var(--green); font-weight: 750; cursor: pointer; }
+.entity-details p { margin: 7px 0 0; line-height: 1.5; }
+.axiology-row { align-items: start; }
 .provenance-cell b { overflow: hidden; color: var(--ink); font-size: .65rem; text-overflow: ellipsis; white-space: nowrap; }
 .provenance-cell span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .empty { padding: 80px 20px; color: var(--muted); text-align: center; border-bottom: 1px solid var(--line); }
