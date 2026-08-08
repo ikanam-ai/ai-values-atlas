@@ -22,6 +22,7 @@ CONFIG = ROOT / "data" / "catalog_sources.json"
 DEFAULT_CACHE = ROOT / ".cache" / "catalog-sources"
 OUTPUT = ROOT / "data" / "raw" / "catalog_links.jsonl"
 REPORT = ROOT / "data" / "raw" / "harvest_report.json"
+TITLE_OVERRIDES = ROOT / "data" / "title_overrides.json"
 
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*?)\s*$")
 MARKDOWN_LINK_RE = re.compile(r"(?<!!)\[{1,2}([^\]]+)\]\]?\((https?://[^\s)]+)\)")
@@ -256,6 +257,7 @@ def main() -> int:
     args = parser.parse_args()
 
     config = json.loads(CONFIG.read_text())
+    title_overrides = json.loads(TITLE_OVERRIDES.read_text()) if TITLE_OVERRIDES.exists() else {}
     by_url: dict[str, dict] = {}
     per_source = defaultdict(int)
 
@@ -281,6 +283,10 @@ def main() -> int:
                 record["scope_tier_guess"] = "core"
 
     records = sorted(by_url.values(), key=lambda item: (item["link_type_guess"], item["context_title"].lower(), item["url"]))
+    for record in records:
+        if record["url"] in title_overrides:
+            record["context_title"] = title_overrides[record["url"]]
+    records.sort(key=lambda item: (item["link_type_guess"], item["context_title"].lower(), item["url"]))
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     with OUTPUT.open("w") as handle:
         for record in records:

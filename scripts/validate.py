@@ -89,6 +89,11 @@ def main() -> int:
             if occurrence.get("catalog_id") not in source_ids:
                 errors.append(f"Link {row.get('id')} references unknown catalog {occurrence.get('catalog_id')}")
 
+    readme = (ROOT / "README.md").read_text()
+    missing_readme_urls = sorted(row["url"] for row in links if row.get("url") not in readme)
+    if missing_readme_urls:
+        errors.append(f"README complete catalog is missing {len(missing_readme_urls)} discovered URLs")
+
     models = load_jsonl(ROOT / "data" / "curated" / "models.jsonl")
     model_ids = [row.get("id") for row in models]
     if len(model_ids) != len(set(model_ids)):

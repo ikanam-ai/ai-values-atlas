@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-labelledby="title desc">
+  <title id="title">AI Values Atlas</title>
+  <desc id="desc">A structured field guide to values research in artificial intelligence.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b3d33"/>
+      <stop offset="1" stop-color="#146b55"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#9de4c8" stop-opacity=".30"/>
+      <stop offset="1" stop-color="#9de4c8" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="320" rx="18" fill="url(#bg)"/>
+  <circle cx="1020" cy="78" r="250" fill="url(#glow)"/>
+  <g fill="none" stroke="#a7dfca" stroke-opacity=".28">
+    <circle cx="985" cy="160" r="105"/>
+    <circle cx="985" cy="160" r="70"/>
+    <circle cx="985" cy="160" r="35"/>
+    <path d="M880 160h210M985 55v210M911 86l148 148M1059 86L911 234"/>
+  </g>
+  <g fill="#bcebd9">
+    <circle cx="985" cy="55" r="6"/><circle cx="1059" cy="86" r="6"/>
+    <circle cx="1090" cy="160" r="6"/><circle cx="1059" cy="234" r="6"/>
+    <circle cx="985" cy="265" r="6"/><circle cx="911" cy="234" r="6"/>
+    <circle cx="880" cy="160" r="6"/><circle cx="911" cy="86" r="6"/>
+  </g>
+  <text x="62" y="72" fill="#9de4c8" font-family="Arial, sans-serif" font-size="14" font-weight="700" letter-spacing="4">OPEN RESEARCH FIELD GUIDE</text>
+  <text x="58" y="158" fill="#ffffff" font-family="Georgia, serif" font-size="66">AI Values Atlas</text>
+  <text x="62" y="207" fill="#d7eee5" font-family="Arial, sans-serif" font-size="20">Axiologies · instruments · evidence · papers · datasets · models</text>
+  <text x="62" y="258" fill="#9de4c8" font-family="Arial, sans-serif" font-size="14">Represented. Elicited. Expressed. Chosen. Validated.</text>
+  <g font-family="Arial, sans-serif" font-size="11" fill="#d7eee5" letter-spacing="1">
+    <text x="948" y="36">AXIOLOGY</text>
+    <text x="1095" y="164">INTERFACE</text>
+    <text x="949" y="296">EVIDENCE</text>
+    <text x="808" y="164">CLAIM</text>
+  </g>
+</svg>
