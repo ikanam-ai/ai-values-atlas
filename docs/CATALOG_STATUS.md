@@ -2,7 +2,7 @@
 
 Source snapshot: 2026-08-08T11:19:08.369813+00:00
 
-- Unique discovered links: **1018**
+- Unique discovered links: **1013**
 - Curated axiological representations: **17**
 - Curated instruments: **7**
 - Curated measurement models: **6**
@@ -16,10 +16,10 @@ Source snapshot: 2026-08-08T11:19:08.369813+00:00
 |---|---:|
 | dataset | 28 |
 | model | 5 |
-| other | 88 |
+| other | 83 |
 | project | 10 |
-| publication | 786 |
-| repository | 97 |
+| publication | 787 |
+| repository | 96 |
 | survey_resource | 4 |
 
 ## By guessed scope
@@ -27,16 +27,16 @@ Source snapshot: 2026-08-08T11:19:08.369813+00:00
 | Scope | Links |
 |---|---:|
 | adjacent | 325 |
-| core | 693 |
+| core | 688 |
 
 ## Unique links contributed by source
 
 | Catalog | Links |
 |---|---:|
-| aidas-llm-values-pluralism | 394 |
+| aidas-llm-values-pluralism | 390 |
 | valuebyte-llm-social-science | 153 |
 | valuebyte-llm-psychometrics | 144 |
-| pluralistic-alignment | 100 |
+| pluralistic-alignment | 99 |
 | awesome-cultural-nlp | 93 |
 | personalized-alignment | 93 |
 | awesome-llm-datasets | 62 |

@@ -17,8 +17,8 @@
 
 <p>
   <a href="https://github.com/ikanam-ai/ai-values-atlas/actions/workflows/validate.yml"><img alt="validation" src="https://img.shields.io/github/actions/workflow/status/ikanam-ai/ai-values-atlas/validate.yml?style=for-the-badge&label=validated"></a>
-  <a href="#complete-catalog"><img alt="resources" src="https://img.shields.io/badge/resources-1018-136f58?style=for-the-badge"></a>
-  <a href="#complete-catalog"><img alt="publications" src="https://img.shields.io/badge/publication%20links-786-0d3f35?style=for-the-badge"></a>
+  <a href="#complete-catalog"><img alt="resources" src="https://img.shields.io/badge/resources-1013-136f58?style=for-the-badge"></a>
+  <a href="#complete-catalog"><img alt="publications" src="https://img.shields.io/badge/publication%20links-787-0d3f35?style=for-the-badge"></a>
   <a href="CONTRIBUTING.md"><img alt="pull requests welcome" src="https://img.shields.io/badge/PRs-welcome-e9b44c?style=for-the-badge"></a>
   <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/metadata-CC%20BY%204.0-7665d8?style=for-the-badge"></a>
 </p>
@@ -243,7 +243,7 @@ identifies a concrete framework, instrument, or subdomain.
 | [🔬 Reliability, validity, and auditing](#catalog-reliability-validity-and-auditing) | 17 |
 | [🎯 Choice, action, and behavioral consistency](#catalog-choice-action-and-behavioral-consistency) | 15 |
 | [🌍 Culture, language, and pluralism](#catalog-culture-language-and-pluralism) | 103 |
-| [🗣️ Preferences, opinions, and social simulation](#catalog-preferences-opinions-and-social-simulation) | 120 |
+| [🗣️ Preferences, opinions, and social simulation](#catalog-preferences-opinions-and-social-simulation) | 121 |
 | [⚖️ Moral reasoning and value understanding](#catalog-moral-reasoning-and-value-understanding) | 63 |
 | [🧰 Alignment, steering, and preferences](#catalog-alignment-steering-and-preferences) | 133 |
 | [📐 Value representation and model internals](#catalog-value-representation-and-model-internals) | 44 |
@@ -579,7 +579,7 @@ identifies a concrete framework, instrument, or subdomain.
 
 <a id="catalog-preferences-opinions-and-social-simulation"></a>
 
-#### 🗣️ Preferences, opinions, and social simulation (120)
+#### 🗣️ Preferences, opinions, and social simulation (121)
 
 - (ANES) CommunityLM: Probing Partisan Worldviews from Language Models, COLING, 2022, [[paper](https://arxiv.org/abs/2209.07065)]
 - (ANES) Random Silicon Sampling: Simulating Human Sub-Population Opinion Using a Large Language Model Based on Group-Level Demographic Information, arXiv, 2024.02, [[paper](https://arxiv.org/abs/2402.18144)]
@@ -606,6 +606,7 @@ identifies a concrete framework, instrument, or subdomain.
 - (PCT) Political Compass or Spinning Arrow? Towards More Meaningful Evaluations for Values and Opinions in Large Language Models, ACL, 2024, [[paper](https://arxiv.org/abs/2402.16786)]
 - (PCT) PRISM: A Methodology for Auditing Biases in Large Language Models, arXiv, 2024.10, [[paper](https://arxiv.org/abs/2410.18906)]
 - (PCT) Revealing Fine-Grained Values and Opinions in Large Language Models, EMNLP Findings, 2024, [[paper](https://arxiv.org/abs/2406.19238)]
+- (PCT) The Political Biases of ChatGPT, Social Sciences, 2023.03, [[paper](https://mdpi.com/2076-0760/12/3/148)]
 - (PCT) The political ideology of conversational AI: Converging evidence on ChatGPT's pro-environmental, left-libertarian orientation, arXiv, 2023.01, [[paper](https://arxiv.org/abs/2301.01768)]
 - (PCT) The Self-Perception and Political Biases of ChatGPT, Human Behavior and Emerging Technologies, 2024.07, [[paper](https://onlinelibrary.wiley.com/doi/full/10.1155/2024/7115633)]
 - A Personalized Conversational Benchmark: Towards Simulating Personalized Conversations, arXiv, 2025, [[paper](https://arxiv.org/abs/2505.14106)]
@@ -1119,9 +1120,8 @@ identifies a concrete framework, instrument, or subdomain.
 
 <a id="catalog-code-repositories"></a>
 
-#### 🧰 Code repositories (17)
+#### 🧰 Code repositories (16)
 
-- <a href=", [[code](https://github.com/sindresorhus/awesome)]
 - AI Job Displacement Tracker, [[code](https://github.com/noahaust2/ai-displacement-tracker)]
 - Alpacacomparisondata 2023-3, [[code](https://github.com/Instruction-Tuning-with-GPT-4/GPT-4-LLM)]
 - Awesome-LLM-in-Social-Science, [[code](https://github.com/ValueByte-AI/Awesome-LLM-in-Social-Science)]
@@ -1157,9 +1157,8 @@ identifies a concrete framework, instrument, or subdomain.
 
 <a id="catalog-additional-resources"></a>
 
-#### 🔗 Additional resources (77)
+#### 🔗 Additional resources (72)
 
-- !\[Awesome, [[link](https://awesome.re)]
 - (ANES) Out of One, Many: Using Language Models to Simulate Human Samples, 2023.02, Political Analysis, [[link](https://cambridge.org/core/journals/political-analysis/article/abs/out-of-one-many-using-language-models-to-simulate-human-samples/035D7C8A55B237942FB6DBAD7CAA4E49)]
 - (ANES) Synthetic Replacements for Human Survey Data? The Perils of Large Language Models, 2024.05, Political Analysis, [[link](https://cambridge.org/core/journals/political-analysis/article/synthetic-replacements-for-human-survey-data-the-perils-of-large-language-models/B92267DC26195C7F36E63EA04A47D2FE)]
 - (ATP) Do LLMs Exhibit Human-like Response Biases? A Case Study in Survey Design, 2024.09, Transactions of the Association for Computational Linguistics (TACL), [[link](https://direct.mit.edu/tacl/article/doi/10.1162/tacl_a_00685/124261)]
@@ -1168,10 +1167,6 @@ identifies a concrete framework, instrument, or subdomain.
 - (Others & custom) DO MINDFULNESS ACTIVITIES IMPROVE HANDGRIP STRENGTH AMONG OLDER ADULTS: A PROPENSITY SCORE MATCHING APPROACH, 2024.12, Innovation in Aging, [[link](https://academic.oup.com/innovateage/article/8/Supplement_1/1010/7939280)]
 - (Others & custom) Improving GPT Generated Synthetic Samples with Sampling-Permutation Algorithm, [[link](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4548937)]
 - (Others & Custom) The moral machine experiment on large language models, 2024.02, Royal Society Open Science, [[link](https://royalsocietypublishing.org/doi/full/10.1098/rsos.231393)]
-- (PCT) The Political Biases of ChatGPT, 2023.01, Social Sciences, [[link](https://mdpi.com/2076-0760/12/3/148)]
-- <a href=", [[link](https://git.io/typing-svg)]
-- <img src=", [[link](https://capsule-render.vercel.app/api)]
-- <img src=", [[link](https://readme-typing-svg.demolab.com)]
 - A 30-year struggle; the sustained efforts to give force of law to the Universal Declaration of Human Rights, [[link](https://unesdoc.unesco.org/ark:/48223/pf0000048063)]
 - A review of automatic item generation techniques leveraging large language models, [[link](https://dergipark.org.tr/en/pub/ijate/issue/90456/1602294)]
 - A theory of justice., [[link](https://jstor.org/stable/j.ctvjf9z6v)]

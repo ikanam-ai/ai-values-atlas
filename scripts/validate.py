@@ -12,6 +12,18 @@ import urllib.parse
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
+MARKUP_FRAGMENT_RE = re.compile(
+    r"<\s*(?:a|img|picture|source)\b[^>]*(?:href|src)\s*=\s*[\"'][^\"'>]*$"
+    r"|^(?:href|src)\s*=\s*[\"']?[^\"']*$",
+    re.I,
+)
+DECORATION_URLS = {
+    "https://awesome.re",
+    "https://git.io/typing-svg",
+    "https://capsule-render.vercel.app/api",
+    "https://readme-typing-svg.demolab.com",
+}
+
 
 def load_json(path: pathlib.Path):
     try:
@@ -86,6 +98,11 @@ def main() -> int:
         link_urls.add(row.get("url"))
         if not valid_url(row.get("url", "")):
             errors.append(f"Invalid link URL {row.get('url')}")
+        title = (row.get("context_title") or row.get("label") or "").strip()
+        if MARKUP_FRAGMENT_RE.search(title):
+            errors.append(f"Link {row.get('id')} has an HTML-fragment title: {title}")
+        if row.get("url") in DECORATION_URLS:
+            errors.append(f"README decoration leaked into the catalog: {row.get('url')}")
         if row.get("link_type_guess") == "publication":
             year = row.get("publication_year")
             if not isinstance(year, int) or not 1950 <= year <= 2026:
@@ -114,6 +131,8 @@ def main() -> int:
             errors.append(f"{readme_name} complete catalog has {len(duplicate_readme_urls)} URLs appearing other than once")
         if "<sub>" in catalog or re.search(r"^- \*\*\[", catalog, re.M):
             errors.append(f"{readme_name} catalog uses the deprecated mixed-font or linked-title format")
+        if MARKUP_FRAGMENT_RE.search(catalog):
+            errors.append(f"{readme_name} complete catalog contains a leaked HTML fragment")
         publication_lines = [line for line in catalog.splitlines() if "[[paper](" in line]
         if len(publication_lines) != sum(row.get("link_type_guess") == "publication" for row in links):
             errors.append(f"{readme_name} does not use the canonical publication-entry format everywhere")

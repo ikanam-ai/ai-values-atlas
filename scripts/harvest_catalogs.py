@@ -38,6 +38,13 @@ SKIP_DOMAINS = {
     "raw.githubusercontent.com",
     "camo.githubusercontent.com",
     "user-images.githubusercontent.com",
+    "awesome.re",
+    "capsule-render.vercel.app",
+    "readme-typing-svg.demolab.com",
+}
+
+SKIP_URLS = {
+    "https://git.io/typing-svg",
 }
 
 GENERIC_LABELS = {
@@ -51,6 +58,19 @@ def clean_text(value: str) -> str:
     value = MARKUP_RE.sub("", value)
     value = re.sub(r"\s+", " ", value)
     return value.strip(" |:-\t")
+
+
+def looks_like_markup_fragment(value: str) -> bool:
+    """Reject incomplete README decoration accidentally parsed as a title."""
+    value = html.unescape(value).strip()
+    return bool(
+        re.search(
+            r"<\s*(?:a|img|picture|source)\b[^>]*(?:href|src)\s*=\s*[\"'][^\"'>]*$",
+            value,
+            re.I,
+        )
+        or re.fullmatch(r"(?:href|src)\s*=\s*[\"']?", value, re.I)
+    )
 
 
 def normalize_heading(value: str) -> str:
@@ -153,6 +173,8 @@ def infer_publication_year(record: dict, overrides: dict[str, int]) -> int | Non
 
 
 def should_skip(url: str) -> bool:
+    if url in SKIP_URLS:
+        return True
     parsed = urllib.parse.urlsplit(url)
     host = parsed.netloc.lower().removeprefix("www.")
     if host in SKIP_DOMAINS:
@@ -173,7 +195,7 @@ def classify_link(url: str, label: str) -> str:
         return "repository"
     if host in {"arxiv.org", "doi.org", "aclanthology.org", "openreview.net"}:
         return "publication"
-    if any(key in host for key in ("springer", "nature.com", "sciencedirect", "wiley", "tandfonline", "sagepub", "aaai.org", "neurips.cc", "jmlr.org", "acm.org", "ieee.org")):
+    if any(key in host for key in ("springer", "nature.com", "sciencedirect", "wiley", "tandfonline", "sagepub", "aaai.org", "neurips.cc", "jmlr.org", "acm.org", "ieee.org", "mdpi.com")):
         return "publication"
     if "dataset" in low_label or "/dataset" in path:
         return "dataset"
@@ -198,7 +220,8 @@ def context_title(links: list[tuple[str, str]]) -> str:
     for label, _ in links:
         cleaned = clean_text(label)
         looks_like_host = bool(re.fullmatch(r"[\w.-]+\.[a-zA-Z]{2,}", cleaned))
-        if cleaned and cleaned.lower() not in GENERIC_LABELS and len(cleaned) > 5 and not looks_like_host:
+        looks_like_url = cleaned.lower().startswith(("http://", "https://"))
+        if cleaned and cleaned.lower() not in GENERIC_LABELS and len(cleaned) > 5 and not looks_like_host and not looks_like_url:
             return cleaned
     return ""
 
@@ -274,6 +297,12 @@ def harvest_source(source: dict, cache: pathlib.Path) -> list[dict]:
         if not links:
             continue
         recovered_title = row_title(raw, links)
+
+        # Decorative HTML in awesome-list headers can expose attribute URLs to
+        # the bare-URL fallback.  In that case the recovered "title" is only a
+        # broken tag such as ``<a href="`` or ``<img src="``.
+        if looks_like_markup_fragment(recovered_title):
+            continue
 
         for label, raw_url in links:
             url = canonicalize_url(raw_url)

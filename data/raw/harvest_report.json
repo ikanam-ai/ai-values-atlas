@@ -1,27 +1,27 @@
 {
   "schema_version": "1.0.0",
-  "unique_links": 1018,
+  "unique_links": 1013,
   "by_type": {
     "dataset": 28,
     "model": 5,
-    "other": 88,
+    "other": 83,
     "project": 10,
-    "publication": 786,
-    "repository": 97,
+    "publication": 787,
+    "repository": 96,
     "survey_resource": 4
   },
   "by_scope": {
     "adjacent": 325,
-    "core": 693
+    "core": 688
   },
   "harvested_occurrences_by_source": {
-    "aidas-llm-values-pluralism": 415,
+    "aidas-llm-values-pluralism": 409,
     "alignment-goal-survey": 93,
     "awesome-cultural-nlp": 103,
     "awesome-llm-datasets": 63,
     "awesome-llm-safety": 31,
     "personalized-alignment": 94,
-    "pluralistic-alignment": 122,
+    "pluralistic-alignment": 121,
     "stonic-manuscript-bibliography": 57,
     "valuebyte-llm-psychometrics": 165,
     "valuebyte-llm-social-science": 157
