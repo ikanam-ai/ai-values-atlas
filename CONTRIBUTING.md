@@ -1,39 +1,39 @@
 # Contributing
 
-## Ways to contribute
+AI Values Atlas welcomes additions and corrections that make the field map more
+useful to researchers.
 
-- add a missing paper, dataset, instrument, model, or axiological framework;
-- enrich a discovered link into a verified work;
-- describe an empirical study within an existing work;
-- correct artifact availability, licensing, or model revisions;
-- report a broken link or duplicate.
+## What to contribute
 
-## Evidence policy
+- a missing paper, book, dataset, benchmark, instrument, model, or living catalog;
+- a better research-domain assignment or contribution type;
+- an official paper, code, dataset, model, prompt, output, or project link;
+- a correction to a year, venue, license, released artifact, or scientific limitation;
+- a concrete challenge to a domain score, supported by the paper or another primary source;
+- a broken-link, duplicate-work, or version-identity correction.
 
-Bibliographic fields should be checked against an official publisher, DOI,
-OpenReview, or arXiv page. Methodological fields should be supported by the paper
-itself. Repository descriptions and generated summaries are discovery aids, not
-methodological evidence.
+## Entry requirements
 
-Use the following statuses:
+For a research work, provide:
 
-- `discovered`: imported from a source catalog;
-- `catalogued`: title and primary URL checked;
-- `verified`: methodology checked against the publication;
-- `audited`: artifacts and reproducibility claims checked as well.
+- a stable identifier or primary URL;
+- title, publication year, and venue where applicable;
+- one or more research domains and contribution types;
+- a short description of the work's actual contribution;
+- separate links for every available artifact;
+- a source for any numerical dataset, benchmark, or model claim.
 
-Automated or LLM-assisted extraction must be disclosed in `curation.notes` and
-cannot by itself assign `verified` or `audited`.
+Artifact availability is shown separately from scientific contribution. A paper
+without code is not automatically weak, and a polished repository does not by
+itself establish scientific importance.
 
 ## Pull-request checklist
 
-- Use a stable identifier: DOI, arXiv ID, ACL Anthology ID, or a deterministic
-  fallback.
-- Do not copy an abstract or summary unless its license permits redistribution.
-- Add primary links before mirrors or aggregators.
-- Record an explicit `scope_tier`.
-- For every study, state whether an axiological model is explicit, induced,
-  open-ended, implicit, or absent.
-- Record artifact licenses as `unknown` instead of guessing.
-- Run `python3 scripts/validate.py` before submitting.
-
+- Prefer publisher, DOI, ACL Anthology, OpenReview, arXiv, official GitHub, or
+  official Hugging Face links.
+- Do not copy abstracts or other text unless redistribution is permitted.
+- Do not infer a license when none is stated.
+- Keep theories, instruments, scorers, model outputs, and observed behavior as
+  separate entities.
+- Explain proposed score or domain changes with concrete scientific evidence.
+- Run `python3 scripts/validate_public.py` and `node --check site/app.js`.
