@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://llm-values-atlas.org/schema/instrument.schema.json",
+  "$id": "https://raw.githubusercontent.com/ikanam-ai/ai-values-atlas/main/schema/instrument.schema.json",
   "title": "Value elicitation or measurement instrument",
   "type": "object",
   "required": ["id", "name", "aliases", "instrument_type", "axiology_ids", "primary_url", "status"],
@@ -22,4 +22,3 @@
   },
   "additionalProperties": false
 }
-

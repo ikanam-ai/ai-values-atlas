@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://llm-values-atlas.org/schema/study.schema.json",
+  "$id": "https://raw.githubusercontent.com/ikanam-ai/ai-values-atlas/main/schema/study.schema.json",
   "title": "Experiment-level value study",
   "type": "object",
   "required": [
@@ -95,4 +95,3 @@
   },
   "additionalProperties": false
 }
-
