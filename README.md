@@ -1,13 +1,6 @@
 # AI Values Atlas
 
-**A MEGA Research Atlas · Values / STONIC**
-
 An open, structured evidence map of values research in AI and LLMs.
-
-AI Values Atlas belongs to **MEGA — Measurement and Evaluation of Generative
-AI**, an umbrella research program for reproducible model-passport protocols.
-The atlas supports the STONIC values track while remaining an independent map
-of the whole field, including alternative and competing approaches.
 
 The atlas connects papers, studies, datasets, instruments, axiological frameworks,
 measurement models, evaluated systems, and validation evidence. It covers named
@@ -88,18 +81,6 @@ It also declares a `model_status`:
 
 This avoids silently treating every use of the word “value” as Schwartz-style
 psychometrics.
-
-## MEGA atlas family
-
-| Measurement track | Research atlas | Status |
-|---|---|---|
-| STONIC — values | **AI Values Atlas** | active |
-| VIBE — affect | AI Affect Atlas | planned; no repository yet |
-| PROOF — factual knowledge | AI Factual Knowledge Atlas | planned; no repository yet |
-
-The measurement frameworks and research atlases remain separate artifacts:
-STONIC is a specific measurement contract, while this atlas catalogues the
-broader values literature rather than presenting STONIC as the only approach.
 
 ## Repository layout
 
