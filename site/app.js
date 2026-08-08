@@ -118,7 +118,7 @@ function renderDiscovery() {
       : "";
     const resource = publicationEntry
       ? `<div class="resource-title publication-title">
-          <span class="subdomain">(${escapeHtml(link.subdomain || "Unclassified")})</span>
+          ${link.subdomain ? `<span class="subdomain">(${escapeHtml(link.subdomain)})</span>` : ""}
           <strong>${escapeHtml(titleFor(link))}</strong>
           <small>${escapeHtml([link.venue, link.date].filter(Boolean).join(" · "))}</small>
           <span class="artifact-links">${artifactLinks}</span>

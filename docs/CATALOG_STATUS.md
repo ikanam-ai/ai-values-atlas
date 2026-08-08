@@ -5,8 +5,8 @@ Source snapshot: 2026-08-08T11:19:08.369813+00:00
 - Unique discovered links: **1018**
 - Curated axiological representations: **17**
 - Curated instruments: **7**
-- Curated measurement models: **3**
-- Curated datasets: **3**
+- Curated measurement models: **6**
+- Curated datasets: **11**
 - Curated works: **6**
 - Curated studies: **6**
 

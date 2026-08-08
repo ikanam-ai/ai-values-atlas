@@ -41,7 +41,14 @@ def main() -> int:
     links = read_jsonl(LINKS)
     related_artifacts, _ = related_artifact_map(links)
     readme_guide = (ROOT / "README.md").read_text().split(CATALOG_START, 1)[0]
-    literature = readme_guide.split("## Literature by research question", 1)[1].split("## Datasets, benchmarks, and instruments", 1)[0]
+    literature_match = re.search(
+        r"^## .*Literature by research question\s*$\n(.*?)^## .*Datasets, benchmarks, and instruments\s*$",
+        readme_guide,
+        re.M | re.S,
+    )
+    if not literature_match:
+        raise SystemExit("README literature section could not be located")
+    literature = literature_match.group(1)
     featured_urls = set(re.findall(r"\[paper\]\((https?://[^)]+)\)", literature))
     site_links = []
     for original in links:

@@ -13,6 +13,7 @@ import urllib.parse
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
 LINKS = ROOT / "data" / "raw" / "catalog_links.jsonl"
+TITLE_OVERRIDES = json.loads((ROOT / "data" / "title_overrides.json").read_text())
 START = "<!-- complete-catalog:start -->"
 END = "<!-- complete-catalog:end -->"
 
@@ -48,6 +49,8 @@ def read_jsonl(path: pathlib.Path) -> list[dict]:
 
 
 def display_title(row: dict) -> str:
+    if row["url"] in TITLE_OVERRIDES:
+        return TITLE_OVERRIDES[row["url"]]
     for value in (row.get("context_title", ""), row.get("label", "")):
         value = re.sub(r"\s+", " ", value).strip()
         if value and value.lower() not in GENERIC and not value.startswith("http"):
@@ -114,10 +117,13 @@ def publication_group(row: dict) -> str:
 
 def publication_metadata(row: dict) -> dict[str, str]:
     """Extract conservative display metadata without claiming full-paper audit."""
-    raw = re.sub(r"\s+", " ", row.get("context_title") or display_title(row)).strip(" ,")
+    raw = re.sub(
+        r"\s+",
+        " ",
+        TITLE_OVERRIDES.get(row["url"]) or row.get("context_title") or display_title(row),
+    ).strip(" ,")
     raw = re.sub(r"^\d+\.\s+", "", raw)
-    group_label = re.sub(r"^[^A-Za-z]+", "", publication_group(row))
-    subdomain = group_label or "Other / adjacent"
+    subdomain = ""
     tagged = re.match(r"^[\[(]([^\])]{1,60})[\])]\s*", raw)
     if tagged:
         subdomain = tagged.group(1).strip().replace("Others & Custom", "Other / custom").replace("Others & custom", "Other / custom")
@@ -252,19 +258,18 @@ def related_artifact_map(rows: list[dict]) -> tuple[dict[str, list[dict]], set[s
 
 def format_row(row: dict, related: list[dict] | None = None) -> str:
     links = [row, *(related or [])]
-    rendered_links = " ".join(f"[{LINK_LABELS.get(item['link_type_guess'], 'link')}]({item['url']})" for item in links)
+    rendered_links = " ".join(f"[[{LINK_LABELS.get(item['link_type_guess'], 'link')}]({item['url']})]" for item in links)
     if row["link_type_guess"] == "publication":
         metadata = publication_metadata(row)
-        details = [metadata["venue"], metadata["date"]]
-        details = [markdown_text(value) for value in details if value]
-        middle = f" — {' — '.join(details)}" if details else ""
-        return f"- ({markdown_text(metadata['subdomain'])}) **{markdown_text(metadata['title'])}**{middle} — {rendered_links}"
-    return f"- **{markdown_text(display_title(row))}** — {rendered_links}"
+        prefix = f"({markdown_text(metadata['subdomain'])}) " if metadata["subdomain"] else ""
+        details = ", ".join(markdown_text(value) for value in (metadata["venue"], metadata["date"]) if value)
+        return f"- {prefix}{markdown_text(metadata['title'])}, {details}, {rendered_links}"
+    return f"- {markdown_text(display_title(row))}, {rendered_links}"
 
 
 def section(label: str, rows: list[dict], related: dict[str, list[dict]] | None = None) -> list[str]:
     rows = sorted(rows, key=lambda row: (display_title(row).casefold(), row["url"]))
-    result = [f'<a id="{anchor_for(label)}"></a>', "", f"#### {label} · {len(rows)}", ""]
+    result = [f'<a id="{anchor_for(label)}"></a>', "", f"#### {label} ({len(rows)})", ""]
     result.extend(format_row(row, (related or {}).get(row["id"], [])) for row in rows)
     result.append("")
     return result
@@ -282,12 +287,8 @@ def generate(rows: list[dict]) -> str:
 
     lines = [
         START, "",
-        "> This section is generated from the deduplicated discovery index. Every",
-        "> URL appears exactly once. Provenance and scope remain available in the",
-        "> downloadable data and on the interactive site rather than after each link.", "",
-        "**Entry format:** `(subdomain) Title — venue — date — [paper] [code] [dataset]`.",
-        "When the source does not name a value model, the parenthetical label falls",
-        "back to the nearest research subdomain rather than inventing one.", "",
+        "Every resource appears once. Parenthetical tags are shown only when a source",
+        "identifies a concrete framework, instrument, or subdomain.", "",
         "**Browse the taxonomy**", "",
         "| Research area | Publications |", "|---|---:|",
     ]
@@ -295,7 +296,7 @@ def generate(rows: list[dict]) -> str:
     for label in ordered_labels:
         if publications[label]:
             lines.append(f"| [{label}](#{anchor_for(label)}) | {len(publications[label])} |")
-    lines.extend(["", "### 📚 Publications by research topic", ""])
+    lines.extend(["", "### 📚 Publications by topic", ""])
     for label in ordered_labels:
         if publications[label]:
             lines.extend(section(label, publications[label], related))

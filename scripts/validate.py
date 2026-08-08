@@ -114,12 +114,12 @@ def main() -> int:
             errors.append(f"{readme_name} complete catalog has {len(duplicate_readme_urls)} URLs appearing other than once")
         if "<sub>" in catalog or re.search(r"^- \*\*\[", catalog, re.M):
             errors.append(f"{readme_name} catalog uses the deprecated mixed-font or linked-title format")
-        publication_lines = [line for line in catalog.splitlines() if re.match(r"^- \([^)]*\) \*\*", line)]
+        publication_lines = [line for line in catalog.splitlines() if "[[paper](" in line]
         if len(publication_lines) != sum(row.get("link_type_guess") == "publication" for row in links):
             errors.append(f"{readme_name} does not use the canonical publication-entry format everywhere")
-        bad_tail = [line for line in publication_lines if re.search(r"\)\s+(?:·|—\s*(?:core|adjacent)|via:)", line)]
+        bad_tail = [line for line in publication_lines if " — " in line or "**" in line or not re.search(r"\]\s*$", line)]
         if bad_tail:
-            errors.append(f"{readme_name} has {len(bad_tail)} publication links followed by deprecated metadata")
+            errors.append(f"{readme_name} has {len(bad_tail)} publication lines outside the concise comma-separated format")
     if (ROOT / "README_RU.md").exists() or "README_RU.md" in (ROOT / "README.md").read_text():
         errors.append("Russian README references remain although the project is English-only")
 
@@ -192,7 +192,7 @@ def main() -> int:
     site_publications = [row for row in site_links if row.get("link_type_guess") == "publication"]
     if any(not row.get("research_class") or not row.get("research_class_id") for row in site_publications):
         errors.append("Site publication index has entries without a research class")
-    if any(not row.get("title") or not row.get("subdomain") or not row.get("date") for row in site_publications):
+    if any(not row.get("title") or not row.get("date") for row in site_publications):
         errors.append("Site publication index has entries without canonical display metadata")
     if any(not row.get("venue") for row in site_publications):
         errors.append("Site publication index has entries without a venue or an explicit unverified-venue marker")
