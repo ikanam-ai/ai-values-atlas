@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://llm-values-atlas.org/schema/axiology.schema.json",
+  "title": "Axiological framework or value representation",
+  "type": "object",
+  "required": [
+    "id", "name", "family", "origin_domain", "representation_type",
+    "interpretability", "dimension_count", "status", "primary_sources"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$"},
+    "name": {"type": "string", "minLength": 2},
+    "aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "family": {
+      "enum": [
+        "basic_human_values", "moral_values", "cultural_values",
+        "social_preferences", "rights_duties_principles", "ai_native_values",
+        "open_value_space"
+      ]
+    },
+    "origin_domain": {
+      "enum": [
+        "psychology", "cross_cultural_psychology", "moral_psychology",
+        "sociology", "political_science", "economics", "philosophy",
+        "ai_research", "interdisciplinary"
+      ]
+    },
+    "representation_type": {
+      "enum": [
+        "named_dimensions", "hierarchy", "circumplex", "survey_item_space",
+        "lexicon_or_ontology", "principle_set", "induced_factors",
+        "latent_embedding", "open_ended"
+      ]
+    },
+    "interpretability": {"enum": ["named", "partially_named", "latent"]},
+    "dimension_count": {"type": ["integer", "null"], "minimum": 1},
+    "dimensions": {"type": "array", "items": {"type": "string"}},
+    "structure_notes": {"type": "string"},
+    "status": {"enum": ["catalogued", "verified"]},
+    "primary_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "format": "uri"}
+    }
+  },
+  "additionalProperties": false
+}
+

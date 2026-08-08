@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://llm-values-atlas.org/schema/study.schema.json",
+  "title": "Experiment-level value study",
+  "type": "object",
+  "required": [
+    "id", "work_id", "research_role", "subjects", "interfaces",
+    "axiology_usages", "model_relations", "validation_evidence", "curation_status"
+  ],
+  "properties": {
+    "id": {"type": "string"},
+    "work_id": {"type": "string"},
+    "name": {"type": "string"},
+    "research_role": {"type": "string"},
+    "subjects": {
+      "type": "array",
+      "items": {"enum": ["llm", "vlm", "agent", "human", "text_corpus", "model_language_pair"]}
+    },
+    "interfaces": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "self_report_questionnaire", "independent_endorsement", "forced_choice",
+          "ranking", "free_text", "observed_behavior", "sequential_action",
+          "internal_representation", "corpus_annotation", "other"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "axiology_usages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["axiology_id", "role", "model_status", "operationalization"],
+        "properties": {
+          "axiology_id": {"type": ["string", "null"]},
+          "role": {"enum": ["primary", "baseline", "mapping_target", "alignment_target", "discovered_output"]},
+          "model_status": {
+            "enum": [
+              "explicit_existing", "explicit_proposed", "induced_interpretable",
+              "induced_latent", "open_ended", "implicit", "none"
+            ]
+          },
+          "operationalization": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "dataset_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "instrument_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "model_relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["model_id", "role"],
+        "properties": {
+          "model_id": {"type": "string"},
+          "role": {
+            "enum": [
+              "evaluated_subject", "response_generator", "perception_parser",
+              "value_scorer", "judge", "embedding_encoder",
+              "annotation_assistant", "alignment_target"
+            ]
+          },
+          "revision": {"type": ["string", "null"]},
+          "system_template": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "validation_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "status"],
+        "properties": {
+          "type": {
+            "enum": [
+              "test_retest", "internal_consistency", "prompt_sensitivity",
+              "template_sensitivity", "language_sensitivity", "order_counterbalance",
+              "position_bias", "human_task_local", "human_external_calibration",
+              "scorer_agreement", "convergent", "discriminant", "predictive",
+              "ecological", "cross_interface", "null_baseline", "identity",
+              "coverage_missingness"
+            ]
+          },
+          "status": {"enum": ["reported", "partial", "not_reported", "not_applicable"]},
+          "notes": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "curation_status": {"enum": ["catalogued", "verified", "audited"]}
+  },
+  "additionalProperties": false
+}
+

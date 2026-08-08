@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://llm-values-atlas.org/schema/model.schema.json",
+  "title": "Model used in value research",
+  "type": "object",
+  "required": [
+    "id", "name", "model_kind", "supported_roles", "primary_url",
+    "open_weights", "license", "curation_status"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$"},
+    "name": {"type": "string"},
+    "developer": {"type": ["string", "null"]},
+    "base_model": {"type": ["string", "null"]},
+    "model_kind": {
+      "enum": [
+        "generative_llm", "classifier", "value_scorer", "embedding_encoder",
+        "reward_model", "llm_judge", "parser", "composite_pipeline"
+      ]
+    },
+    "supported_roles": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "evaluated_subject", "response_generator", "perception_parser",
+          "value_scorer", "judge", "embedding_encoder",
+          "annotation_assistant", "alignment_target"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "axiology_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "primary_url": {"type": "string", "format": "uri"},
+    "paper_urls": {"type": "array", "items": {"type": "string", "format": "uri"}},
+    "revision": {"type": ["string", "null"]},
+    "open_weights": {"type": ["boolean", "null"]},
+    "license": {"type": ["string", "null"]},
+    "curation_status": {"enum": ["catalogued", "verified", "audited"]},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": false
+}
+

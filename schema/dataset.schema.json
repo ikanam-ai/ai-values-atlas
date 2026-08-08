@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://llm-values-atlas.org/schema/dataset.schema.json",
+  "title": "Dataset used in value research",
+  "type": "object",
+  "required": [
+    "id", "name", "dataset_kinds", "unit", "languages", "construction",
+    "annotation", "axiology_ids", "primary_url", "access", "license",
+    "curation_status"
+  ],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]+$"},
+    "name": {"type": "string"},
+    "aliases": {"type": "array", "items": {"type": "string"}},
+    "dataset_kinds": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "item_bank", "response_corpus", "human_annotations", "model_annotations",
+          "preference_pairs", "survey_microdata", "benchmark_suite",
+          "behavioral_trajectories", "training_corpus"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "unit": {"type": "string"},
+    "size": {"type": ["integer", "null"], "minimum": 0},
+    "languages": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "construction": {"enum": ["human_authored", "model_generated", "collected", "mixed", "unknown"]},
+    "annotation": {"enum": ["none", "human", "model", "mixed", "unknown"]},
+    "axiology_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "instrument_ids": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "primary_url": {"type": "string", "format": "uri"},
+    "paper_urls": {"type": "array", "items": {"type": "string", "format": "uri"}},
+    "access": {"enum": ["open", "registration", "request", "partial", "closed", "unknown"]},
+    "license": {"type": ["string", "null"]},
+    "curation_status": {"enum": ["catalogued", "verified", "audited"]},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": false
+}
+

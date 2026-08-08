@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://llm-values-atlas.org/schema/catalog-link.schema.json",
+  "title": "Discovered catalog link",
+  "type": "object",
+  "required": ["id", "url", "label", "link_type_guess", "scope_tier_guess", "occurrences"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^link-[a-f0-9]{16}$"},
+    "url": {"type": "string", "format": "uri"},
+    "label": {"type": "string"},
+    "context_title": {"type": "string"},
+    "link_type_guess": {
+      "enum": ["publication", "repository", "dataset", "model", "project", "survey_resource", "other"]
+    },
+    "scope_tier_guess": {"enum": ["core", "adjacent", "background"]},
+    "occurrences": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["catalog_id", "section", "line"],
+        "properties": {
+          "catalog_id": {"type": "string"},
+          "section": {"type": "string"},
+          "line": {"type": "integer", "minimum": 1}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
+

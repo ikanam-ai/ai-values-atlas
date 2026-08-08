@@ -1,0 +1,74 @@
+{
+  "schema_version": "1.0.0",
+  "generated_at": "2026-08-08T11:19:08.369813+00:00",
+  "sources": [
+    {
+      "id": "stonic-manuscript-bibliography",
+      "kind": "local_bibliography_snapshot",
+      "path": "data/seed/stonic_bibliography_links.jsonl"
+    },
+    {
+      "id": "aidas-llm-values-pluralism",
+      "kind": "git_readme",
+      "repo": "https://github.com/AIDASLab/Awesome-LLM-Values-and-Pluralistic-Alignment.git",
+      "commit": "0cb0b381bd9487dede431073dfe2dd82fa94e271",
+      "commit_date": "2026-08-08T01:36:19+09:00"
+    },
+    {
+      "id": "valuebyte-llm-psychometrics",
+      "kind": "git_readme",
+      "repo": "https://github.com/ValueByte-AI/Awesome-LLM-Psychometrics.git",
+      "commit": "666df7ddd943375b4f8442f0ea5cb6361cdc145e",
+      "commit_date": "2026-08-01T14:12:24+08:00"
+    },
+    {
+      "id": "valuebyte-llm-social-science",
+      "kind": "git_readme",
+      "repo": "https://github.com/ValueByte-AI/Awesome-LLM-in-Social-Science.git",
+      "commit": "68ebd2f07d4caafd98afb0fb510a68e6137fbf87",
+      "commit_date": "2026-08-01T14:59:16+08:00"
+    },
+    {
+      "id": "pluralistic-alignment",
+      "kind": "git_readme",
+      "repo": "https://github.com/anudeex/Awesome-Pluralistic-Alignment.git",
+      "commit": "68c24b76751708b86d6f231c73d2f57b701d6f5c",
+      "commit_date": "2026-03-27T03:17:53+11:00"
+    },
+    {
+      "id": "personalized-alignment",
+      "kind": "git_readme",
+      "repo": "https://github.com/liyongqi2002/Awesome-Personalized-Alignment.git",
+      "commit": "9dae4a9f541aff86f67a79dd920fb7e4ee70e500",
+      "commit_date": "2026-08-06T16:52:45+08:00"
+    },
+    {
+      "id": "alignment-goal-survey",
+      "kind": "git_readme",
+      "repo": "https://github.com/ValueCompass/Alignment-Goal-Survey.git",
+      "commit": "4e377b0659a19c0c0e84a9e69820bf5e98ceaf98",
+      "commit_date": "2024-02-16T20:23:32+08:00"
+    },
+    {
+      "id": "awesome-cultural-nlp",
+      "kind": "git_readme",
+      "repo": "https://github.com/simran-khanuja/awesome-cultural-nlp.git",
+      "commit": "91aa0b25a3ad6ee9c9383e707d000fde751f941c",
+      "commit_date": "2025-09-28T17:58:48-04:00"
+    },
+    {
+      "id": "awesome-llm-datasets",
+      "kind": "git_readme",
+      "repo": "https://github.com/lmmlzn/Awesome-LLMs-Datasets.git",
+      "commit": "ca0ab5655be47bde6362667473b26a2f1cf6a601",
+      "commit_date": "2026-03-11T11:47:03+08:00"
+    },
+    {
+      "id": "awesome-llm-safety",
+      "kind": "git_readme",
+      "repo": "https://github.com/tjunlp-lab/Awesome-LLM-Safety-Papers.git",
+      "commit": "6749bf77aa508e549451671fe00cc1f2afa725a0",
+      "commit_date": "2024-12-25T00:15:03+08:00"
+    }
+  ]
+}

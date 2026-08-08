@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://llm-values-atlas.org/schema/work.schema.json",
+  "title": "Publication-level record",
+  "type": "object",
+  "required": [
+    "id", "title", "year", "primary_url", "work_types", "research_roles",
+    "scope_tier", "source_catalogs", "curation"
+  ],
+  "properties": {
+    "id": {"type": "string"},
+    "title": {"type": "string", "minLength": 3},
+    "authors": {"type": "array", "items": {"type": "string"}},
+    "year": {"type": "integer", "minimum": 1900, "maximum": 2100},
+    "venue": {"type": ["string", "null"]},
+    "publication_status": {"enum": ["published", "accepted", "preprint", "report", "unknown"]},
+    "primary_url": {"type": "string", "format": "uri"},
+    "doi": {"type": ["string", "null"]},
+    "arxiv_id": {"type": ["string", "null"]},
+    "work_types": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "empirical", "benchmark", "dataset", "measurement_method", "model",
+          "representation", "alignment_method", "survey", "position", "theory"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "research_roles": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "measure_ai_values", "measure_human_values", "identify_values_in_text",
+          "test_value_understanding", "compare_human_ai", "study_value_action_gap",
+          "learn_value_representation", "construct_axiology", "align_or_steer",
+          "aggregate_plural_values", "review_field"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "scope_tier": {"enum": ["core", "adjacent", "background"]},
+    "summary": {"type": ["string", "null"]},
+    "source_catalogs": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "artifacts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["type", "url", "availability"],
+        "properties": {
+          "type": {"enum": ["code", "dataset", "model", "prompts", "project", "supplement"]},
+          "url": {"type": "string", "format": "uri"},
+          "availability": {"enum": ["open", "partial", "closed", "unknown"]},
+          "license": {"type": ["string", "null"]}
+        },
+        "additionalProperties": false
+      }
+    },
+    "curation": {
+      "type": "object",
+      "required": ["status", "last_verified", "method"],
+      "properties": {
+        "status": {"enum": ["discovered", "catalogued", "verified", "audited"]},
+        "last_verified": {"type": ["string", "null"], "format": "date"},
+        "method": {"enum": ["manual", "automated", "assisted"]},
+        "notes": {"type": "string"}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
+

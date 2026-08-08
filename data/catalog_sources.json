@@ -1,0 +1,128 @@
+{
+  "schema_version": "1.0.0",
+  "sources": [
+    {
+      "id": "stonic-manuscript-bibliography",
+      "name": "STONIC manuscript bibliography",
+      "kind": "local_bibliography_snapshot",
+      "seed_file": "data/seed/stonic_bibliography_links.jsonl",
+      "scope_tier_guess": "core",
+      "license_status": "bibliographic facts",
+      "notes": "Bibliographic links imported from the current STONIC references file; entries remain attributable to their original publications."
+    },
+    {
+      "id": "aidas-llm-values-pluralism",
+      "name": "Awesome LLM Values and Pluralistic Alignment",
+      "kind": "git_readme",
+      "repo": "https://github.com/AIDASLab/Awesome-LLM-Values-and-Pluralistic-Alignment.git",
+      "readme": "README.md",
+      "scope_tier_guess": "core",
+      "include_heading_patterns": [".*"],
+      "exclude_heading_patterns": ["table of contents"],
+      "license_status": "unclear",
+      "notes": "Harvest links and provenance only; repository advertises MIT but no license file was present during the 2026-08-08 audit."
+    },
+    {
+      "id": "valuebyte-llm-psychometrics",
+      "name": "Awesome LLM Psychometrics",
+      "kind": "git_readme",
+      "repo": "https://github.com/ValueByte-AI/Awesome-LLM-Psychometrics.git",
+      "readme": "readme.md",
+      "scope_tier_guess": "core",
+      "include_heading_patterns": [
+        "category entries / related survey",
+        "category entries / values",
+        "category entries / morality",
+        "category entries / attitudes.*opinions",
+        "category entries / reliability and validity"
+      ],
+      "exclude_heading_patterns": [],
+      "license_status": "unclear"
+    },
+    {
+      "id": "valuebyte-llm-social-science",
+      "name": "Awesome LLM in Social Science",
+      "kind": "git_readme",
+      "repo": "https://github.com/ValueByte-AI/Awesome-LLM-in-Social-Science.git",
+      "readme": "README.md",
+      "scope_tier_guess": "adjacent",
+      "include_heading_patterns": [
+        "survey",
+        "dataset",
+        "evaluating.*llm / value",
+        "evaluating.*llm / morality",
+        "evaluating.*llm / opinion",
+        "evaluating.*llm / general.*preference",
+        "alignment"
+      ],
+      "exclude_heading_patterns": [],
+      "license_status": "MIT"
+    },
+    {
+      "id": "pluralistic-alignment",
+      "name": "Awesome Pluralistic Alignment",
+      "kind": "git_readme",
+      "repo": "https://github.com/anudeex/Awesome-Pluralistic-Alignment.git",
+      "readme": "README.md",
+      "scope_tier_guess": "core",
+      "include_heading_patterns": ["pluralistic alignment", "other alignment surveys"],
+      "exclude_heading_patterns": ["table of contents", "reference"],
+      "license_status": "unclear"
+    },
+    {
+      "id": "personalized-alignment",
+      "name": "Awesome Personalized Alignment",
+      "kind": "git_readme",
+      "repo": "https://github.com/liyongqi2002/Awesome-Personalized-Alignment.git",
+      "readme": "README.md",
+      "scope_tier_guess": "adjacent",
+      "include_heading_patterns": ["papers"],
+      "exclude_heading_patterns": [],
+      "license_status": "unclear"
+    },
+    {
+      "id": "alignment-goal-survey",
+      "name": "Alignment Goal Survey",
+      "kind": "git_readme",
+      "repo": "https://github.com/ValueCompass/Alignment-Goal-Survey.git",
+      "readme": "README.md",
+      "scope_tier_guess": "core",
+      "include_heading_patterns": ["human values", "evaluation of alignment targets / human values"],
+      "exclude_heading_patterns": [],
+      "license_status": "unclear"
+    },
+    {
+      "id": "awesome-cultural-nlp",
+      "name": "Awesome Cultural NLP",
+      "kind": "git_readme",
+      "repo": "https://github.com/simran-khanuja/awesome-cultural-nlp.git",
+      "readme": "README.md",
+      "scope_tier_guess": "adjacent",
+      "include_heading_patterns": ["survey", "dataset", "models", "evaluation / llms", "analysis / llms", "alignment", "methodology"],
+      "exclude_heading_patterns": [],
+      "license_status": "CC0-like waiver"
+    },
+    {
+      "id": "awesome-llm-datasets",
+      "name": "Awesome LLM Datasets",
+      "kind": "git_readme",
+      "repo": "https://github.com/lmmlzn/Awesome-LLMs-Datasets.git",
+      "readme": "README.md",
+      "scope_tier_guess": "adjacent",
+      "include_heading_patterns": ["preference datasets", "evaluation datasets / social norms"],
+      "exclude_heading_patterns": [],
+      "license_status": "Apache-2.0"
+    },
+    {
+      "id": "awesome-llm-safety",
+      "name": "Awesome LLM Safety Papers",
+      "kind": "git_readme",
+      "repo": "https://github.com/tjunlp-lab/Awesome-LLM-Safety-Papers.git",
+      "readme": "README.md",
+      "scope_tier_guess": "adjacent",
+      "include_heading_patterns": ["papers / value misalignment / ethics and morality"],
+      "exclude_heading_patterns": [],
+      "license_status": "unclear"
+    }
+  ]
+}

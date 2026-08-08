@@ -1,0 +1,68 @@
+{
+  "schema_version": "1.0.0",
+  "instruments": [
+    {
+      "id": "schwartz-value-survey",
+      "name": "Schwartz Value Survey",
+      "aliases": ["SVS"],
+      "instrument_type": "self_report_questionnaire",
+      "axiology_ids": ["schwartz-tbv-10"],
+      "primary_url": "https://doi.org/10.1016/S0065-2601(08)60281-6",
+      "status": "catalogued"
+    },
+    {
+      "id": "pvq-40",
+      "name": "Portrait Values Questionnaire — 40 items",
+      "aliases": ["PVQ-40"],
+      "instrument_type": "self_report_questionnaire",
+      "axiology_ids": ["schwartz-tbv-10"],
+      "primary_url": "https://doi.org/10.1177/0022022101032005001",
+      "status": "catalogued"
+    },
+    {
+      "id": "pvq-rr-57",
+      "name": "Revised Portrait Values Questionnaire — 57 items",
+      "aliases": ["PVQ-RR"],
+      "instrument_type": "self_report_questionnaire",
+      "axiology_ids": ["schwartz-refined-19"],
+      "primary_url": "https://doi.org/10.1037/a0029393",
+      "status": "catalogued"
+    },
+    {
+      "id": "moral-foundations-questionnaire",
+      "name": "Moral Foundations Questionnaire",
+      "aliases": ["MFQ"],
+      "instrument_type": "self_report_questionnaire",
+      "axiology_ids": ["moral-foundations-theory"],
+      "primary_url": "https://moralfoundations.org/questionnaires/",
+      "status": "catalogued"
+    },
+    {
+      "id": "world-values-survey-questionnaire",
+      "name": "World Values Survey questionnaire",
+      "aliases": ["WVS questionnaire"],
+      "instrument_type": "survey_item_bank",
+      "axiology_ids": ["world-values-survey-item-space", "inglehart-welzel-cultural-map"],
+      "primary_url": "https://www.worldvaluessurvey.org/WVSDocumentationWV7.jsp",
+      "status": "catalogued"
+    },
+    {
+      "id": "value-portrait",
+      "name": "Value Portrait",
+      "aliases": ["VP"],
+      "instrument_type": "scenario_item_bank",
+      "axiology_ids": ["schwartz-tbv-10"],
+      "primary_url": "https://arxiv.org/abs/2505.01015",
+      "status": "catalogued"
+    },
+    {
+      "id": "gpv-free-text-protocol",
+      "name": "GPV free-text perception protocol",
+      "aliases": ["GPV"],
+      "instrument_type": "free_text_protocol",
+      "axiology_ids": ["gpv-open-value-space"],
+      "primary_url": "https://ojs.aaai.org/index.php/AAAI/article/view/34839",
+      "status": "catalogued"
+    }
+  ]
+}

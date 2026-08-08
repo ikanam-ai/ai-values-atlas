@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Structured evidence map of research on values in artificial intelligence." />
+    <title>LLM Values Atlas</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <header class="hero shell">
+      <nav>
+        <a class="brand" href="#">LLM Values Atlas</a>
+        <div class="nav-links">
+          <a href="#methodology">Methodology</a>
+          <a href="catalog_links.jsonl">Download JSONL</a>
+          <a href="https://github.com/Chetoff1228/llm-values-atlas" data-repo-link>Repository</a>
+        </div>
+      </nav>
+
+      <div class="hero-grid">
+        <div>
+          <p class="eyebrow">OPEN RESEARCH INFRASTRUCTURE</p>
+          <h1>How do we study<br /><span>values in AI?</span></h1>
+          <p class="lede">
+            Papers, datasets, instruments, axiological frameworks, models, and
+            validation evidence — connected instead of flattened into a reading list.
+          </p>
+        </div>
+        <aside class="principle-card">
+          <p class="card-label">Core distinction</p>
+          <p class="principle">A value framework is not an instrument. An instrument is not a scorer. A paper may contain several studies.</p>
+          <div class="flow"><span>Work</span><b>→</b><span>Study</span><b>→</b><span>Evidence</span></div>
+        </aside>
+      </div>
+
+      <section class="metrics" aria-label="Atlas counts">
+        <div><strong id="metricLinks">—</strong><span>discovered links</span></div>
+        <div><strong id="metricWorks">—</strong><span>curated works</span></div>
+        <div><strong id="metricStudies">—</strong><span>studies</span></div>
+        <div><strong id="metricAxiologies">—</strong><span>axiologies</span></div>
+        <div><strong id="metricModels">—</strong><span>models</span></div>
+        <div><strong id="metricDatasets">—</strong><span>datasets</span></div>
+      </section>
+    </header>
+
+    <main class="shell">
+      <section class="workspace">
+        <div class="tabs" role="tablist">
+          <button class="tab active" data-view="links">Discovery catalog</button>
+          <button class="tab" data-view="works">Curated works</button>
+          <button class="tab" data-view="axiologies">Axiologies</button>
+          <button class="tab" data-view="instruments">Instruments</button>
+          <button class="tab" data-view="models">Models</button>
+          <button class="tab" data-view="datasets">Datasets</button>
+        </div>
+
+        <div class="filters" id="linkFilters">
+          <label class="search-field">
+            <span>Search</span>
+            <input id="search" type="search" placeholder="Value Portrait, moral foundations, pluralism…" />
+          </label>
+          <label>
+            <span>Resource</span>
+            <select id="typeFilter"><option value="">All types</option></select>
+          </label>
+          <label>
+            <span>Scope</span>
+            <select id="scopeFilter">
+              <option value="">Core + adjacent</option>
+              <option value="core">Core</option>
+              <option value="adjacent">Adjacent</option>
+            </select>
+          </label>
+          <label>
+            <span>Source</span>
+            <select id="sourceFilter"><option value="">All catalogs</option></select>
+          </label>
+        </div>
+
+        <div class="result-bar">
+          <p id="resultCount">Loading catalog…</p>
+          <p class="status-key" id="statusKey"><i></i><span>Discovery records are not yet method-verified</span></p>
+        </div>
+        <div id="content" class="catalog-grid" aria-live="polite"></div>
+        <button id="loadMore" class="load-more" hidden>Load more</button>
+      </section>
+
+      <section class="method-note" id="methodology">
+        <p class="eyebrow">EVIDENCE-AWARE BY DESIGN</p>
+        <h2>Missing axiology is data, too.</h2>
+        <p>
+          Studies are explicitly marked as using an established framework, proposing
+          one, inducing interpretable factors, learning a latent space, accepting
+          open-ended values, invoking values implicitly, or using no axiological model.
+        </p>
+      </section>
+    </main>
+
+    <footer class="shell">
+      <p>Open metadata for the AI values research community.</p>
+      <p id="generatedAt"></p>
+    </footer>
+
+    <script src="app.js"></script>
+  </body>
+</html>
