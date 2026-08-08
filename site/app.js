@@ -92,10 +92,6 @@ function domainInfo() {
   return state.data.domains.find(domain => domain.id === state.domain);
 }
 
-function ranking(work) {
-  return work.rankings.find(row => row.domain_id === state.domain);
-}
-
 function domainWorks() {
   let works = state.data.works.filter(work => work.scope !== 'out_of_scope');
   if (state.domain !== 'all') works = works.filter(work => work.domains.includes(state.domain));
@@ -103,14 +99,13 @@ function domainWorks() {
   if (state.contribution) works = works.filter(work => work.contribution_types.includes(state.contribution));
   if (state.artifact) works = works.filter(work => work.links.some(link => link.label === state.artifact));
   if (state.year) works = works.filter(work => work.year === state.year);
-  if (state.domain === 'all') return works.sort((a,b) => (b.year || 0) - (a.year || 0) || a.title.localeCompare(b.title));
-  return works.sort((a,b) => ranking(a).rank - ranking(b).rank || a.title.localeCompare(b.title));
+  return works.sort((a,b) => (b.year || 0) - (a.year || 0) || a.title.localeCompare(b.title));
 }
 
 function render() {
   const info = domainInfo();
   $('#domain-title').textContent = info ? `${info.icon} ${info.name}` : 'All research works';
-  $('#domain-question').textContent = info ? info.question : 'Browse the complete corpus by year; select a domain for a scientifically meaningful ranking.';
+  $('#domain-question').textContent = info ? info.question : 'Browse the complete corpus by year or select a research domain.';
   document.querySelectorAll('.domain-nav').forEach(button => button.classList.toggle('active', button.dataset.domain === state.domain));
   renderTimeline();
   renderWorks();
@@ -138,20 +133,12 @@ function renderWorks() {
 }
 
 function renderWork(work) {
-  const row = state.domain === 'all' ? null : ranking(work);
   const primary = work.links.find(link => link.label === 'paper') || work.links[0];
   const links = work.links.map(link => `<a class="artifact-link" href="${esc(link.url)}" target="_blank" rel="noopener">${esc(link.label)}</a>`).join('');
   const tags = work.contribution_types.map(type => `<span class="tag">${esc(pretty(type))}</span>`).join('');
-  const scorePanel = row ? `
-    <div class="score-panel">
-      <div class="domain-score">${row.domain_score.toFixed(1)} <small>/ 100</small></div>
-      ${scoreBar('Contribution', row.scientific_contribution, 'contribution')}
-      ${scoreBar('Relevance', row.field_relevance, 'relevance')}
-      ${scoreBar('Influence', row.influence, 'influence')}
-    </div>` : '';
   const release = work.release ? renderRelease(work.release) : '';
   return `<li class="work-row">
-    <div class="rank">${row ? row.rank : (work.year || '—')}<small>${row ? 'rank' : ''}</small></div>
+    <div class="year-mark">${work.year || '—'}</div>
     <article>
       <h3 class="work-title">${work.publication_status === 'published' ? '⭐' : '📄'} <a href="${esc(primary?.url || '#')}" target="_blank" rel="noopener">${esc(work.title)}</a></h3>
       <p class="work-meta"><span>${esc(work.venue || 'Venue not listed')}</span><span>${work.year || 'n.d.'}</span></p>
@@ -160,14 +147,7 @@ function renderWork(work) {
       <div class="artifact-links">${links}</div>
       ${release}
     </article>
-    ${scorePanel}
   </li>`;
-}
-
-function scoreBar(label, value, className) {
-  const shown = value == null ? '—' : Math.round(value);
-  const width = value == null ? 0 : value;
-  return `<div class="score-row ${className}"><label><span>${label}</span><b>${shown}</b></label><div class="track"><i style="--w:${width}%"></i></div></div>`;
 }
 
 function renderRelease(release) {

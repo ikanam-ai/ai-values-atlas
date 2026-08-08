@@ -62,9 +62,19 @@ def main() -> int:
         "book", "catalog", "course", "policy", "reference",
     }
     for row in works:
-        for field in ("id", "title", "year", "description", "domains", "contribution_types", "rankings", "links"):
+        for field in ("id", "title", "year", "description", "domains", "contribution_types", "links"):
             if field not in row:
                 errors.append(f"Work {row.get('id', '<unknown>')} missing {field}")
+        forbidden_score_fields = {
+            "rankings", "domain_score", "scientific_contribution",
+            "field_relevance", "influence", "score_formula",
+        }
+        present_score_fields = forbidden_score_fields.intersection(row)
+        if present_score_fields:
+            errors.append(
+                f"Work {row.get('id')} exposes editorial score fields: "
+                f"{', '.join(sorted(present_score_fields))}"
+            )
         if row.get("publication_status") not in allowed_status:
             errors.append(f"Work {row.get('id')} has invalid publication status")
         if not row.get("description"):
@@ -74,13 +84,6 @@ def main() -> int:
         for domain in row.get("domains", []):
             if domain not in domains:
                 errors.append(f"Work {row.get('id')} references unknown domain {domain}")
-        for ranking in row.get("rankings", []):
-            if ranking.get("domain_id") not in domains:
-                errors.append(f"Work {row.get('id')} has ranking for unknown domain")
-            for score in ("domain_score", "scientific_contribution", "field_relevance"):
-                value = ranking.get(score)
-                if not isinstance(value, (int, float)) or not 0 <= value <= 100:
-                    errors.append(f"Work {row.get('id')} has invalid {score}: {value}")
         for link in row.get("links", []):
             if link.get("label") not in allowed_roles:
                 errors.append(f"Work {row.get('id')} has unsupported link role {link.get('label')}")
@@ -99,6 +102,8 @@ def main() -> int:
         errors.append("site/data.json work records differ from data/works.jsonl")
     if site_resource_ids != resource_ids:
         errors.append("site/data.json resource records differ from data/resources.jsonl")
+    if "score_formula" in site_data:
+        errors.append("site/data.json exposes the removed editorial score formula")
 
     stats = site_data.get("stats", {})
     expected_stats = {
@@ -137,6 +142,7 @@ def main() -> int:
         "internal stage M3": r"\bM3\b",
         "featured label": r"\bfeatured\b",
         "metadata-check label": r"metadata (?:checked|verified)",
+        "editorial score label": r"(?:domain|contribution|relevance|influence) score|/\s*100",
     }
     for path in public_files:
         text = path.read_text()

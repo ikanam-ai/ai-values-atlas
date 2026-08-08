@@ -9,7 +9,7 @@ useful to researchers.
 - a better research-domain assignment or contribution type;
 - an official paper, code, dataset, model, prompt, output, or project link;
 - a correction to a year, venue, license, released artifact, or scientific limitation;
-- a concrete challenge to a domain score, supported by the paper or another primary source;
+- a concrete challenge to a domain assignment, supported by the paper or another primary source;
 - a broken-link, duplicate-work, or version-identity correction.
 
 ## Entry requirements
@@ -35,5 +35,5 @@ itself establish scientific importance.
 - Do not infer a license when none is stated.
 - Keep theories, instruments, scorers, model outputs, and observed behavior as
   separate entities.
-- Explain proposed score or domain changes with concrete scientific evidence.
+- Explain proposed domain or taxonomy changes with concrete scientific evidence.
 - Run `python3 scripts/validate_public.py` and `node --check site/app.js`.
