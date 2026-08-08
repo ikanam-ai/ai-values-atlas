@@ -3,105 +3,131 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Structured evidence map of research on values in artificial intelligence." />
+    <meta name="description" content="A field guide and structured index of research on values in AI and language models." />
     <title>AI Values Atlas</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="ambient ambient-one"></div>
-    <div class="ambient ambient-two"></div>
-
-    <header class="hero shell">
-      <nav>
-        <a class="brand" href="#">AI Values Atlas</a>
+    <header class="hero">
+      <nav class="shell">
+        <a class="brand" href="#top">AI Values Atlas</a>
         <div class="nav-links">
-          <a href="#methodology">Methodology</a>
-          <a href="catalog_links.jsonl">Download JSONL</a>
-          <a href="https://github.com/ikanam-ai/ai-values-atlas" data-repo-link>Repository</a>
+          <a href="https://github.com/ikanam-ai/ai-values-atlas#field-map">Field guide</a>
+          <a href="catalog_links.jsonl">Download data</a>
+          <a class="nav-cta" href="https://github.com/ikanam-ai/ai-values-atlas">GitHub</a>
         </div>
       </nav>
 
-      <div class="hero-grid">
-        <div>
-          <p class="eyebrow">OPEN RESEARCH INFRASTRUCTURE</p>
-          <h1>How do we study<br /><span>values in AI?</span></h1>
-          <p class="lede">
-            Papers, datasets, instruments, axiological frameworks, models, and
-            validation evidence — connected instead of flattened into a reading list.
-          </p>
+      <div class="shell hero-layout" id="top">
+        <div class="hero-copy">
+          <p class="eyebrow">OPEN FIELD GUIDE · STRUCTURED EVIDENCE INDEX</p>
+          <h1>Values in AI,<br /><em>mapped carefully.</em></h1>
+          <p class="lede">Research on how AI systems represent, express, prioritize, and act on values — organized by construct, interface, scorer, and evidence.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#browse">Browse the literature</a>
+            <a class="button secondary" href="#field-map">Understand the field</a>
+          </div>
         </div>
-        <aside class="principle-card">
-          <p class="card-label">Core distinction</p>
-          <p class="principle">A value framework is not an instrument. An instrument is not a scorer. A paper may contain several studies.</p>
-          <div class="flow"><span>Work</span><b>→</b><span>Study</span><b>→</b><span>Evidence</span></div>
+
+        <aside class="reading-rule">
+          <p class="rule-label">Before comparing two results, ask:</p>
+          <ol>
+            <li><b>What</b> is the value space?</li>
+            <li><b>Who</b> or what is measured?</li>
+            <li><b>How</b> is evidence elicited?</li>
+            <li><b>Which</b> scorer maps the output?</li>
+            <li><b>What</b> protocol fixes the result?</li>
+            <li><b>Which</b> validity claim was tested?</li>
+          </ol>
         </aside>
       </div>
 
-      <section class="metrics" aria-label="Atlas counts">
-        <div><strong id="metricLinks">—</strong><span>discovered links</span></div>
-        <div><strong id="metricWorks">—</strong><span>curated works</span></div>
-        <div><strong id="metricStudies">—</strong><span>studies</span></div>
-        <div><strong id="metricAxiologies">—</strong><span>axiologies</span></div>
-        <div><strong id="metricModels">—</strong><span>models</span></div>
-        <div><strong id="metricDatasets">—</strong><span>datasets</span></div>
-      </section>
+      <div class="shell headline-stats" aria-label="Atlas coverage">
+        <div><strong id="metricPublications">—</strong><span>publication links</span></div>
+        <div><strong id="metricResources">—</strong><span>deduplicated resources</span></div>
+        <div><strong id="metricSources">—</strong><span>source catalogs</span></div>
+      </div>
     </header>
 
-    <main class="shell">
-      <section class="workspace">
-        <div class="tabs" role="tablist">
-          <button class="tab active" data-view="links">Discovery catalog</button>
-          <button class="tab" data-view="works">Curated works</button>
-          <button class="tab" data-view="axiologies">Axiologies</button>
-          <button class="tab" data-view="instruments">Instruments</button>
-          <button class="tab" data-view="models">Models</button>
-          <button class="tab" data-view="datasets">Datasets</button>
-        </div>
+    <main>
+      <section class="shell field-map" id="field-map">
+        <header class="section-heading">
+          <p class="eyebrow">FIELD MAP</p>
+          <h2>“Values” is not one measurement.</h2>
+          <p>The same model can produce different but legitimate evidence under different interfaces. Each row licenses a different kind of claim.</p>
+        </header>
 
-        <div class="filters" id="linkFilters">
-          <label class="search-field">
-            <span>Search</span>
-            <input id="search" type="search" placeholder="Value Portrait, moral foundations, pluralism…" />
-          </label>
-          <label>
-            <span>Resource</span>
-            <select id="typeFilter"><option value="">All types</option></select>
-          </label>
-          <label>
-            <span>Scope</span>
-            <select id="scopeFilter">
-              <option value="">Core + adjacent</option>
-              <option value="core">Core</option>
-              <option value="adjacent">Adjacent</option>
-            </select>
-          </label>
-          <label>
-            <span>Source</span>
-            <select id="sourceFilter"><option value="">All catalogs</option></select>
-          </label>
+        <div class="map-table" role="table" aria-label="Value research evidence layers">
+          <div class="map-head" role="row"><span>Evidence layer</span><span>Typical interface</span><span>Reportable claim</span></div>
+          <div class="map-row" role="row"><b>Value understanding</b><span>classification · moral scenarios</span><span>recognition or reasoning</span></div>
+          <div class="map-row" role="row"><b>Stated profile</b><span>questionnaire · endorsement</span><span>protocol-conditioned profile</span></div>
+          <div class="map-row" role="row"><b>Conflict choice</b><span>forced choice · ranking</span><span>task-bounded priority</span></div>
+          <div class="map-row" role="row"><b>Generated framing</b><span>free text + scorer</span><span>values expressed in text</span></div>
+          <div class="map-row" role="row"><b>Observed action</b><span>games · agents · environments</span><span>behavioral evidence</span></div>
+          <div class="map-row" role="row"><b>Internal representation</b><span>probes · activations · embeddings</span><span>mechanism or representation</span></div>
+          <div class="map-row" role="row"><b>Alignment target</b><span>principles · preferences · constitutions</span><span>normative objective</span></div>
         </div>
-
-        <div class="result-bar">
-          <p id="resultCount">Loading catalog…</p>
-          <p class="status-key" id="statusKey"><i></i><span>Discovery records are not yet method-verified</span></p>
-        </div>
-        <div id="content" class="catalog-grid" aria-live="polite"></div>
-        <button id="loadMore" class="load-more" hidden>Load more</button>
+        <p class="map-footnote">A questionnaire is not an axiology. A scorer is not an instrument. Reliability within one interface does not establish identity across interfaces.</p>
       </section>
 
-      <section class="method-note" id="methodology">
-        <p class="eyebrow">EVIDENCE-AWARE BY DESIGN</p>
-        <h2>Missing axiology is data, too.</h2>
-        <p>
-          Studies are explicitly marked as using an established framework, proposing
-          one, inducing interpretable factors, learning a latent space, accepting
-          open-ended values, invoking values implicitly, or using no axiological model.
-        </p>
+      <section class="browser" id="browse">
+        <div class="shell browser-layout">
+          <aside class="browse-nav" aria-label="Browse sections">
+            <p class="browse-label">Browse the atlas</p>
+            <button class="browse-tab active" data-view="publications"><span>01</span>Publications</button>
+            <button class="browse-tab" data-view="datasets"><span>02</span>Datasets & benchmarks</button>
+            <button class="browse-tab" data-view="tools"><span>03</span>Models, code & tools</button>
+            <button class="browse-tab" data-view="axiologies"><span>04</span>Axiologies</button>
+            <button class="browse-tab" data-view="instruments"><span>05</span>Instruments</button>
+            <button class="browse-tab" data-view="sources"><span>06</span>Source catalogs</button>
+            <div class="browse-note">The discovery index preserves provenance. Method verification is a separate curation step.</div>
+          </aside>
+
+          <div class="browse-main">
+            <div class="browse-title">
+              <div>
+                <p class="eyebrow">RESEARCH INDEX</p>
+                <h2 id="viewTitle">Publications</h2>
+              </div>
+              <p id="resultCount">Loading index…</p>
+            </div>
+
+            <div class="filters" id="filters">
+              <label class="search-field">
+                <span>Search title, URL, section, or catalog</span>
+                <input id="search" type="search" placeholder="Schwartz, value-action gap, pluralism…" />
+              </label>
+              <label>
+                <span>Scope</span>
+                <select id="scopeFilter"><option value="">Core + adjacent</option><option value="core">Core</option><option value="adjacent">Adjacent</option></select>
+              </label>
+              <label>
+                <span>Provenance</span>
+                <select id="sourceFilter"><option value="">All source catalogs</option></select>
+              </label>
+            </div>
+
+            <div class="index-head" id="indexHead"><span>Resource</span><span>Evidence</span><span>Provenance</span></div>
+            <div id="content" class="index-list" aria-live="polite"></div>
+            <button id="loadMore" class="load-more" hidden>Show more results</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="shell contribution">
+        <div>
+          <p class="eyebrow">OPEN CURATION</p>
+          <h2>Help turn discovery into evidence.</h2>
+        </div>
+        <div>
+          <p>Add a missing paper, connect a study to its axiology and instrument, document validation evidence, or correct an artifact link.</p>
+          <a href="https://github.com/ikanam-ai/ai-values-atlas/blob/main/CONTRIBUTING.md">Read the contribution guide →</a>
+        </div>
       </section>
     </main>
 
     <footer class="shell">
-      <p>Open metadata for the AI values research community.</p>
+      <p>AI Values Atlas · open metadata for the research community</p>
       <p id="generatedAt"></p>
     </footer>
 

@@ -1,21 +1,23 @@
-const state = {
-  data: null,
-  view: "links",
-  search: "",
-  type: "",
-  scope: "",
-  source: "",
-  visible: 60,
-};
+const state = { data: null, view: "publications", search: "", scope: "", source: "", visible: 80 };
 
 const content = document.querySelector("#content");
 const resultCount = document.querySelector("#resultCount");
 const loadMore = document.querySelector("#loadMore");
-const filters = document.querySelector("#linkFilters");
-const statusText = document.querySelector("#statusKey span");
+const filters = document.querySelector("#filters");
+const indexHead = document.querySelector("#indexHead");
+const viewTitle = document.querySelector("#viewTitle");
+
+const viewNames = {
+  publications: "Publications",
+  datasets: "Datasets & benchmarks",
+  tools: "Models, code & tools",
+  axiologies: "Axiological spaces",
+  instruments: "Measurement instruments",
+  sources: "Source catalogs",
+};
 
 function escapeHtml(value = "") {
-  return value.replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
+  return String(value).replace(/[&<>'"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
 }
 
 function titleFor(link) {
@@ -30,133 +32,108 @@ function sourcesFor(link) {
   return [...new Set(link.occurrences.map((item) => item.catalog_id))];
 }
 
-function renderLinks() {
+function discoveryRows() {
+  const datasetTerms = /dataset|benchmark|item bank|corpus|survey|questionnaire/i;
+  let rows = state.data.links.filter((link) => {
+    if (state.view === "publications") return link.link_type_guess === "publication";
+    if (state.view === "datasets") return link.link_type_guess === "dataset" || datasetTerms.test(titleFor(link));
+    return ["model", "repository", "project"].includes(link.link_type_guess);
+  });
   const query = state.search.toLowerCase();
-  const rows = state.data.links.filter((link) => {
+  return rows.filter((link) => {
     const haystack = [titleFor(link), link.label, link.url, ...sourcesFor(link), ...link.occurrences.map((item) => item.section)].join(" ").toLowerCase();
     return (!query || haystack.includes(query)) &&
-      (!state.type || link.link_type_guess === state.type) &&
       (!state.scope || link.scope_tier_guess === state.scope) &&
       (!state.source || sourcesFor(link).includes(state.source));
+  }).sort((left, right) => {
+    const weak = (link) => /^(?:\d{4}\.\d{4,5}|\d{4}\.[\w.-]+|collection|leaderboard|hf datasets|hg & ci)$/i.test(titleFor(link)) || /^https?:/i.test(titleFor(link));
+    return Number(weak(left)) - Number(weak(right)) || titleFor(left).localeCompare(titleFor(right));
   });
-  resultCount.textContent = `${rows.length.toLocaleString()} discovered resources`;
+}
+
+function renderDiscovery() {
+  const rows = discoveryRows();
+  resultCount.textContent = `${rows.length.toLocaleString()} matching resources`;
   const visible = rows.slice(0, state.visible);
   content.innerHTML = visible.length ? visible.map((link) => {
     const sources = sourcesFor(link);
-    return `<article class="record">
-      <div class="record-top"><span class="pill">${escapeHtml(link.link_type_guess)}</span><span class="scope">${escapeHtml(link.scope_tier_guess)}</span></div>
-      <h3><a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(titleFor(link))}</a></h3>
-      <div class="record-meta"><span>${sources.length} source${sources.length === 1 ? "" : "s"}</span><span title="${escapeHtml(sources.join(", "))}">${escapeHtml(sources[0] || "")}</span></div>
+    const section = link.occurrences[0]?.section?.split(" / ").slice(-2).join(" / ") || "catalog entry";
+    return `<article class="index-row">
+      <div class="resource-title"><a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(titleFor(link))}</a><small>${escapeHtml(link.url)}</small></div>
+      <div class="evidence-cell"><span class="tag">${escapeHtml(link.link_type_guess)}</span><span>${escapeHtml(link.scope_tier_guess)}</span></div>
+      <div class="provenance-cell"><b>${escapeHtml(sources[0] || "")}</b><span title="${escapeHtml(section)}">${escapeHtml(section)}</span></div>
     </article>`;
-  }).join("") : '<div class="empty">No resources match these filters.</div>';
+  }).join("") : '<div class="empty">No resources match the current filters.</div>';
   loadMore.hidden = state.visible >= rows.length;
 }
 
 function renderAxiologies() {
   const rows = state.data.axiologies;
-  resultCount.textContent = `${rows.length} curated value representations`;
-  content.innerHTML = rows.map((item) => `<article class="record">
-    <div class="record-top"><span class="pill">${escapeHtml(item.representation_type.replaceAll("_", " "))}</span><span class="scope">${item.dimension_count ?? "open"} dimensions</span></div>
-    <h3><a href="${escapeHtml(item.primary_sources[0])}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a></h3>
-    <div class="record-meta"><span>${escapeHtml(item.family.replaceAll("_", " "))}</span><span>${escapeHtml(item.interpretability)}</span></div>
-  </article>`).join("");
-  loadMore.hidden = true;
-}
-
-function renderWorks() {
-  const rows = state.data.works;
-  resultCount.textContent = `${rows.length} method-aware publication records`;
-  content.innerHTML = rows.map((item) => `<article class="record">
-    <div class="record-top"><span class="pill">${escapeHtml(item.work_types[0].replaceAll("_", " "))}</span><span class="scope">${item.year} · ${escapeHtml(item.curation.status)}</span></div>
-    <h3><a href="${escapeHtml(item.primary_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.title)}</a></h3>
-    <p class="record-note">${escapeHtml(item.summary || "Method record in curation.")}</p>
-    <div class="record-meta"><span>${escapeHtml(item.venue || item.publication_status)}</span><span>${escapeHtml(item.research_roles[0].replaceAll("_", " "))}</span></div>
+  resultCount.textContent = `${rows.length} mapped value representations`;
+  content.innerHTML = rows.map((item) => `<article class="index-row entity-row">
+    <div class="resource-title"><a href="${escapeHtml(item.primary_sources[0])}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a><small>${escapeHtml(item.origin_domain.replaceAll("_", " "))}</small></div>
+    <div class="evidence-cell"><span class="tag">${escapeHtml(item.representation_type.replaceAll("_", " "))}</span><span>${item.dimension_count ?? "open"} dimensions</span></div>
+    <div class="provenance-cell"><b>${escapeHtml(item.family.replaceAll("_", " "))}</b><span>${escapeHtml(item.interpretability)}</span></div>
   </article>`).join("");
   loadMore.hidden = true;
 }
 
 function renderInstruments() {
   const rows = state.data.instruments;
-  resultCount.textContent = `${rows.length} curated instruments`;
-  content.innerHTML = rows.map((item) => `<article class="record">
-    <div class="record-top"><span class="pill">${escapeHtml(item.instrument_type.replaceAll("_", " "))}</span><span class="scope">${escapeHtml(item.status)}</span></div>
-    <h3><a href="${escapeHtml(item.primary_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a></h3>
-    <div class="record-meta"><span>${item.axiology_ids.length} axiology link${item.axiology_ids.length === 1 ? "" : "s"}</span><span>${escapeHtml(item.aliases.join(", "))}</span></div>
+  resultCount.textContent = `${rows.length} reusable elicitation instruments`;
+  content.innerHTML = rows.map((item) => `<article class="index-row entity-row">
+    <div class="resource-title"><a href="${escapeHtml(item.primary_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a><small>${escapeHtml(item.aliases.join(" · "))}</small></div>
+    <div class="evidence-cell"><span class="tag">${escapeHtml(item.instrument_type.replaceAll("_", " "))}</span><span>${escapeHtml(item.status)}</span></div>
+    <div class="provenance-cell"><b>${item.axiology_ids.length} linked spaces</b><span>${escapeHtml(item.axiology_ids.join(" · "))}</span></div>
   </article>`).join("");
   loadMore.hidden = true;
 }
 
-function renderModels() {
-  const rows = state.data.models;
-  resultCount.textContent = `${rows.length} curated value-related models`;
-  content.innerHTML = rows.map((item) => `<article class="record">
-    <div class="record-top"><span class="pill">${escapeHtml(item.model_kind.replaceAll("_", " "))}</span><span class="scope">${escapeHtml(item.curation_status)}</span></div>
-    <h3><a href="${escapeHtml(item.primary_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a></h3>
-    <p class="record-note">${escapeHtml(item.notes)}</p>
-    <div class="record-meta"><span>${escapeHtml(item.developer)}</span><span>${item.axiology_ids.length} axiology link${item.axiology_ids.length === 1 ? "" : "s"}</span></div>
-  </article>`).join("");
-  loadMore.hidden = true;
-}
-
-function renderDatasets() {
-  const rows = state.data.datasets;
-  resultCount.textContent = `${rows.length} curated datasets and item banks`;
-  content.innerHTML = rows.map((item) => `<article class="record">
-    <div class="record-top"><span class="pill">${escapeHtml(item.dataset_kinds[0].replaceAll("_", " "))}</span><span class="scope">${escapeHtml(item.curation_status)}</span></div>
-    <h3><a href="${escapeHtml(item.primary_url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a></h3>
-    <p class="record-note">${escapeHtml(item.notes)}</p>
-    <div class="record-meta"><span>${escapeHtml(item.annotation)} annotation</span><span>${item.axiology_ids.length} axiology link${item.axiology_ids.length === 1 ? "" : "s"}</span></div>
+function renderSources() {
+  const occurrenceCounts = new Map();
+  state.data.links.forEach((link) => sourcesFor(link).forEach((id) => occurrenceCounts.set(id, (occurrenceCounts.get(id) || 0) + 1)));
+  const rows = [...state.data.sources].sort((a, b) => (occurrenceCounts.get(b.id) || 0) - (occurrenceCounts.get(a.id) || 0));
+  resultCount.textContent = `${rows.length} provenance sources`;
+  content.innerHTML = rows.map((item) => `<article class="index-row entity-row source-row">
+    <div class="resource-title"><a href="${escapeHtml(item.repo || "https://github.com/ikanam-ai/ai-values-atlas")}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.name)}</a><small>${escapeHtml(item.id)}</small></div>
+    <div class="evidence-cell"><strong>${(occurrenceCounts.get(item.id) || 0).toLocaleString()}</strong><span>unique links</span></div>
+    <div class="provenance-cell"><b>${escapeHtml(item.scope_tier_guess)}</b><span>${escapeHtml(item.license_status)}</span></div>
   </article>`).join("");
   loadMore.hidden = true;
 }
 
 function render() {
-  filters.hidden = state.view !== "links";
-  content.className = "catalog-grid";
-  statusText.textContent = state.view === "links"
-    ? "Discovery records are not yet method-verified"
-    : "Curated records disclose their review status";
-  if (state.view === "links") renderLinks();
-  else if (state.view === "works") renderWorks();
+  viewTitle.textContent = viewNames[state.view];
+  const discovery = ["publications", "datasets", "tools"].includes(state.view);
+  filters.hidden = !discovery;
+  indexHead.hidden = false;
+  if (discovery) renderDiscovery();
   else if (state.view === "axiologies") renderAxiologies();
   else if (state.view === "instruments") renderInstruments();
-  else if (state.view === "models") renderModels();
-  else renderDatasets();
+  else renderSources();
 }
 
-function populateFilters() {
-  const types = [...new Set(state.data.links.map((item) => item.link_type_guess))].sort();
-  const sources = [...new Set(state.data.links.flatMap(sourcesFor))].sort();
-  document.querySelector("#typeFilter").insertAdjacentHTML("beforeend", types.map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join(""));
-  document.querySelector("#sourceFilter").insertAdjacentHTML("beforeend", sources.map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join(""));
-  document.querySelector("#metricLinks").textContent = state.data.counts.links.toLocaleString();
-  document.querySelector("#metricWorks").textContent = state.data.counts.works;
-  document.querySelector("#metricStudies").textContent = state.data.counts.studies;
-  document.querySelector("#metricAxiologies").textContent = state.data.counts.axiologies;
-  document.querySelector("#metricModels").textContent = state.data.counts.models;
-  document.querySelector("#metricDatasets").textContent = state.data.counts.datasets;
-  document.querySelector("#generatedAt").textContent = `Built ${new Date(state.data.generated_at).toLocaleDateString()}`;
+function populate() {
+  const sourceIds = [...new Set(state.data.links.flatMap(sourcesFor))].sort();
+  document.querySelector("#sourceFilter").insertAdjacentHTML("beforeend", sourceIds.map((item) => `<option value="${escapeHtml(item)}">${escapeHtml(item)}</option>`).join(""));
+  document.querySelector("#metricPublications").textContent = state.data.links.filter((item) => item.link_type_guess === "publication").length.toLocaleString();
+  document.querySelector("#metricResources").textContent = state.data.links.length.toLocaleString();
+  document.querySelector("#metricSources").textContent = sourceIds.length;
+  document.querySelector("#generatedAt").textContent = `Source snapshot ${new Date(state.data.generated_at).toLocaleDateString()}`;
 }
 
-document.querySelectorAll(".tab").forEach((button) => button.addEventListener("click", () => {
-  document.querySelectorAll(".tab").forEach((item) => item.classList.toggle("active", item === button));
+document.querySelectorAll(".browse-tab").forEach((button) => button.addEventListener("click", () => {
+  document.querySelectorAll(".browse-tab").forEach((item) => item.classList.toggle("active", item === button));
   state.view = button.dataset.view;
+  state.visible = 80;
   render();
 }));
-
-document.querySelector("#search").addEventListener("input", (event) => { state.search = event.target.value; state.visible = 60; render(); });
-document.querySelector("#typeFilter").addEventListener("change", (event) => { state.type = event.target.value; state.visible = 60; render(); });
-document.querySelector("#scopeFilter").addEventListener("change", (event) => { state.scope = event.target.value; state.visible = 60; render(); });
-document.querySelector("#sourceFilter").addEventListener("change", (event) => { state.source = event.target.value; state.visible = 60; render(); });
-loadMore.addEventListener("click", () => { state.visible += 60; render(); });
+document.querySelector("#search").addEventListener("input", (event) => { state.search = event.target.value; state.visible = 80; render(); });
+document.querySelector("#scopeFilter").addEventListener("change", (event) => { state.scope = event.target.value; state.visible = 80; render(); });
+document.querySelector("#sourceFilter").addEventListener("change", (event) => { state.source = event.target.value; state.visible = 80; render(); });
+loadMore.addEventListener("click", () => { state.visible += 80; render(); });
 
 fetch("data.json", { cache: "no-store" })
-  .then((response) => {
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    return response.json();
-  })
-  .then((data) => { state.data = data; populateFilters(); render(); })
-  .catch((error) => {
-    resultCount.textContent = "Catalog could not be loaded";
-    content.innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`;
-  });
+  .then((response) => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response.json(); })
+  .then((data) => { state.data = data; populate(); render(); })
+  .catch((error) => { resultCount.textContent = "Index unavailable"; content.innerHTML = `<div class="empty">${escapeHtml(error.message)}</div>`; });

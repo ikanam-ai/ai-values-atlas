@@ -33,6 +33,7 @@ def source_snapshot_time() -> str:
 
 def main() -> int:
     generated_at = source_snapshot_time()
+    sources = json.loads((ROOT / "data" / "catalog_sources.json").read_text())["sources"]
     links = read_jsonl(LINKS)
     axiologies = json.loads((ROOT / "data" / "curated" / "axiologies.json").read_text())["axiologies"]
     instruments = json.loads((ROOT / "data" / "curated" / "instruments.json").read_text())["instruments"]
@@ -87,6 +88,7 @@ def main() -> int:
                 "generated_at": generated_at,
                 "counts": {"links": len(links), "axiologies": len(axiologies), "instruments": len(instruments), "models": len(models), "datasets": len(datasets), "works": len(works), "studies": len(studies)},
                 "links": links,
+                "sources": sources,
                 "works": works,
                 "studies": studies,
                 "axiologies": axiologies,

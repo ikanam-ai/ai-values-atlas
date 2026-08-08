@@ -128,9 +128,30 @@ def included(section: str, source: dict) -> bool:
 def context_title(links: list[tuple[str, str]]) -> str:
     for label, _ in links:
         cleaned = clean_text(label)
-        if cleaned and cleaned.lower() not in GENERIC_LABELS and len(cleaned) > 5:
+        looks_like_host = bool(re.fullmatch(r"[\w.-]+\.[a-zA-Z]{2,}", cleaned))
+        if cleaned and cleaned.lower() not in GENERIC_LABELS and len(cleaned) > 5 and not looks_like_host:
             return cleaned
     return ""
+
+
+def row_title(raw: str, links: list[tuple[str, str]]) -> str:
+    """Recover an unlinked paper title that precedes generic paper/code links."""
+    linked_title = context_title(links)
+    if linked_title:
+        return linked_title
+
+    starts = [match.start() for pattern in (MARKDOWN_LINK_RE, HTML_LINK_RE, BARE_URL_RE) for match in pattern.finditer(raw)]
+    prefix = raw[: min(starts)] if starts else raw
+    prefix = re.sub(r"^\s*[-*+]\s*", "", prefix)
+    prefix = clean_text(prefix)
+
+    # Awesome-list tables frequently keep the title as plain text in the first
+    # substantial cell and attach a generic [paper] link in a later cell.
+    cells = [re.sub(r"\b(?:19|20)\d{2}(?:-\d{2})?\s*$", "", cell).strip(" :-") for cell in prefix.split("|")]
+    candidates = [cell for cell in cells if len(cell) > 5 and re.search(r"[A-Za-z]", cell)]
+    if candidates:
+        return max(candidates, key=len)
+    return prefix if len(prefix) > 5 else ""
 
 
 def extract_links(line: str) -> list[tuple[str, str]]:
@@ -177,7 +198,7 @@ def harvest_source(source: dict, cache: pathlib.Path) -> list[dict]:
         links = extract_links(raw)
         if not links:
             continue
-        row_title = context_title(links)
+        recovered_title = row_title(raw, links)
 
         for label, raw_url in links:
             url = canonicalize_url(raw_url)
@@ -187,7 +208,7 @@ def harvest_source(source: dict, cache: pathlib.Path) -> list[dict]:
                 {
                     "url": url,
                     "label": label,
-                    "context_title": row_title,
+                    "context_title": recovered_title,
                     "link_type_guess": classify_link(url, label),
                     "scope_tier_guess": source["scope_tier_guess"],
                     "occurrence": {
