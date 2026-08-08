@@ -12,55 +12,20 @@ import urllib.parse
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 README = ROOT / "README.md"
-README_RU = ROOT / "README_RU.md"
 LINKS = ROOT / "data" / "raw" / "catalog_links.jsonl"
 START = "<!-- complete-catalog:start -->"
 END = "<!-- complete-catalog:end -->"
 
 GENERIC = {"paper", "pdf", "code", "github", "dataset", "data", "model", "project", "website", "link", "repository"}
 
-RU_LABELS = {
-    "🗺️ Surveys, reviews, and field overviews": "🗺️ Обзоры и карты исследовательского поля",
-    "🧭 Foundations and value theory": "🧭 Основания и теории ценностей",
-    "🗂️ Datasets and benchmarks": "🗂️ Датасеты и бенчмарки",
-    "🔬 Reliability, validity, and auditing": "🔬 Надёжность, валидность и аудит",
-    "🎯 Choice, action, and behavioral consistency": "🎯 Выбор, действие и поведенческая согласованность",
-    "🌍 Culture, language, and pluralism": "🌍 Культура, язык и плюрализм",
-    "🗣️ Preferences, opinions, and social simulation": "🗣️ Предпочтения, мнения и социальные симуляции",
-    "⚖️ Moral reasoning and value understanding": "⚖️ Моральное рассуждение и понимание ценностей",
-    "🧰 Alignment, steering, and preferences": "🧰 Алайнмент, управление и предпочтения",
-    "📐 Value representation and model internals": "📐 Представления ценностей и внутренние механизмы моделей",
-    "📏 Measurement and profiling": "📏 Измерение и профилирование",
-    "📎 Other and adjacent value research": "📎 Другие и смежные исследования ценностей",
-    "💾 Dataset and benchmark artifacts": "💾 Датасеты и артефакты бенчмарков",
-    "🧠 Model checkpoints and scorers": "🧠 Чекпойнты моделей и скореры",
-    "🧰 Code repositories": "🧰 Репозитории с кодом",
-    "🌐 Project pages": "🌐 Страницы проектов",
-    "📋 Survey resources": "📋 Опросные ресурсы",
-    "🔗 Additional resources": "🔗 Дополнительные ресурсы",
-}
-
 LINK_LABELS = {
-    "publication": ("paper", "статья"),
-    "dataset": ("data", "данные"),
-    "model": ("model", "модель"),
-    "repository": ("code", "код"),
-    "project": ("project", "проект"),
-    "survey_resource": ("survey", "опрос"),
-    "other": ("link", "ссылка"),
-}
-
-SOURCE_NAMES = {
-    "aidas-llm-values-pluralism": "AIDAS Values & Pluralism",
-    "alignment-goal-survey": "Alignment Goal Survey",
-    "awesome-cultural-nlp": "Awesome Cultural NLP",
-    "awesome-llm-datasets": "Awesome LLM Datasets",
-    "awesome-llm-safety": "Awesome LLM Safety",
-    "personalized-alignment": "Personalized Alignment",
-    "pluralistic-alignment": "Pluralistic Alignment",
-    "stonic-manuscript-bibliography": "STONIC bibliography",
-    "valuebyte-llm-psychometrics": "LLM Psychometrics",
-    "valuebyte-llm-social-science": "LLM Social Science",
+    "publication": "paper",
+    "dataset": "dataset",
+    "model": "model",
+    "repository": "code",
+    "project": "project",
+    "survey_resource": "survey",
+    "other": "link",
 }
 
 PUBLICATION_GROUPS = [
@@ -80,10 +45,6 @@ PUBLICATION_GROUPS = [
 
 def read_jsonl(path: pathlib.Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text().splitlines() if line.strip()]
-
-
-def source_ids(row: dict) -> list[str]:
-    return sorted({item["catalog_id"] for item in row.get("occurrences", [])})
 
 
 def display_title(row: dict) -> str:
@@ -151,65 +112,193 @@ def publication_group(row: dict) -> str:
     return "📎 Other and adjacent value research"
 
 
-def localized_label(label: str, language: str) -> str:
-    return RU_LABELS.get(label, label) if language == "ru" else label
+def publication_metadata(row: dict) -> dict[str, str]:
+    """Extract conservative display metadata without claiming full-paper audit."""
+    raw = re.sub(r"\s+", " ", row.get("context_title") or display_title(row)).strip(" ,")
+    raw = re.sub(r"^\d+\.\s+", "", raw)
+    group_label = re.sub(r"^[^A-Za-z]+", "", publication_group(row))
+    subdomain = group_label or "Other / adjacent"
+    tagged = re.match(r"^[\[(]([^\])]{1,60})[\])]\s*", raw)
+    if tagged:
+        subdomain = tagged.group(1).strip().replace("Others & Custom", "Other / custom").replace("Others & custom", "Other / custom")
+        raw = raw[tagged.end():].strip()
+
+    # Source catalogs commonly use either ``Title, 2024.05, Venue`` or
+    # ``Title, ACL 2024``.  Parse only unambiguous trailing metadata.
+    title = raw
+    venue = ""
+    date = str(row.get("publication_year") or "")
+    parts = [part.strip() for part in raw.strip(" ,").split(",")]
+    date_index = next(
+        (index for index, part in enumerate(parts[1:], start=1) if re.fullmatch(r"(?:19|20)\d{2}(?:\.(?:0?[1-9]|1[0-2]))?", part)),
+        None,
+    )
+    if date_index is not None:
+        title = ", ".join(parts[:date_index]).strip()
+        date = parts[date_index]
+        if date_index + 1 < len(parts):
+            venue = ", ".join(parts[date_index + 1:]).strip(" ,")
+    elif len(parts) > 1:
+        tail = parts[-1]
+        venue_year = re.match(r"^(.*?)(?:\s+|\b)((?:19|20)\d{2})(?:\.(0?[1-9]|1[0-2]))?(.*)$", tail)
+        if venue_year and venue_year.group(1).strip():
+            title = ", ".join(parts[:-1]).strip()
+            venue = (venue_year.group(1) + venue_year.group(4)).strip(" ,-()")
+            date = venue_year.group(2) + (f".{venue_year.group(3)}" if venue_year.group(3) else "")
+
+    if not venue:
+        url = row["url"].lower()
+        anthology = re.search(r"aclanthology\.org/(?:\d{4}\.)?([a-z0-9-]+?)(?:-main|-long|-short|-\d|\.\d|/)", url)
+        if anthology:
+            key = anthology.group(1)
+            venue = {
+                "findings-acl": "Findings of ACL",
+                "findings-emnlp": "Findings of EMNLP",
+                "findings-naacl": "Findings of NAACL",
+                "lrec": "LREC-COLING",
+                "semeval": "SemEval",
+                "nlpcss": "NLP+CSS",
+                "ccl": "CCL",
+                "q18": "TACL",
+            }.get(key, key.upper())
+        elif "proceedings.iclr.cc" in url:
+            venue = "ICLR"
+        elif "proceedings.neurips.cc" in url:
+            venue = "NeurIPS"
+        elif "openreview.net" in url:
+            venue = "OpenReview"
+        elif "arxiv.org" in url:
+            venue = "arXiv"
+        else:
+            known_sources = (
+                ("nature.com/articles/s41586", "Nature"),
+                ("nature.com/articles/s41562", "Nature Human Behaviour"),
+                ("nature.com/articles/s43588", "Nature Computational Science"),
+                ("nature.com/articles/s42256", "Nature Machine Intelligence"),
+                ("nature.com/articles/s41599", "Humanities and Social Sciences Communications"),
+                ("10.1093/pnasnexus", "PNAS Nexus"),
+                ("10.1371/journal.pone", "PLOS ONE"),
+                ("10.2196/", "JMIR"),
+                ("10.1155/2024/7115633", "Human Behavior and Emerging Technologies"),
+                ("ojs.aaai.org/index.php/aaai", "AAAI"),
+                ("ojs.aaai.org/index.php/aies", "AIES"),
+                ("journals.sagepub.com", "SAGE journal"),
+                ("dl.acm.org", "ACM Digital Library"),
+                ("ieeexplore.ieee.org", "IEEE Xplore"),
+                ("link.springer.com", "Springer journal or proceedings"),
+                ("sciencedirect.com", "Elsevier journal or book"),
+                ("tandfonline.com", "Taylor & Francis journal"),
+                ("10.21203/", "Research Square"),
+                ("10.1145/", "ACM proceedings or journal"),
+                ("10.1609/aaai", "AAAI"),
+                ("10.1177/", "SAGE journal"),
+                ("10.1007/", "Springer journal or proceedings"),
+            )
+            venue = next((label for fragment, label in known_sources if fragment in url), "Venue not verified")
+
+    return {
+        "subdomain": subdomain,
+        "title": title.strip(" ,"),
+        "venue": venue,
+        "date": date,
+    }
 
 
-def format_row(row: dict, language: str) -> str:
-    title = markdown_text(display_title(row))
-    sources = ", ".join(SOURCE_NAMES.get(source, source) for source in source_ids(row))
-    sources = sources or ("прямой источник" if language == "ru" else "direct source")
-    link_label = LINK_LABELS.get(row["link_type_guess"], LINK_LABELS["other"])[language == "ru"]
-    scope = {"core": "ядро", "adjacent": "смежная тема"}.get(row["scope_tier_guess"], row["scope_tier_guess"]) if language == "ru" else row["scope_tier_guess"]
-    via = "источник" if language == "ru" else "via"
-    year = f", {row['publication_year']}" if row.get("publication_year") else ""
-    return f"- **{title}**{year} — [[{link_label}]({row['url']})] · {scope} · {via}: {sources}"
+def occurrence_keys(row: dict) -> set[tuple[str, int]]:
+    return {(item["catalog_id"], item["line"]) for item in row.get("occurrences", [])}
 
 
-def section(label: str, rows: list[dict], language: str) -> list[str]:
+def normalized_work_title(row: dict) -> str:
+    title = publication_metadata(row)["title"]
+    title = re.sub(r"^\s*[★⭐]+\s*", "", title)
+    return re.sub(r"[^a-z0-9]+", " ", title.casefold()).strip()
+
+
+def related_artifact_map(rows: list[dict]) -> tuple[dict[str, list[dict]], set[str]]:
+    """Assign directly co-listed artifacts to one publication, once each."""
+    publications = [row for row in rows if row["link_type_guess"] == "publication"]
+    by_occurrence: dict[tuple[str, int], list[dict]] = collections.defaultdict(list)
+    by_title: dict[str, list[dict]] = collections.defaultdict(list)
+    for row in publications:
+        for key in occurrence_keys(row):
+            by_occurrence[key].append(row)
+        title_key = normalized_work_title(row)
+        if len(title_key) >= 16:
+            by_title[title_key].append(row)
+
+    result: dict[str, list[dict]] = collections.defaultdict(list)
+    assigned: set[str] = set()
+    for artifact in rows:
+        if artifact["link_type_guess"] == "publication":
+            continue
+        candidates: dict[str, tuple[int, dict]] = {}
+        artifact_occurrences = occurrence_keys(artifact)
+        for key in artifact_occurrences:
+            for publication in by_occurrence.get(key, []):
+                overlap = len(artifact_occurrences & occurrence_keys(publication))
+                candidates[publication["id"]] = (overlap, publication)
+        title_key = normalized_work_title(artifact)
+        if len(title_key) >= 16:
+            for publication in by_title.get(title_key, []):
+                overlap = len(artifact_occurrences & occurrence_keys(publication))
+                candidates[publication["id"]] = (100 + overlap, publication)
+        if not candidates:
+            continue
+        _, publication = max(candidates.values(), key=lambda item: (item[0], item[1].get("publication_year") or 0, item[1]["url"]))
+        result[publication["id"]].append(artifact)
+        assigned.add(artifact["id"])
+    return result, assigned
+
+
+def format_row(row: dict, related: list[dict] | None = None) -> str:
+    links = [row, *(related or [])]
+    rendered_links = " ".join(f"[{LINK_LABELS.get(item['link_type_guess'], 'link')}]({item['url']})" for item in links)
+    if row["link_type_guess"] == "publication":
+        metadata = publication_metadata(row)
+        details = [metadata["venue"], metadata["date"]]
+        details = [markdown_text(value) for value in details if value]
+        middle = f" — {' — '.join(details)}" if details else ""
+        return f"- ({markdown_text(metadata['subdomain'])}) **{markdown_text(metadata['title'])}**{middle} — {rendered_links}"
+    return f"- **{markdown_text(display_title(row))}** — {rendered_links}"
+
+
+def section(label: str, rows: list[dict], related: dict[str, list[dict]] | None = None) -> list[str]:
     rows = sorted(rows, key=lambda row: (display_title(row).casefold(), row["url"]))
-    result = [f'<a id="{anchor_for(label)}"></a>', "", f"#### {localized_label(label, language)} · {len(rows)}", ""]
-    result.extend(format_row(row, language) for row in rows)
+    result = [f'<a id="{anchor_for(label)}"></a>', "", f"#### {label} · {len(rows)}", ""]
+    result.extend(format_row(row, (related or {}).get(row["id"], [])) for row in rows)
     result.append("")
     return result
 
 
-def generate(rows: list[dict], language: str) -> str:
+def generate(rows: list[dict]) -> str:
     publications: dict[str, list[dict]] = collections.defaultdict(list)
     artifacts: dict[str, list[dict]] = collections.defaultdict(list)
+    related, assigned_artifacts = related_artifact_map(rows)
     for row in rows:
         if row["link_type_guess"] == "publication":
             publications[publication_group(row)].append(row)
-        else:
+        elif row["id"] not in assigned_artifacts:
             artifacts[row["link_type_guess"]].append(row)
 
-    if language == "ru":
-        lines = [
-            START, "",
-            "> Раздел генерируется из дедуплицированного индекса. Каждый URL приведён",
-            "> ровно один раз; для записи сохранены тематический охват и происхождение.", "",
-            "**Навигация по таксономии**", "",
-            "| Направление | Публикации |", "|---|---:|",
-        ]
-    else:
-        lines = [
-            START, "",
-            "> This section is generated from the deduplicated discovery index. Every",
-            "> URL appears exactly once here; provenance and scope labels remain visible.", "",
-            "**Browse the taxonomy**", "",
-            "| Research area | Publications |", "|---|---:|",
-        ]
+    lines = [
+        START, "",
+        "> This section is generated from the deduplicated discovery index. Every",
+        "> URL appears exactly once. Provenance and scope remain available in the",
+        "> downloadable data and on the interactive site rather than after each link.", "",
+        "**Entry format:** `(subdomain) Title — venue — date — [paper] [code] [dataset]`.",
+        "When the source does not name a value model, the parenthetical label falls",
+        "back to the nearest research subdomain rather than inventing one.", "",
+        "**Browse the taxonomy**", "",
+        "| Research area | Publications |", "|---|---:|",
+    ]
     ordered_labels = [label for label, _ in PUBLICATION_GROUPS] + ["📎 Other and adjacent value research"]
     for label in ordered_labels:
         if publications[label]:
-            lines.append(f"| [{localized_label(label, language)}](#{anchor_for(label)}) | {len(publications[label])} |")
-    if language == "ru":
-        lines.extend(["", "> **Легенда:** `ядро` — работа непосредственно о ценностях; `смежная тема` — более широкий контекст. После ссылки указаны каталоги-источники.", "", "### 📚 Публикации по направлениям", ""])
-    else:
-        lines.extend(["", "> **Legend:** `core` records focus directly on values; `adjacent` records provide broader context. Source catalogs follow each link.", "", "### 📚 Publications by research topic", ""])
+            lines.append(f"| [{label}](#{anchor_for(label)}) | {len(publications[label])} |")
+    lines.extend(["", "### 📚 Publications by research topic", ""])
     for label in ordered_labels:
         if publications[label]:
-            lines.extend(section(label, publications[label], language))
+            lines.extend(section(label, publications[label], related))
 
     artifact_labels = {
         "dataset": "💾 Dataset and benchmark artifacts",
@@ -219,54 +308,24 @@ def generate(rows: list[dict], language: str) -> str:
         "survey_resource": "📋 Survey resources",
         "other": "🔗 Additional resources",
     }
-    heading = "### 🧩 Данные, модели, код и дополнительные ресурсы" if language == "ru" else "### 🧩 Data, models, code, and additional resources"
-    lines.extend([heading, ""])
+    lines.extend(["### 🧩 Standalone data, models, code, and additional resources", ""])
     for kind in ("dataset", "model", "repository", "project", "survey_resource", "other"):
         if artifacts[kind]:
-            lines.extend(section(artifact_labels[kind], artifacts[kind], language))
+            lines.extend(section(artifact_labels[kind], artifacts[kind]))
     lines.append(END)
     return "\n".join(lines)
 
 
-def add_curated_years(text: str, rows: list[dict]) -> str:
-    years = {}
-    for row in rows:
-        if not row.get("publication_year"):
-            continue
-        url = row["url"]
-        variants = {
-            url,
-            re.sub(r"^http://", "https://", url),
-            url.replace("https://doi.org/", "https://dx.doi.org/"),
-            url.replace("https://arxiv.org/abs/", "https://browse.arxiv.org/pdf/") + (".pdf" if "arxiv.org/abs/" in url else ""),
-        }
-        for variant in variants:
-            years[variant] = row["publication_year"]
-    pattern = re.compile(r"(- \*\*[^\n]+?\*\*)(?:, (\d{4}))? (\[\[(?:paper|статья)\]\((https?://[^)]+)\)\])")
-
-    def replace(match: re.Match) -> str:
-        year = years.get(match.group(4)) or match.group(2)
-        if not year:
-            url_years = [int(value) for value in re.findall(r"(?<!\d)((?:19|20)\d{2})(?!\d)", match.group(4))]
-            url_years = [value for value in url_years if 1950 <= value <= 2026]
-            year = max(url_years) if url_years else None
-        suffix = f", {year}" if year else ""
-        return f"{match.group(1)}{suffix} {match.group(3)}"
-
-    return pattern.sub(replace, text)
-
-
-def update_readme(path: pathlib.Path, rows: list[dict], language: str) -> None:
+def update_readme(path: pathlib.Path, rows: list[dict]) -> None:
     text = path.read_text()
     if START not in text or END not in text:
         raise SystemExit(f"{path.name} must contain {START} and {END}")
-    text = add_curated_years(text, rows)
     publication_count = sum(row["link_type_guess"] == "publication" for row in rows)
     text = re.sub(r"badge/resources-\d+-136f58", f"badge/resources-{len(rows)}-136f58", text)
     text = re.sub(r"badge/publication%20links-\d+-0d3f35", f"badge/publication%20links-{publication_count}-0d3f35", text)
     text = re.sub(r"\d+ deduplicated links harvested", f"{len(rows)} deduplicated links harvested", text)
     text = re.sub(r"Complete catalog — all \d+ links", f"Complete catalog — all {len(rows)} links", text)
-    generated = generate(rows, language)
+    generated = generate(rows)
     prefix, remainder = text.split(START, 1)
     _, suffix = remainder.split(END, 1)
     updated = prefix.rstrip() + "\n\n" + generated + suffix
@@ -279,8 +338,7 @@ def update_readme(path: pathlib.Path, rows: list[dict], language: str) -> None:
 
 def main() -> int:
     rows = read_jsonl(LINKS)
-    update_readme(README, rows, "en")
-    update_readme(README_RU, rows, "ru")
+    update_readme(README, rows)
     return 0
 
 

@@ -24,9 +24,6 @@ nav { height: 78px; display: flex; align-items: center; justify-content: space-b
 .nav-links a { color: var(--muted); font-size: .82rem; text-decoration: none; }
 .nav-links a:hover { color: var(--green); }
 .nav-cta { border: 1px solid rgba(23,32,29,.25); border-radius: 999px; padding: 8px 14px; }
-.language-switch { display: inline-flex; gap: 2px; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.55); }
-.language-switch a { min-width: 30px; padding: 4px 7px; border-radius: 999px; text-align: center; font-size: .65rem; font-weight: 800; }
-.language-switch a.active { color: white; background: var(--green); }
 
 .hero-layout { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(340px, .65fr); gap: 90px; padding: 92px 0 72px; align-items: end; }
 .eyebrow { color: var(--green); font-size: .69rem; letter-spacing: .14em; font-weight: 850; margin: 0 0 22px; }
@@ -107,6 +104,10 @@ input:focus, select:focus { border-color: var(--green); }
 .resource-title a { display: block; color: var(--ink); font-family: var(--serif); font-size: 1rem; line-height: 1.28; text-decoration: none; }
 .resource-title a:hover { color: var(--green); }
 .resource-title small { display: block; max-width: 100%; color: #919d98; font-size: .62rem; margin-top: 7px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.publication-title .subdomain { display: block; margin-bottom: 4px; color: var(--green); font-size: .62rem; font-weight: 800; letter-spacing: .035em; text-transform: uppercase; }
+.publication-title strong { display: block; font-family: var(--serif); font-size: 1rem; font-weight: 500; line-height: 1.28; }
+.artifact-links { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 9px; }
+.artifact-links a { display: inline-block; padding: 3px 7px; color: var(--green); border: 1px solid #bdd7cd; border-radius: 999px; font-family: var(--sans); font-size: .59rem; font-weight: 800; line-height: 1; text-transform: uppercase; }
 .evidence-cell, .provenance-cell { min-width: 0; display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: .66rem; }
 .evidence-cell .tag { align-self: flex-start; color: var(--green); font-size: .59rem; font-weight: 800; text-transform: uppercase; letter-spacing: .055em; }
 .evidence-cell strong { color: var(--ink); font-family: var(--serif); font-size: 1.3rem; font-weight: 500; }

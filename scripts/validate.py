@@ -101,7 +101,7 @@ def main() -> int:
             if occurrence.get("catalog_id") not in source_ids:
                 errors.append(f"Link {row.get('id')} references unknown catalog {occurrence.get('catalog_id')}")
 
-    for readme_name in ("README.md", "README_RU.md"):
+    for readme_name in ("README.md",):
         readme = (ROOT / readme_name).read_text()
         catalog = readme.split("<!-- complete-catalog:start -->", 1)[-1].split("<!-- complete-catalog:end -->", 1)[0]
         catalog_urls = re.findall(r"\]\((https?://[^)]+)\)", catalog)
@@ -114,8 +114,14 @@ def main() -> int:
             errors.append(f"{readme_name} complete catalog has {len(duplicate_readme_urls)} URLs appearing other than once")
         if "<sub>" in catalog or re.search(r"^- \*\*\[", catalog, re.M):
             errors.append(f"{readme_name} catalog uses the deprecated mixed-font or linked-title format")
-    if "README_RU.md" not in (ROOT / "README.md").read_text() or "README.md" not in (ROOT / "README_RU.md").read_text():
-        errors.append("README language switch is incomplete")
+        publication_lines = [line for line in catalog.splitlines() if re.match(r"^- \([^)]*\) \*\*", line)]
+        if len(publication_lines) != sum(row.get("link_type_guess") == "publication" for row in links):
+            errors.append(f"{readme_name} does not use the canonical publication-entry format everywhere")
+        bad_tail = [line for line in publication_lines if re.search(r"\)\s+(?:·|—\s*(?:core|adjacent)|via:)", line)]
+        if bad_tail:
+            errors.append(f"{readme_name} has {len(bad_tail)} publication links followed by deprecated metadata")
+    if (ROOT / "README_RU.md").exists() or "README_RU.md" in (ROOT / "README.md").read_text():
+        errors.append("Russian README references remain although the project is English-only")
 
     models = load_jsonl(ROOT / "data" / "curated" / "models.jsonl")
     model_ids = [row.get("id") for row in models]
@@ -186,6 +192,10 @@ def main() -> int:
     site_publications = [row for row in site_links if row.get("link_type_guess") == "publication"]
     if any(not row.get("research_class") or not row.get("research_class_id") for row in site_publications):
         errors.append("Site publication index has entries without a research class")
+    if any(not row.get("title") or not row.get("subdomain") or not row.get("date") for row in site_publications):
+        errors.append("Site publication index has entries without canonical display metadata")
+    if any(not row.get("venue") for row in site_publications):
+        errors.append("Site publication index has entries without a venue or an explicit unverified-venue marker")
     featured_count = sum(bool(row.get("featured")) for row in site_publications)
     if not 0 < featured_count < len(site_publications):
         errors.append(f"Site featured-work count is implausible: {featured_count}")

@@ -24,6 +24,7 @@ function escapeHtml(value = "") {
 }
 
 function titleFor(link) {
+  if (link.link_type_guess === "publication" && link.title) return link.title;
   const generic = new Set(["paper", "pdf", "code", "github", "dataset", "data", "model", "project", "website", "link"]);
   const clean = (value) => value.replace(/^\d+\.\s+/, "").replace(/,\s*20\d{2}(?:\.\d{1,2})?,?\s*$/, "").trim();
   if (link.context_title && !generic.has(link.context_title.toLowerCase())) return clean(link.context_title);
@@ -109,8 +110,22 @@ function renderDiscovery() {
     const evidence = link.link_type_guess === "publication"
       ? `${link.featured ? '<span class="featured-tag">★ featured</span>' : ""}<strong>${year}</strong><span title="${escapeHtml(link.research_class || "")}">${escapeHtml(link.research_class || "unclassified")}</span>`
       : `<span class="tag">${escapeHtml(link.link_type_guess)}</span><span>${escapeHtml(link.scope_tier_guess)}</span>`;
+    const publicationEntry = link.link_type_guess === "publication";
+    const artifactLabels = { repository: "code", dataset: "dataset", model: "model", project: "project", other: "link" };
+    const artifactLinks = publicationEntry
+      ? [{ type: "publication", url: link.url }, ...(link.related_artifacts || [])]
+        .map((item) => `<a href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${artifactLabels[item.type] || "paper"}</a>`).join("")
+      : "";
+    const resource = publicationEntry
+      ? `<div class="resource-title publication-title">
+          <span class="subdomain">(${escapeHtml(link.subdomain || "Unclassified")})</span>
+          <strong>${escapeHtml(titleFor(link))}</strong>
+          <small>${escapeHtml([link.venue, link.date].filter(Boolean).join(" · "))}</small>
+          <span class="artifact-links">${artifactLinks}</span>
+        </div>`
+      : `<div class="resource-title"><a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(titleFor(link))}</a><small>${escapeHtml(link.url)}</small></div>`;
     return `<article class="index-row${link.featured ? " featured-row" : ""}">
-      <div class="resource-title"><a href="${escapeHtml(link.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(titleFor(link))}</a><small>${escapeHtml(link.url)}</small></div>
+      ${resource}
       <div class="evidence-cell">${evidence}</div>
       <div class="provenance-cell"><b>${escapeHtml(sources[0] || "")}</b><span>${escapeHtml(link.scope_tier_guess)}</span><span title="${escapeHtml(section)}">${escapeHtml(section)}</span></div>
     </article>`;
@@ -159,7 +174,7 @@ function render() {
   filters.hidden = !discovery;
   timelinePanel.hidden = state.view !== "publications";
   document.querySelectorAll(".publication-only").forEach((item) => { item.hidden = state.view !== "publications"; });
-  indexHead.innerHTML = state.view === "publications" ? "<span>Publication</span><span>Year & class</span><span>Provenance</span>" : "<span>Resource</span><span>Evidence</span><span>Provenance</span>";
+  indexHead.innerHTML = state.view === "publications" ? "<span>Subdomain · title · venue · date · links</span><span>Year & class</span><span>Provenance</span>" : "<span>Resource</span><span>Evidence</span><span>Provenance</span>";
   indexHead.hidden = false;
   if (discovery) {
     if (state.view === "publications") renderTimeline();

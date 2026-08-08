@@ -9,7 +9,7 @@ import pathlib
 import re
 
 from build_readme import START as CATALOG_START
-from build_readme import anchor_for, publication_group
+from build_readme import anchor_for, publication_group, publication_metadata, related_artifact_map
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -39,8 +39,10 @@ def main() -> int:
     generated_at = source_snapshot_time()
     sources = json.loads((ROOT / "data" / "catalog_sources.json").read_text())["sources"]
     links = read_jsonl(LINKS)
+    related_artifacts, _ = related_artifact_map(links)
     readme_guide = (ROOT / "README.md").read_text().split(CATALOG_START, 1)[0]
-    featured_urls = set(re.findall(r"\]\((https?://[^)]+)\)", readme_guide))
+    literature = readme_guide.split("## Literature by research question", 1)[1].split("## Datasets, benchmarks, and instruments", 1)[0]
+    featured_urls = set(re.findall(r"\[paper\]\((https?://[^)]+)\)", literature))
     site_links = []
     for original in links:
         row = dict(original)
@@ -48,6 +50,11 @@ def main() -> int:
         if row["link_type_guess"] == "publication":
             row["research_class"] = publication_group(row)
             row["research_class_id"] = anchor_for(row["research_class"])
+            row.update(publication_metadata(row))
+            row["related_artifacts"] = [
+                {"type": item["link_type_guess"], "url": item["url"]}
+                for item in related_artifacts.get(row["id"], [])
+            ]
         else:
             row["research_class"] = None
             row["research_class_id"] = None
