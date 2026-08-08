@@ -8,7 +8,7 @@ useful to researchers.
 - a missing paper, book, dataset, benchmark, instrument, model, or living catalog;
 - a better research-domain assignment or contribution type;
 - an official paper, code, dataset, model, prompt, output, or project link;
-- a correction to a year, venue, license, released artifact, or scientific limitation;
+- a correction to a year, venue, license, released artifact, or source link;
 - a concrete challenge to a domain assignment, supported by the paper or another primary source;
 - a broken-link, duplicate-work, or version-identity correction.
 

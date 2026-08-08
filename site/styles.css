@@ -92,10 +92,7 @@ input:focus, select:focus { border-color: var(--green-2); box-shadow: 0 0 0 3px 
 .year-mark { color: var(--green); font-family: Georgia, serif; font-size: 30px; }
 .year-mark small { display: block; margin-top: 3px; color: var(--muted); font-family: inherit; font-size: 11px; }
 .work-title { margin: 0; font-family: Georgia, serif; font-size: 24px; line-height: 1.2; letter-spacing: -.018em; }
-.work-title a { text-decoration: none; }
-.work-title a:hover { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
 .work-meta { display: flex; flex-wrap: wrap; gap: 5px 12px; margin: 9px 0 0; color: var(--muted); font-size: 12px; }
-.work-description { margin: 13px 0 0; color: #46544f; line-height: 1.55; }
 .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
 .tag { padding: 4px 7px; border-radius: 5px; background: #eef1eb; color: #506059; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; }
 .artifact-links { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
@@ -104,7 +101,6 @@ input:focus, select:focus { border-color: var(--green-2); box-shadow: 0 0 0 3px 
 .release-note { margin-top: 12px; }
 .release-note summary { color: var(--green-2); font-size: 12px; cursor: pointer; }
 .release-note p { margin: 8px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
-.load-more { display: block; min-width: 180px; margin: 28px auto 0; padding: 11px 18px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); cursor: pointer; }
 .empty { padding: 50px 0; color: var(--muted); text-align: center; }
 
 .resources-section { border-bottom: 1px solid var(--line); }

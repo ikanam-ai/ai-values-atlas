@@ -5,7 +5,6 @@ const state = {
   contribution: '',
   artifact: '',
   year: null,
-  limit: 30,
 };
 
 const $ = (selector) => document.querySelector(selector);
@@ -69,7 +68,6 @@ function initialize() {
     resetPage();
   });
   $('#clear-year').addEventListener('click', () => { state.year = null; resetPage(); });
-  $('#load-more').addEventListener('click', () => { state.limit += 30; renderWorks(); });
   $('#resource-search').addEventListener('input', renderResources);
   $('#resource-kind').addEventListener('change', renderResources);
   renderResources();
@@ -78,13 +76,11 @@ function initialize() {
 function selectDomain(domain) {
   state.domain = domain;
   state.year = null;
-  state.limit = 30;
   render();
   $('#explorer').scrollIntoView({behavior: 'smooth', block: 'start'});
 }
 
 function resetPage() {
-  state.limit = 30;
   render();
 }
 
@@ -95,7 +91,7 @@ function domainInfo() {
 function domainWorks() {
   let works = state.data.works.filter(work => work.scope !== 'out_of_scope');
   if (state.domain !== 'all') works = works.filter(work => work.domains.includes(state.domain));
-  if (state.search) works = works.filter(work => [work.title, work.venue, work.description, ...work.contribution_types].join(' ').toLowerCase().includes(state.search));
+  if (state.search) works = works.filter(work => [work.title, work.venue, ...work.contribution_types].join(' ').toLowerCase().includes(state.search));
   if (state.contribution) works = works.filter(work => work.contribution_types.includes(state.contribution));
   if (state.artifact) works = works.filter(work => work.links.some(link => link.label === state.artifact));
   if (state.year) works = works.filter(work => work.year === state.year);
@@ -124,25 +120,21 @@ function renderTimeline() {
 
 function renderWorks() {
   const works = domainWorks();
-  const visible = works.slice(0, state.limit);
   const filters = [state.year, state.contribution && pretty(state.contribution), state.artifact && `with ${state.artifact}`].filter(Boolean);
   $('#result-count').textContent = `${works.length} work${works.length === 1 ? '' : 's'}`;
   $('#active-filter').textContent = filters.join(' · ');
-  $('#work-list').innerHTML = visible.length ? visible.map(renderWork).join('') : '<li class="empty">No works match these filters.</li>';
-  $('#load-more').hidden = visible.length >= works.length;
+  $('#work-list').innerHTML = works.length ? works.map(renderWork).join('') : '<li class="empty">No works match these filters.</li>';
 }
 
 function renderWork(work) {
-  const primary = work.links.find(link => link.label === 'paper') || work.links[0];
   const links = work.links.map(link => `<a class="artifact-link" href="${esc(link.url)}" target="_blank" rel="noopener">${esc(link.label)}</a>`).join('');
   const tags = work.contribution_types.map(type => `<span class="tag">${esc(pretty(type))}</span>`).join('');
   const release = work.release ? renderRelease(work.release) : '';
   return `<li class="work-row">
     <div class="year-mark">${work.year || '—'}</div>
     <article>
-      <h3 class="work-title">${work.publication_status === 'published' ? '⭐' : '📄'} <a href="${esc(primary?.url || '#')}" target="_blank" rel="noopener">${esc(work.title)}</a></h3>
+      <h3 class="work-title">${work.publication_status === 'published' ? '⭐' : '📄'} ${esc(work.title)}</h3>
       <p class="work-meta"><span>${esc(work.venue || 'Venue not listed')}</span><span>${work.year || 'n.d.'}</span></p>
-      <p class="work-description">${esc(work.description)}</p>
       <div class="tags">${tags}</div>
       <div class="artifact-links">${links}</div>
       ${release}
@@ -153,8 +145,7 @@ function renderWork(work) {
 function renderRelease(release) {
   const available = release.available.map(pretty).join(', ') || 'No computational release expected';
   const licenses = Object.entries(release.licenses).filter(([, value]) => !['not_applicable','not_released'].includes(value)).map(([kind, value]) => `${kind}: ${value}`).join(' · ');
-  const limitations = release.limitations.length ? `<p><strong>Practical limits:</strong> ${esc(release.limitations.join(' · '))}</p>` : '';
-  return `<details class="release-note"><summary>Release contents</summary><p><strong>Available:</strong> ${esc(available)}</p>${licenses ? `<p><strong>Licenses:</strong> ${esc(licenses)}</p>` : ''}${limitations}</details>`;
+  return `<details class="release-note"><summary>Release contents</summary><p><strong>Available:</strong> ${esc(available)}</p>${licenses ? `<p><strong>Licenses:</strong> ${esc(licenses)}</p>` : ''}</details>`;
 }
 
 function renderResources() {
@@ -162,5 +153,5 @@ function renderResources() {
   const query = $('#resource-search').value.trim().toLowerCase();
   const kind = $('#resource-kind').value;
   const resources = state.data.standalone_resources.filter(row => (!kind || row.kind === kind) && (!query || row.title.toLowerCase().includes(query)));
-  $('#resource-list').innerHTML = resources.map(row => `<div class="resource-item"><a href="${esc(row.url)}" target="_blank" rel="noopener">${esc(row.title)}</a><span>${esc(row.roles.join(' · '))}</span></div>`).join('') || '<p class="empty">No resources match these filters.</p>';
+  $('#resource-list').innerHTML = resources.map(row => `<div class="resource-item"><strong>${esc(row.title.replace(/^\d+\.\s+/, '').replace(/,+$/, ''))}</strong><span>${row.roles.map(role => `<a href="${esc(row.url)}" target="_blank" rel="noopener">[${esc(role)}]</a>`).join(' ')}</span></div>`).join('') || '<p class="empty">No resources match these filters.</p>';
 }

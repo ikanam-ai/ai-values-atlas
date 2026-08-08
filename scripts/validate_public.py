@@ -62,23 +62,22 @@ def main() -> int:
         "book", "catalog", "course", "policy", "reference",
     }
     for row in works:
-        for field in ("id", "title", "year", "description", "domains", "contribution_types", "links"):
+        for field in ("id", "title", "year", "domains", "contribution_types", "links"):
             if field not in row:
                 errors.append(f"Work {row.get('id', '<unknown>')} missing {field}")
-        forbidden_score_fields = {
+        forbidden_editorial_fields = {
             "rankings", "domain_score", "scientific_contribution",
             "field_relevance", "influence", "score_formula",
+            "description", "limitations",
         }
-        present_score_fields = forbidden_score_fields.intersection(row)
-        if present_score_fields:
+        present_editorial_fields = forbidden_editorial_fields.intersection(row)
+        if present_editorial_fields:
             errors.append(
-                f"Work {row.get('id')} exposes editorial score fields: "
-                f"{', '.join(sorted(present_score_fields))}"
+                f"Work {row.get('id')} exposes internal editorial fields: "
+                f"{', '.join(sorted(present_editorial_fields))}"
             )
         if row.get("publication_status") not in allowed_status:
             errors.append(f"Work {row.get('id')} has invalid publication status")
-        if not row.get("description"):
-            errors.append(f"Work {row.get('id')} has no contribution description")
         if not row.get("links"):
             errors.append(f"Work {row.get('id')} has no links")
         for domain in row.get("domains", []):
@@ -104,6 +103,8 @@ def main() -> int:
         errors.append("site/data.json resource records differ from data/resources.jsonl")
     if "score_formula" in site_data:
         errors.append("site/data.json exposes the removed editorial score formula")
+    if any("description" in row or "limitations" in row for row in site_data.get("works", [])):
+        errors.append("site/data.json exposes internal work descriptions or limitations")
 
     stats = site_data.get("stats", {})
     expected_stats = {
@@ -131,6 +132,30 @@ def main() -> int:
         if row["title"] not in readme:
             errors.append(f"README is missing work title: {row['title']}")
 
+    literature = readme.split("## 📚 Literature by research domain", 1)[-1].split(
+        "## 🧩 Independent resources", 1
+    )[0]
+    expected_domain_entries = sum(len(row.get("domains", [])) for row in works)
+    listed_domain_entries = len(re.findall(r"^- [⭐📄] ", literature, flags=re.M))
+    if listed_domain_entries != expected_domain_entries:
+        errors.append(
+            f"README lists {listed_domain_entries} domain entries; "
+            f"expected all {expected_domain_entries}"
+        )
+    if re.search(r"^\s{2,}- ", literature, flags=re.M):
+        errors.append("README literature list contains nested editorial descriptions")
+    if "<details>" in literature:
+        errors.append("README literature list is collapsed")
+
+    independent = readme.split("## 🧩 Independent resources", 1)[-1].split(
+        "## 🤝 Contributing", 1
+    )[0]
+    listed_resources = len(re.findall(r"^- .+, \[\[[a-z ]+\]\(https?://", independent, flags=re.M))
+    if listed_resources != len(resources):
+        errors.append(
+            f"README lists {listed_resources} independent resources; expected {len(resources)}"
+        )
+
     public_files = [
         ROOT / "README.md", ROOT / "CONTRIBUTING.md", ROOT / "site" / "index.html",
         ROOT / "site" / "app.js", ROOT / "site" / "styles.css", WORKS_PATH,
@@ -143,6 +168,7 @@ def main() -> int:
         "featured label": r"\bfeatured\b",
         "metadata-check label": r"metadata (?:checked|verified)",
         "editorial score label": r"(?:domain|contribution|relevance|influence) score|/\s*100",
+        "collapsed literature list": r"Show all \d+ works in this domain",
     }
     for path in public_files:
         text = path.read_text()
