@@ -3,3 +3,11 @@
 __pycache__/
 *.pyc
 
+# Generated wiki pages (built from data/wiki_content.json + axiology registry)
+site/learn/index.html
+site/learn/axiologies/
+site/learn/compare/
+site/learn/concepts/
+site/learn/measurement/
+site/learn/search.json
+site/learn/wiki-manifest.json

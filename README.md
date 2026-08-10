@@ -6,13 +6,15 @@
 
 **A field guide to how values are represented, measured, expressed, chosen, and steered in AI systems.**
 
-[Explore the atlas](https://ikanam-ai.github.io/ai-values-atlas/) · [Visual guide](https://ikanam-ai.github.io/ai-values-atlas/learn/) · [Field map](#-field-map) · [Axiologies](#-axiologies-and-value-spaces) · [Literature](#-literature-by-research-domain) · [Datasets & benchmarks](#-datasets-benchmarks-and-instruments) · [Contribute](CONTRIBUTING.md)
+[Explore the atlas](https://ikanam-ai.github.io/ai-values-atlas/) · [Wiki](https://ikanam-ai.github.io/ai-values-atlas/learn/) · [Field map](#-field-map) · [Axiologies](#-axiologies-and-value-spaces) · [Literature](#-literature-by-research-domain) · [Datasets & benchmarks](#-datasets-benchmarks-and-instruments) · [Contribute](CONTRIBUTING.md)
 
 **701 works · 10 research domains · 1,013 source links · 94 standalone resources**
 
 </div>
 
 The Atlas separates value theories, measurement interfaces, benchmarks, scorers, model behavior, and alignment targets instead of treating them as one interchangeable construct.
+
+The [interactive Wiki](https://ikanam-ai.github.io/ai-values-atlas/learn/) gives every mapped value space a stable reference page with its structure, measurement assumptions, AI uses, cautions, primary sources, and a small visual example.
 
 ## 🧭 Field map
 

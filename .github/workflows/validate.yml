@@ -13,5 +13,7 @@ jobs:
         with:
           python-version: "3.12"
       - run: python3 scripts/validate_public.py
+      - run: python3 scripts/build_wiki.py
+      - run: python3 scripts/validate_wiki.py
       - run: node --check site/app.js
       - run: node --check site/learn/app.js
