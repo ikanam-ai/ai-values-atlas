@@ -52,10 +52,10 @@
       "representation_type": "named_dimensions",
       "interpretability": "named",
       "dimension_count": 6,
-      "dimensions": ["Care/Harm", "Fairness/Cheating", "Loyalty/Betrayal", "Authority/Subversion", "Sanctity/Degradation", "Liberty/Oppression"],
-      "structure_notes": "The original five-foundation formulation is also common; Liberty/Oppression was added later.",
+      "dimensions": ["Care/Harm", "Equality", "Proportionality", "Loyalty/Betrayal", "Authority/Subversion", "Purity/Degradation"],
+      "structure_notes": "MFT is a family of related operationalizations, not one immutable six-axis inventory. The classic MFQ-1 uses Care, Fairness, Loyalty, Authority, and Purity; Liberty/Oppression is a proposed extension. The 36-item MFQ-2 instead separates Fairness into Equality and Proportionality, yielding the six coordinates shown here.",
       "status": "verified",
-      "primary_sources": ["https://doi.org/10.1037/a0015141"]
+      "primary_sources": ["https://doi.org/10.1037/a0015141", "https://doi.org/10.1016/j.paid.2023.112339"]
     },
     {
       "id": "world-values-survey-item-space",
@@ -153,7 +153,7 @@
       "dimensions": ["Emotion", "Pleasure", "Sexuality", "Power", "Prestige", "Success", "Personal Stability", "Health", "Survival", "Beauty", "Knowledge", "Maturity", "Affectivity", "Belonging", "Social Support", "Obedience", "Religiosity", "Tradition"],
       "structure_notes": "Eighteen marker values organized into six subfunctions: Excitement, Promotion, Existence, Suprapersonal, Interactive, and Normative.",
       "status": "catalogued",
-      "primary_sources": ["https://doi.org/10.1016/j.paid.2013.07.043"]
+      "primary_sources": ["https://doi.org/10.1016/j.paid.2013.12.012"]
     },
     {
       "id": "gpla-five-factor",

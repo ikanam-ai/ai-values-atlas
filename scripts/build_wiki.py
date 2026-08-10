@@ -114,6 +114,7 @@ def layout(*, title: str, description: str, body: str, nav: str, toc: str, root:
            atlas_root: str, path: str, page_id: str, page_class: str = "") -> str:
     canonical = "https://ikanam-ai.github.io/ai-values-atlas/learn/" + (f"{path}/" if path else "")
     css = f"{root}styles.css"
+    css_v2 = f"{root}wiki-v2.css"
     js = f"{root}app.js"
     return f"""<!doctype html>
 <html lang="en">
@@ -124,6 +125,7 @@ def layout(*, title: str, description: str, body: str, nav: str, toc: str, root:
   <link rel="canonical" href="{canonical}" />
   <title>{esc(title)} · AI Values Atlas Wiki</title>
   <link rel="stylesheet" href="{css}" />
+  <link rel="stylesheet" href="{css_v2}" />
 </head>
 <body data-wiki-root="{root}" data-page-id="{esc(page_id)}">
   <div class="reading-progress" aria-hidden="true"><span id="readingProgress"></span></div>
@@ -184,11 +186,11 @@ def widget_html(widget: str, record: dict | None = None) -> str:
     data_dimensions = esc(json.dumps(dimensions, ensure_ascii=False))
     page_id = esc(record["id"] if record else "")
     return (
-        f'<div class="interactive-module" data-widget="{esc(widget)}" '
+        f'<figure class="visual-module" data-widget="{esc(widget)}" '
         f'data-page="{page_id}" data-dimensions="{data_dimensions}">'
-        '<div class="widget-canvas" aria-live="polite"></div>'
-        '<p class="widget-note">Interactive structural example. It does not calculate a validated person, culture, or model profile.</p>'
-        '</div>'
+        '<div class="widget-canvas"></div>'
+        '<figcaption class="widget-note">Structural diagram—not an estimated person, culture, or model profile.</figcaption>'
+        '</figure>'
     )
 
 
@@ -230,6 +232,30 @@ def dimensions_html(dimensions: list[str]) -> str:
     ) + "</div>"
 
 
+def scope_html(scope: dict) -> str:
+    labels = [("Unit", "unit"), ("Construct", "construct"), ("Output", "output"), ("Evidence base", "evidence")]
+    return '<dl class="scope-grid">' + "".join(
+        f'<div><dt>{esc(label)}</dt><dd>{esc(scope.get(key, "—"))}</dd></div>'
+        for label, key in labels
+    ) + "</dl>"
+
+
+def numbers_html(rows: list[dict]) -> str:
+    return '<div class="number-ribbon">' + "".join(
+        f'<div><b>{esc(row["value"])}</b><span>{esc(row["label"])}</span></div>'
+        for row in rows
+    ) + "</div>"
+
+
+def evidence_html(rows: list[dict]) -> str:
+    return '<div class="evidence-list">' + "".join(
+        f'<article class="evidence-row"><p>{esc(row["meta"])}</p>'
+        f'<h3><a href="{esc(row["url"])}">{esc(row["title"])}</a></h3>'
+        f'<span>{esc(row["detail"])}</span></article>'
+        for row in rows
+    ) + "</div>"
+
+
 def axiology_page(record: dict, records: list[dict], content: dict) -> str:
     root = "../../"
     atlas_root = "../../../"
@@ -248,9 +274,10 @@ def axiology_page(record: dict, records: list[dict], content: dict) -> str:
     uses = "".join(f"<li>{esc(text)}</li>" for text in note["uses"])
     cautions = "".join(f"<li>{esc(text)}</li>" for text in note["cautions"])
     toc = [
-        ("structure", "Structure"), ("measurement", "Measurement"),
-        ("ai-use", "Use in AI research"), ("limits", "What not to infer"),
-        ("sources", "Sources"), ("related", "Related pages"),
+        ("at-a-glance", "At a glance"), ("structure", "Structure"),
+        ("measurement", "Measurement"), ("ai-evidence", "Evidence in AI"),
+        ("ai-use", "Best uses"), ("limits", "What not to infer"),
+        ("sources", "Primary sources"), ("related", "Related pages"),
     ]
     body = f"""
       <article id="top" class="wiki-article">
@@ -260,6 +287,7 @@ def axiology_page(record: dict, records: list[dict], content: dict) -> str:
           <h1>{esc(record["short_title"])}</h1>
           <p>{esc(note["lead"])}</p>
         </header>
+        <aside class="verdict"><b>Atlas verdict</b><p>{esc(note["verdict"])}</p></aside>
         <dl class="fact-strip">
           <div><dt>Full name</dt><dd>{esc(item["name"])}</dd></div>
           <div><dt>Discipline</dt><dd>{esc(note["discipline"])}</dd></div>
@@ -267,10 +295,12 @@ def axiology_page(record: dict, records: list[dict], content: dict) -> str:
           <div><dt>Coordinates</dt><dd>{esc(count_text)}</dd></div>
           <div><dt>Aliases</dt><dd>{esc(aliases)}</dd></div>
         </dl>
+        <section class="article-section glance-section" id="at-a-glance"><h2>At a glance</h2>{scope_html(note["scope"])}{numbers_html(note.get("numbers", []))}</section>
         {widget_html(note["widget"], record)}
         <section class="article-section" id="structure"><h2>Structure</h2><p>{esc(item["structure_notes"])}</p>{dimensions_html(item.get("dimensions", []))}</section>
         <section class="article-section" id="measurement"><h2>How it is measured</h2><p>{esc(note["measurement"])}</p></section>
-        <section class="article-section" id="ai-use"><h2>Use in AI research</h2><ul>{uses}</ul></section>
+        <section class="article-section" id="ai-evidence"><h2>Evidence in AI research</h2>{evidence_html(note.get("ai_evidence", []))}</section>
+        <section class="article-section" id="ai-use"><h2>Best uses</h2><ul>{uses}</ul></section>
         <section class="article-section caution-section" id="limits"><h2>What not to infer</h2><ul>{cautions}</ul></section>
         <section class="article-section sources" id="sources"><h2>Primary sources</h2><ol>{source_links}</ol><p>See the <a href="{atlas_root}#explorer">research index</a> for studies, datasets, code, and related artifacts.</p></section>
         {related_html(note.get("related", []), records_by_id, root)}
@@ -301,20 +331,37 @@ def home_page(records: list[dict], content: dict) -> str:
             f'<section class="directory-group" id="group-{esc(group["id"])}"><header><p>{len(items):02d}</p>'
             f'<div><h2>{esc(group["title"])}</h2><span>{esc(group["description"])}</span></div></header>{rows}</section>'
         )
-    toc = "<p>Wiki contents</p>" + "".join(
+    toc = '<p>Wiki contents</p><a href="#landscape">Framework landscape</a>' + "".join(
         f'<a href="#group-{esc(group["id"])}">{esc(group["title"])}</a>'
         for group in content["groups"] if grouped.get(group["id"])
     )
+    axiology_count = sum(record["kind"] == "axiology" for record in records)
+    guide_count = sum(record["kind"] == "guide" for record in records)
     body = f"""
       <section id="top" class="wiki-home">
         <header class="wiki-hero">
-          <p class="article-kind">VISUAL REFERENCE · 17 VALUE SPACES</p>
-          <h1>A field guide to<br /><em>values in AI.</em></h1>
-          <p>Use the wiki to learn what each framework represents, how it is measured, which comparisons its structure supports, and what should not be inferred from its scores.</p>
-          <div class="hero-actions"><a class="button primary" href="concepts/what-is-an-axiology/">Start with the foundations</a><a class="button secondary" href="axiologies/schwartz-tbv-10/">Open an example</a></div>
+          <p class="article-kind">RESEARCH WIKI · {axiology_count} REPRESENTATIONS · {guide_count} GUIDES</p>
+          <h1>Values in AI,<br /><em>without category errors.</em></h1>
+          <p>A compact textbook for choosing value frameworks, reading their geometry, tracing their instruments, and judging what evidence about an AI system actually supports.</p>
+          <div class="hero-actions"><a class="button primary" href="concepts/what-is-an-axiology/">Start with the foundations</a><a class="button secondary" href="axiologies/schwartz-tbv-10/">Why Schwartz is the default</a></div>
         </header>
-        <div class="wiki-principle"><b>The organizing rule</b><p>A value theory is not an instrument. An instrument is not an interface. An interface is not a scorer. A score is not automatically a stable identity.</p></div>
-        <section class="quick-compare" aria-label="Wiki coverage"><div><b>17</b><span>mapped value spaces</span></div><div><b>9</b><span>representation types</span></div><div><b>6</b><span>measurement guides</span></div><div><b>1</b><span>linked research index</span></div></section>
+        <div class="wiki-principle"><b>The organizing rule</b><p>A theory is not an instrument. An instrument is not an interface. An interface is not a scorer. A score is not automatically a stable model identity.</p></div>
+        <section class="quick-compare" aria-label="Wiki coverage"><div><b>{axiology_count}</b><span>mapped representations</span></div><div><b>7</b><span>representation shapes</span></div><div><b>{guide_count}</b><span>measurement guides</span></div><div><b>701</b><span>works in the linked index</span></div></section>
+        <section class="home-landscape" id="landscape">
+          <header><p class="article-kind">THE LANDSCAPE</p><h2>Choose by question, not familiarity.</h2><p>Only three families below aim at a broad named profile. The others change the construct, the unit of analysis, or the kind of output.</p></header>
+          <div class="landscape-table">
+            <div class="landscape-head"><span>Research question</span><span>Best starting point</span><span>Do not claim</span></div>
+            <div><b>Broad individual priorities</b><span>Schwartz · Functional Theory · Rokeach</span><small>that endorsement is behavior</small></div>
+            <div><b>Moral concerns</b><span>MFT</span><small>a complete value profile</small></div>
+            <div><b>Self–other allocation</b><span>SVO</span><small>general morality or personality</small></div>
+            <div><b>Population and culture</b><span>WVS · Inglehart–Welzel · Hofstede · GLOBE</span><small>country scores are individual traits</small></div>
+            <div><b>Named LLM-native factors</b><span>GPLA-5</span><small>universal human categories</small></div>
+            <div><b>Model/language similarity</b><span>UniVaR</span><small>latent axes have fixed meanings</small></div>
+            <div><b>Contextual conflict</b><span>Value Kaleidoscope · GPV</span><small>a global profile from relevance</small></div>
+            <div><b>Desired assistant behavior</b><span>HHH · Constitutional AI</span><small>a policy reveals intrinsic values</small></div>
+          </div>
+        </section>
+        <aside class="schwartz-default"><p class="article-kind">BOTTOM LINE</p><h2>Schwartz is the default—not the winner of every task.</h2><p>It currently offers the strongest package for a broad, interpretable, individual-level profile: explicit motivational geometry, 4/10/19 granularities, reusable instruments, cross-cultural validation, and substantial AI adoption. MFT is better for moral concerns; WVS-family spaces for culture; GPLA for an LLM-native named alternative; UniVaR for identity and similarity; Value Kaleidoscope and GPV for contextual text.</p></aside>
         <div class="directory">{''.join(directories)}</div>
       </section>"""
     return layout(

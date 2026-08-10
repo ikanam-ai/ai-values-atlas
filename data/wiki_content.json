@@ -1,13 +1,13 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "updated": "2026-08-10",
   "groups": [
-    {"id": "foundations", "title": "Foundations", "description": "Concepts needed to distinguish a theory, instrument, interface, scorer, and claim."},
-    {"id": "human", "title": "Human value theories", "description": "Named motivational systems developed in psychology and adjacent social sciences."},
-    {"id": "moral-social", "title": "Moral and social frameworks", "description": "Moral concerns and allocation preferences that cover a narrower construct than general values."},
-    {"id": "cultural", "title": "Cultural models", "description": "Survey spaces and aggregate dimensions for comparing societies and cultures."},
-    {"id": "ai-native", "title": "AI-native and open spaces", "description": "Induced, latent, relational, and dynamically supplied representations used for AI systems."},
-    {"id": "principles", "title": "Principles and alignment targets", "description": "Normative objectives used to train or constrain assistants, not descriptive human-value theories."},
+    {"id": "foundations", "title": "Foundations", "description": "Definitions, boundaries, and comparison rules for theories, instruments, interfaces, scorers, and claims."},
+    {"id": "human", "title": "General human-value theories", "description": "Named motivational systems intended to cover broad individual value priorities."},
+    {"id": "moral-social", "title": "Moral and social preferences", "description": "Moral concerns and self–other allocation preferences: important, but narrower than general values."},
+    {"id": "cultural", "title": "Culture-level spaces", "description": "Survey banks and aggregate dimensions for populations, countries, and organizational cultures."},
+    {"id": "ai-native", "title": "AI-native and contextual spaces", "description": "Induced factors, latent embeddings, contextual ontologies, and open value vocabularies built for AI research."},
+    {"id": "principles", "title": "Alignment targets", "description": "Normative objectives used to train or constrain assistants—not descriptive theories of what a model values."},
     {"id": "measurement", "title": "Measurement", "description": "Interfaces, scorers, validity tests, and reporting rules that turn a construct into evidence."}
   ],
   "guide_pages": [
@@ -17,14 +17,29 @@
       "group": "foundations",
       "title": "What counts as an axiology?",
       "short_title": "What is an axiology?",
-      "summary": "An axiology specifies what values exist and, sometimes, how compatibility, conflict, priority, or distance between them is represented.",
+      "summary": "An axiology defines the value universe: its coordinates and, sometimes, their order, compatibility, conflict, or distance.",
       "widget": "grammar",
       "sections": [
-        {"id": "definition", "title": "The narrow definition", "paragraphs": ["In the Atlas, an axiology is the coordinate system for value claims. It may contain named dimensions, an ordered hierarchy, a circumplex, an ontology, or a learned latent space.", "The term is used descriptively: inclusion does not imply that a framework is philosophically complete or normatively endorsed."], "bullets": []},
-        {"id": "category-errors", "title": "Four things often confused with it", "paragraphs": ["A theory can be operationalized by several instruments, and one instrument can be scored in several ways. Keeping those objects separate is necessary for reproducible comparison."], "bullets": ["PVQ is an instrument linked to Schwartz; it is not the entire theory.", "WVS is primarily a changing survey item bank; derived cultural maps are separate representations.", "A text classifier or LLM judge is a scorer, not the value space it predicts.", "A constitution is a normative target, not evidence of a model's descriptive value profile."]},
-        {"id": "classification", "title": "The Atlas classification", "paragraphs": ["The wiki labels general value theories, adjacent moral or cultural frameworks, operational spaces, AI-native representations, and normative targets explicitly. They can be compared, but they should not be treated as identical kinds of object."], "bullets": []}
+        {"id": "definition", "title": "A coordinate system for value claims", "paragraphs": ["The Atlas uses axiology as a database umbrella, not as a claim that every entry is a complete philosophical theory. A named theory, hierarchy, circumplex, ontology, factor model, latent embedding, or explicitly open value set may all define the space in which a value claim is expressed.", "A useful test is substitution: if changing this object changes which values can exist in the result, it is acting as the axiology."], "bullets": []},
+        {"id": "category-errors", "title": "Objects that must stay separate", "paragraphs": ["Most confusion in AI value research comes from collapsing different stages of the measurement chain."], "bullets": ["Schwartz is a theory and coordinate system; PVQ is one instrument that operationalizes it.", "WVS is a survey program and item bank; the Inglehart–Welzel map is a derived culture-level representation.", "ValueLlama, a classifier, or an LLM judge is a scorer—not the value space it predicts.", "HHH and a constitution are normative targets—not evidence that a trained model has a stable value identity.", "A benchmark packages items, prompts, outputs, and scoring rules; it is not automatically a new theory of values."]},
+        {"id": "comparison", "title": "Compare like with like", "paragraphs": ["A full general-value theory should be compared with another broad theory. Moral foundations, culture-level indices, behavioral allocation preferences, and latent embeddings answer different questions. They can provide convergent evidence, but they are not interchangeable substitutes."], "bullets": []}
       ],
-      "related": ["value-space-shapes", "measurement-interfaces", "choosing-a-framework"]
+      "related": ["morality-and-values", "value-space-shapes", "choosing-a-framework"]
+    },
+    {
+      "id": "morality-and-values",
+      "path": "concepts/morality-and-values",
+      "group": "foundations",
+      "title": "Morality, values, and the normative system",
+      "short_title": "Morality and values",
+      "summary": "Moral values overlap broad values, but morality also contains duties, rights, norms, virtues, and judgments about what is permissible.",
+      "widget": "scope-map",
+      "sections": [
+        {"id": "relation", "title": "Overlapping systems, not synonyms", "paragraphs": ["Care, fairness, loyalty, authority, and purity are value-laden concerns. Yet morality also asks what is obligatory, forbidden, permissible, virtuous, and owed to others. Conversely, a model can prioritize curiosity, achievement, power, pleasure, novelty, or personal security without making a moral judgment. Moral values therefore overlap broad values; morality itself is not simply a subset of an axiology."], "bullets": ["Axiology: what is good, desirable, or worth pursuing.", "Deontic structure: what is required, permitted, prohibited, or owed.", "Virtue: what counts as a good character or agent.", "Preference: which option is selected under constraints.", "Belief: what the agent takes to be true about the world and consequences.", "Behavior: what the agent actually does in a specified environment."]},
+        {"id": "overlap", "title": "A crosswalk is approximate", "paragraphs": ["MFT and Schwartz overlap semantically, but the mapping is many-to-many and must be treated as a model to validate, not a dictionary truth."], "bullets": ["Care overlaps most with Benevolence and Universalism.", "Equality and proportionality overlap partly with Universalism, Achievement, and conceptions of fairness not isolated by Schwartz-10.", "Loyalty overlaps with Benevolence, Tradition, and Conformity.", "Authority and Purity overlap with Tradition, Conformity, and Security.", "Schwartz values such as Hedonism, Stimulation, Power, Achievement, and Self-Direction have no direct MFT counterpart."]},
+        {"id": "choice", "title": "When to use which", "paragraphs": ["Use MFT when the question is moral language, intuitions, political moralization, or moral rationales. Use Schwartz or another broad theory for a general priority profile. Use rights, duties, constitutions, or virtue frameworks when the object is obligation or good conduct. Use several only when the study explicitly models their overlap instead of pooling unlike scores."], "bullets": []}
+      ],
+      "related": ["moral-foundations-theory", "schwartz-tbv-10", "choosing-a-framework"]
     },
     {
       "id": "value-space-shapes",
@@ -32,11 +47,11 @@
       "group": "foundations",
       "title": "Seven shapes of a value space",
       "short_title": "Shapes of value spaces",
-      "summary": "A circle, hierarchy, scale, ontology, factor model, and latent embedding make different relations visible and support different comparisons.",
+      "summary": "Geometry determines whether a result supports adjacency, opposition, rank, typed relations, factor scores, or similarity.",
       "widget": "shape-gallery",
       "sections": [
-        {"id": "geometry", "title": "Geometry is part of the claim", "paragraphs": ["Named dimensions tell us which coordinates can be reported. Structure tells us whether adjacency, opposition, rank, or distance is meaningful."], "bullets": ["Circumplex: neighborhood and opposition.", "Bipolar axes: position between named poles.", "Hierarchy: levels or priority order.", "Ontology: typed concepts and relations.", "Induced factors: interpretable structure learned from observations.", "Latent embedding: similarity without fixed named axes.", "Open set: values supplied at measurement time."]},
-        {"id": "comparison", "title": "Why conversion is difficult", "paragraphs": ["Mapping between spaces is a measurement model of its own. A label crosswalk may lose relational structure, merge distinct concepts, or invent equivalence where only partial overlap exists."], "bullets": []}
+        {"id": "geometry", "title": "The shape is part of the claim", "paragraphs": ["A list of labels is not enough. A circumplex licenses compatibility and opposition; a ranking preserves order but not distance; a latent embedding supports similarity but not named-coordinate interpretation."], "bullets": ["Circumplex—neighborhood and motivational tension.", "Bipolar axes—position between explicit poles.", "Hierarchy—levels, functions, or priority order.", "Ontology—typed entities and relations.", "Induced factors—interpretable recurring covariance structure.", "Latent embedding—learned distance without stable named axes.", "Open set—values supplied or discovered at measurement time."]},
+        {"id": "conversion", "title": "Crosswalks lose structure", "paragraphs": ["Mapping MFT, Schwartz, GPLA, or an open ontology into one another is a new measurement model. Report the mapping data, ambiguity rule, unmatched concepts, and validation; preserve original labels beside mapped labels."], "bullets": []}
       ],
       "related": ["what-is-an-axiology", "choosing-a-framework", "scorers-and-mappers"]
     },
@@ -45,12 +60,13 @@
       "path": "measurement/interfaces",
       "group": "measurement",
       "title": "Measurement interfaces",
-      "short_title": "Interfaces",
-      "summary": "Questionnaires, independent ratings, forced choices, generated text, and observed actions expose different evidence about the same subject.",
+      "short_title": "Interfaces and L0–L3",
+      "summary": "Questionnaires, endorsement, conflict choice, free text, and observed action create different evidence objects and license different claims.",
       "widget": "interfaces",
       "sections": [
-        {"id": "evidence-objects", "title": "Each interface creates a different evidence object", "paragraphs": ["Changing the interface is not cosmetic. It changes what the model is asked to do, what uncertainty is visible, and which conclusion can be reported."], "bullets": ["Questionnaire: protocol-conditioned stated profile.", "Independent endorsement: rating of each item without direct conflict.", "Forced choice: task-bounded priority between available alternatives.", "Free generation: textual framing under a named scorer.", "Observed action: behavior inside a specified environment."]},
-        {"id": "stonic", "title": "About the L0–L3 notation", "paragraphs": ["STONIC uses L0–L3 for a questionnaire anchor, endorsement, conflict choice, and free-text framing. These labels define one measurement contract; they are not a universal maturity ladder for the field."], "bullets": []}
+        {"id": "evidence", "title": "Same situation, different evidence", "paragraphs": ["Changing the interface is a substantive intervention. It changes the task, exposed uncertainty, response format, and reportable conclusion."], "bullets": ["Questionnaire anchor (L0)—protocol-conditioned stated profile.", "Independent endorsement (L1)—rating of each item without direct conflict.", "Conflict choice (L2)—task-bounded priority among presented alternatives.", "Free-text framing (L3)—values expressed in generated language under a named scorer.", "Observed action—behavior inside a specified environment, which is not automatically implied by L0–L3."]},
+        {"id": "contract", "title": "L0–L3 is one measurement contract", "paragraphs": ["STONIC uses L0–L3 to align distinct interfaces on shared situations. The notation is not a universal field taxonomy or maturity ladder. Its central lesson is that reliable evidence within an interface is not automatically interchangeable across interfaces."], "bullets": []},
+        {"id": "design", "title": "Controls that matter", "paragraphs": ["Pairwise choice needs order counterbalancing; free text needs scorer, input-unit, coverage, and zero-evidence audits; questionnaire and endorsement results need prompt, scale-use, and template sensitivity checks."], "bullets": []}
       ],
       "related": ["scorers-and-mappers", "validity-and-reporting", "choosing-a-framework"]
     },
@@ -60,11 +76,12 @@
       "group": "measurement",
       "title": "Scorers and semantic mappers",
       "short_title": "Scorers and mappers",
-      "summary": "A scorer converts responses into labels, probabilities, named dimensions, or embeddings; its identity is part of the reported measurement.",
+      "summary": "A scorer maps evidence into labels, probabilities, named coordinates, or embeddings; its identity and input unit are part of the measurement.",
       "widget": "scoring-pipeline",
       "sections": [
-        {"id": "families", "title": "Common scorer families", "paragraphs": ["Different scorers answer different questions and can disagree even when applied to the same text."], "bullets": ["Psychometric keys aggregate prespecified item responses.", "Supervised classifiers predict labels learned from annotated examples.", "Generative scorers test supplied values or produce structured rationales.", "Embedding encoders represent similarity in a latent space.", "LLM judges apply a rubric through a prompt and decoding protocol."]},
-        {"id": "reporting", "title": "Minimum reporting contract", "paragraphs": ["Name the model and revision, input unit, prompt, parser, threshold, aggregation, missingness rule, coverage, and any zero-evidence policy. Without these, a semantic profile is not reproducible."], "bullets": []}
+        {"id": "families", "title": "Five scorer families", "paragraphs": ["Different scorers answer different questions and may disagree on the same text."], "bullets": ["Psychometric keys aggregate prespecified responses.", "Supervised classifiers predict labels learned from annotated examples.", "Generative scorers test supplied values or produce structured rationales.", "Embedding encoders represent similarity in a learned latent space.", "LLM judges apply a prompt-defined rubric and decoding protocol."]},
+        {"id": "input-unit", "title": "Whole text versus propositions", "paragraphs": ["Long responses can contain several claims with different values. Splitting text into atomic perceptions before scoring can improve evidence coverage and attribution, but the splitter becomes another measured component. It must preserve meaning, negation, attribution, and speaker identity."], "bullets": []},
+        {"id": "reporting", "title": "Minimum reproducibility contract", "paragraphs": ["Report model and revision, prompt, input unit, parser, threshold, aggregation, missingness, coverage, zero-evidence policy, calibration set, and task-local human validation. A scorer name alone is not a method section."], "bullets": []}
       ],
       "related": ["measurement-interfaces", "validity-and-reporting", "gpv-open-value-space"]
     },
@@ -74,12 +91,12 @@
       "group": "measurement",
       "title": "Validity and reporting",
       "short_title": "Validity and reporting",
-      "summary": "A reliable score inside one protocol does not automatically identify a stable construct across prompts, scorers, languages, or interfaces.",
+      "summary": "Reliability within one protocol is only the first gate; transfer, specificity, and prediction require separate evidence.",
       "widget": "validity-ladder",
       "sections": [
-        {"id": "claims", "title": "Claims become stronger in stages", "paragraphs": ["Within-interface reliability, convergent evidence, cross-interface transfer, discriminant validity, and behavioral prediction are distinct tests. Passing an earlier test does not imply passing the later ones."], "bullets": []},
-        {"id": "stress-tests", "title": "Useful stress tests", "paragraphs": ["A measurement should expose sensitivity rather than hide it."], "bullets": ["Prompt, persona, template, decoding, and language changes.", "Order and position counterbalancing for choice tasks.", "Alternative scorers and task-local human adjudication.", "Coverage, parse failure, missingness, and zero-evidence audits.", "Shuffled, permutation, chance, and identity-specific nulls."]},
-        {"id": "scope", "title": "Report the narrowest defensible claim", "paragraphs": ["Say stated endorsement, conflict-task priority, textual framing, or task-bounded behavior when that is what was measured. A pooled value identity requires additional evidence."], "bullets": []}
+        {"id": "gates", "title": "Claims strengthen in stages", "paragraphs": ["Parse coverage, within-interface reliability, convergent validity, cross-interface transfer, discriminant specificity, and behavioral prediction are different tests. Passing an earlier gate does not license a later claim."], "bullets": []},
+        {"id": "stress", "title": "Stress the measurement, not only the model", "paragraphs": ["Useful audits vary prompts, personas, templates, decoding, language, option order, scorer, aggregation, and missingness policy. Item-shuffled and model-identity nulls test different failure modes."], "bullets": []},
+        {"id": "scope", "title": "Report the narrowest defensible noun", "paragraphs": ["Prefer stated endorsement, conflict-task priority, textual framing, culture-conditioned response distribution, or task-bounded action. A pooled value identity requires evidence that the same subject remains distinguishable across interfaces and protocols."], "bullets": []}
       ],
       "related": ["measurement-interfaces", "scorers-and-mappers", "choosing-a-framework"]
     },
@@ -87,152 +104,239 @@
       "id": "choosing-a-framework",
       "path": "compare/choosing-a-framework",
       "group": "foundations",
-      "title": "Choosing and comparing frameworks",
-      "short_title": "Choosing a framework",
-      "summary": "Select a representation from the research question, unit of analysis, and reportable claim—not simply from familiarity or benchmark availability.",
+      "title": "The value-framework landscape",
+      "short_title": "Framework landscape",
+      "summary": "There is no universal winner: the best representation follows from construct, unit of analysis, evidence interface, and required interpretation.",
       "widget": "framework-matrix",
       "sections": [
-        {"id": "decision", "title": "A practical decision sequence", "paragraphs": ["Start with the construct and subject, then select geometry, instrument, interface, and scorer. Only then decide which statistic can summarize the evidence."], "bullets": ["Is the target an individual model, a model-language pair, a population, or a culture?", "Do you need named motives, moral concerns, cultural coordinates, principles, or similarity?", "Is conflict, endorsement, language, or behavior the evidence of interest?", "Will different models be compared in one fixed coordinate system?"]},
-        {"id": "crosswalks", "title": "Treat crosswalks as models", "paragraphs": ["A mapping from one framework to another must state its source data, unit of mapping, ambiguity policy, and validation. Preserve the original labels alongside any mapped representation."], "bullets": []}
+        {"id": "default", "title": "Why Schwartz is the general-purpose default", "paragraphs": ["Among broad, interpretable individual human-value theories, Schwartz has the strongest combination of explicit motivational geometry, 4/10/19 granularities, reusable instruments, extensive cross-cultural validation, and direct adoption in AI evaluation. This makes it a defensible default—not a universal ground truth."], "bullets": []},
+        {"id": "alternatives", "title": "The closest alternatives", "paragraphs": ["Functional Theory and Rokeach are genuine broad human-value alternatives; GPLA is the clearest named LLM-native alternative. MFT, SVO, WVS-derived spaces, Hofstede, GLOBE, UniVaR, and Value Kaleidoscope are complementary because they change the construct, unit, or representation."], "bullets": ["General individual profile—Schwartz; Functional Theory as a six-subfunction robustness test; Rokeach for rank-ordered terminal/instrumental priorities.", "Moral reasoning—MFT.", "Self–other allocation—SVO.", "Population and culture—WVS distributions, Inglehart–Welzel, Hofstede, or GLOBE.", "LLM-native named factors—GPLA-5.", "Model/language similarity—UniVaR.", "Contextual values, rights, and duties—Value Kaleidoscope.", "Open-vocabulary text scoring—GPV plus an explicit target ontology and scorer contract."]},
+        {"id": "stonic", "title": "A principled robustness stack for STONIC", "paragraphs": ["Keep Schwartz-10 as the common interpretable coordinate system. Add GPLA-5 as a full named AI-native alternative; MFT for moral-subset convergence; Value Kaleidoscope for contextual L2/L3 analysis; UniVaR for latent model identity; and culture-level spaces only as sidecars. Functional Theory is the most scientifically interesting high-risk broad alternative because direct LLM evidence remains sparse."], "bullets": []}
       ],
-      "related": ["what-is-an-axiology", "value-space-shapes", "validity-and-reporting"]
+      "related": ["schwartz-tbv-10", "functional-theory-human-values-18", "gpla-five-factor"]
     }
   ],
   "axiologies": {
     "schwartz-tbv-10": {
-      "group": "human", "short_title": "Schwartz-10", "classification": "General value theory", "discipline": "Cross-cultural psychology", "widget": "circumplex",
-      "lead": "Ten broad motivational goals arranged in a circular structure of compatibility and conflict. The theory describes value priorities rather than isolated personality traits.",
-      "measurement": "Common instruments include SVS and PVQ variants. Prompted LLM ratings are adaptations whose protocol equivalence must be tested rather than assumed.",
+      "group": "human", "short_title": "Schwartz-10", "classification": "General individual-value theory", "discipline": "Cross-cultural psychology", "widget": "circumplex",
+      "lead": "Ten broad motivational goals arranged as a circumplex of compatibility and conflict. It is the most operationalized general-purpose coordinate system in current AI value profiling.",
+      "verdict": "Best-supported default for a broad, interpretable model profile; not a universal ontology and not proof of behavior.",
+      "scope": {"unit": "Individual priority profile", "construct": "Broad motivational values", "output": "10 relative scores with circular relations", "evidence": "Established human theory; substantial AI adoption"},
+      "numbers": [{"value": "10", "label": "broad values"}, {"value": "4", "label": "higher-order regions"}, {"value": "82", "label": "societies in one overview"}, {"value": "44", "label": "LLMs in Value Portrait"}],
+      "measurement": "SVS and PVQ variants are the canonical human instruments. AI studies adapt questionnaires, scenarios, choices, or text scorers; those adaptations require their own prompt, scale-use, scorer, and cross-interface validation.",
       "uses": ["Questionnaire-style model profiles", "Scenario and response annotation", "Value-conflict and cross-interface analysis"],
-      "cautions": ["The ten scores are relational, not ten unrelated labels.", "A profile depends on the item bank, prompt, response scale, and aggregation.", "Endorsement does not by itself establish choice or behavior."],
+      "cautions": ["The ten scores are relative and structurally related, not ten independent traits.", "Endorsement does not establish conflict choice, free-text framing, or behavior.", "A scorer trained for Schwartz labels does not validate the underlying item bank."],
+      "ai_evidence": [
+        {"title": "Value Portrait", "meta": "ACL 2025", "detail": "520 query–response pairs, 46 human raters per pair on average, 44 evaluated LLMs; links scenario similarity to PVQ-21 scores.", "url": "https://aclanthology.org/2025.acl-long.838/"},
+        {"title": "Measuring Human and AI Values Based on Generative Psychometrics", "meta": "AAAI 2025", "detail": "Introduces a split-then-score pipeline and supports dynamically supplied values while retaining named spaces such as Schwartz.", "url": "https://ojs.aaai.org/index.php/AAAI/article/view/34839"},
+        {"title": "Investigating Human Values in Online Communities", "meta": "NAACL 2025", "detail": "Validates relevance and polarity classifiers and annotates more than 9 million posts from roughly 12,000 subreddits.", "url": "https://aclanthology.org/2025.naacl-long.77/"}
+      ],
       "related": ["schwartz-higher-order-4", "schwartz-refined-19", "functional-theory-human-values-18"]
     },
     "schwartz-higher-order-4": {
-      "group": "human", "short_title": "Schwartz-4", "classification": "Aggregated value representation", "discipline": "Cross-cultural psychology", "widget": "quadrants",
-      "lead": "Four higher-order regions summarize the original Schwartz circle: Openness to Change, Conservation, Self-Enhancement, and Self-Transcendence.",
-      "measurement": "Usually derived by aggregating lower-level Schwartz values rather than elicited as a separate four-item theory.",
-      "uses": ["Compact profile reporting", "Broad trade-off visualization", "Comparison when item-level power is limited"],
-      "cautions": ["Aggregation hides distinctions such as Benevolence versus Universalism.", "The four regions inherit the measurement assumptions of the lower-level instrument.", "Opposition is motivational, not a claim that both poles cannot be endorsed."],
+      "group": "human", "short_title": "Schwartz-4", "classification": "Aggregated individual-value representation", "discipline": "Cross-cultural psychology", "widget": "quadrants",
+      "lead": "Four higher-order regions compress the Schwartz circle into Openness to Change, Conservation, Self-Enhancement, and Self-Transcendence.",
+      "verdict": "Useful reporting summary when power is limited; too coarse for claims about specific motives.",
+      "scope": {"unit": "Individual priority profile", "construct": "Broad motivational trade-offs", "output": "4 relative region scores", "evidence": "Inherited from lower-level Schwartz instruments"},
+      "numbers": [{"value": "4", "label": "regions"}, {"value": "10→4", "label": "common aggregation"}],
+      "measurement": "Usually derived from item-level Schwartz-10 or Schwartz-19 scores rather than elicited as four isolated questions.",
+      "uses": ["Compact profile reporting", "Broad trade-off visualization", "Low-power robustness checks"],
+      "cautions": ["Aggregation hides Benevolence versus Universalism and other distinctions.", "Four regions inherit every assumption of the lower-level instrument.", "Opposition denotes motivational tension, not logical impossibility."],
+      "ai_evidence": [{"title": "GPLA comparison baseline", "meta": "ACL 2025", "detail": "Uses the four higher-order Schwartz dimensions as a human-theory baseline against an induced five-factor LLM space.", "url": "https://aclanthology.org/2025.acl-long.585/"}],
       "related": ["schwartz-tbv-10", "schwartz-refined-19", "choosing-a-framework"]
     },
     "schwartz-refined-19": {
-      "group": "human", "short_title": "Schwartz-19", "classification": "General value theory", "discipline": "Cross-cultural psychology", "widget": "circumplex",
-      "lead": "A refined circumplex that separates the ten broad values into nineteen more motivationally precise value types.",
-      "measurement": "PVQ-RR commonly operationalizes the nineteen values with 57 portrait items. Mapping older ten-value datasets into nineteen values cannot recover distinctions absent from the source data.",
-      "uses": ["Fine-grained value profiling", "Separating personal and societal security", "Distinguishing universalism and benevolence subtypes"],
-      "cautions": ["Higher granularity requires more evidence per dimension.", "Schwartz-10 and Schwartz-19 results should not be compared as if their coordinates were identical.", "Sparse text scoring can produce unstable fine-grained profiles."],
+      "group": "human", "short_title": "Schwartz-19", "classification": "Refined general individual-value theory", "discipline": "Cross-cultural psychology", "widget": "circumplex",
+      "lead": "Nineteen motivationally precise values refine the original ten while preserving the circular structure.",
+      "verdict": "Best when fine distinctions matter and the item bank is large enough; unsuitable as a post-hoc expansion of ten-label data.",
+      "scope": {"unit": "Individual priority profile", "construct": "Fine-grained motivational values", "output": "19 relative scores in a circumplex", "evidence": "Validated human refinement; thinner direct LLM evidence"},
+      "numbers": [{"value": "19", "label": "refined values"}, {"value": "57", "label": "PVQ-RR portraits"}, {"value": "6,059", "label": "participants in initial validation"}, {"value": "10", "label": "countries in initial validation"}],
+      "measurement": "PVQ-RR commonly uses 57 portraits. Mapping a ten-value dataset into nineteen values cannot recover distinctions absent from the source labels or items.",
+      "uses": ["Separate personal from societal security", "Distinguish benevolence and universalism subtypes", "Test granularity sensitivity"],
+      "cautions": ["More dimensions require more evidence per coordinate.", "Schwartz-10 and Schwartz-19 are not identical output spaces.", "Sparse free text produces unstable fine-grained profiles without strong coverage."],
+      "ai_evidence": [{"title": "The Touché23-ValueEval Dataset", "meta": "SemEval-style value detection resource, 2023", "detail": "Operationalizes fine-grained human values in arguments and motivates classifier-based scoring beyond ten broad labels.", "url": "https://arxiv.org/abs/2301.13771"}],
       "related": ["schwartz-tbv-10", "schwartz-higher-order-4", "validity-and-reporting"]
     },
     "moral-foundations-theory": {
-      "group": "moral-social", "short_title": "Moral Foundations", "classification": "Moral framework", "discipline": "Moral psychology", "widget": "radar",
-      "lead": "A framework for recurring moral concerns such as care, fairness, loyalty, authority, sanctity, and, in extended formulations, liberty.",
-      "measurement": "Questionnaires and moral-language dictionaries or classifiers operationalize the foundations differently. The original five-foundation formulation and later extensions must be identified explicitly.",
-      "uses": ["Moral-language classification", "Political and cultural comparison", "Analysis of moral rationales"],
-      "cautions": ["It is not a comprehensive theory of all human values.", "Foundation salience in text is not equivalent to moral endorsement.", "Dictionary and model-based scorers may encode different formulations."],
-      "related": ["schwartz-tbv-10", "social-value-orientation", "scorers-and-mappers"]
+      "group": "moral-social", "short_title": "Moral Foundations", "classification": "Moral-psychology framework", "discipline": "Moral psychology", "widget": "mft-versions",
+      "lead": "A family of frameworks for recurring moral concerns. It covers the value-laden side of morality, but not every duty, virtue, norm, or general value.",
+      "verdict": "The strongest established moral lens for LLM studies, but its version must be named explicitly and it cannot replace a broad value theory.",
+      "scope": {"unit": "Individual moral concern profile", "construct": "Moral intuitions and language", "output": "5 or 6 foundation scores depending on instrument", "evidence": "Large human literature; active AI adoption"},
+      "numbers": [{"value": "5", "label": "classic MFQ-1 foundations"}, {"value": "6", "label": "MFQ-2 foundations"}, {"value": "36", "label": "MFQ-2 items"}, {"value": "25", "label": "development populations"}],
+      "measurement": "Classic MFQ-1 uses Care, Fairness, Loyalty, Authority, and Purity. Liberty/Oppression is a proposed extension. MFQ-2 instead splits fairness into Equality and Proportionality and uses Care, Equality, Proportionality, Loyalty, Authority, and Purity.",
+      "uses": ["Moral-language and rationale analysis", "Political and cultural moralization", "Moral steering and prompt sensitivity"],
+      "cautions": ["Care or fairness language is not automatically endorsement.", "Published LLM work often mixes five-factor, Liberty-extended, and MFQ-2 variants.", "Achievement, pleasure, stimulation, power, autonomy, and much of security sit outside MFT."],
+      "ai_evidence": [
+        {"title": "Moral Foundations of Large Language Models", "meta": "EMNLP 2024", "detail": "Uses a questionnaire-based moral lens, studies prompt consistency, and shows adversarial prompting can shift downstream behavior.", "url": "https://aclanthology.org/2024.emnlp-main.982/"},
+        {"title": "Are Large Language Models Moral Hypocrites?", "meta": "AIES 2024", "detail": "Tests consistency between moral positions and scenario judgments using Moral Foundations Theory.", "url": "https://ojs.aaai.org/index.php/AIES/article/view/31704"},
+        {"title": "MFQ-2 validation and replication", "meta": "Personality and Individual Differences 2023", "detail": "UK N=809 and US N=835; reported total-score reliability ω=.79–.92 and validation against 18 external criteria.", "url": "https://doi.org/10.1016/j.paid.2023.112339"}
+      ],
+      "related": ["morality-and-values", "schwartz-tbv-10", "social-value-orientation"]
     },
     "world-values-survey-item-space": {
-      "group": "cultural", "short_title": "World Values Survey", "classification": "Survey item space", "discipline": "Political science and sociology", "widget": "survey",
-      "lead": "A changing cross-national bank of questions about social, political, cultural, moral, and religious attitudes rather than one fixed-dimensional axiology.",
-      "measurement": "Analyses may use individual questions, thematic batteries, response distributions, or derived cultural dimensions. Wave, country coverage, translation, and coding are part of the instrument definition.",
-      "uses": ["Human–AI response comparison", "Demographically conditioned simulation", "Derivation of aggregate cultural coordinates"],
-      "cautions": ["WVS is not interchangeable with the Inglehart–Welzel map derived from parts of it.", "Question-level agreement does not imply a coherent latent value profile.", "Survey responses are sensitive to language, population, and wave."],
+      "group": "cultural", "short_title": "World Values Survey", "classification": "Cross-national survey item space", "discipline": "Political science and sociology", "widget": "survey",
+      "lead": "A changing bank of social, political, moral, religious, and cultural questions—not one fixed-dimensional axiology.",
+      "verdict": "Best source for comparing model answers with population distributions; inappropriate as a single latent profile unless a derived model is specified.",
+      "scope": {"unit": "Respondents and population distributions", "construct": "Broad attitudes and values", "output": "Item responses, batteries, or derived coordinates", "evidence": "Long-running global survey program"},
+      "numbers": [{"value": "7+", "label": "survey waves"}, {"value": "94,728", "label": "participants used by WorldValuesBench"}, {"value": "20M+", "label": "WorldValuesBench examples"}],
+      "measurement": "Report wave, countries, demographic fields, translations, question wording, response coding, and whether the target is an individual response or a population distribution.",
+      "uses": ["Human–AI distribution comparison", "Demographically conditioned simulation", "Derivation of culture-level maps"],
+      "cautions": ["WVS is not the Inglehart–Welzel map.", "Question-level accuracy does not establish one coherent value identity.", "Prompting a country persona does not reconstruct a representative national sample."],
+      "ai_evidence": [
+        {"title": "WorldValuesBench", "meta": "LREC-COLING 2024", "detail": "Builds more than 20 million demographic-question-answer examples from 94,728 WVS participants and evaluates distribution matching.", "url": "https://aclanthology.org/2024.lrec-main.1539/"},
+        {"title": "GlobalOpinionQA", "meta": "arXiv 2023", "detail": "Compares LLM responses against cross-national public-opinion distributions and exposes geographic representational bias.", "url": "https://arxiv.org/abs/2306.16388"},
+        {"title": "Break the Checkbox", "meta": "EMNLP 2025", "detail": "Shows closed survey formats and even option order can alter cultural-alignment conclusions.", "url": "https://aclanthology.org/2025.emnlp-main.2/"}
+      ],
       "related": ["inglehart-welzel-cultural-map", "hofstede-cultural-dimensions-6", "measurement-interfaces"]
     },
     "inglehart-welzel-cultural-map": {
       "group": "cultural", "short_title": "Inglehart–Welzel", "classification": "Aggregate cultural model", "discipline": "Political sociology", "widget": "axes2d",
-      "lead": "A two-dimensional map of societies using Traditional versus Secular-Rational and Survival versus Self-Expression orientations.",
-      "measurement": "The coordinates are derived from cross-national survey patterns. They are aggregate constructs, not two sliders designed for direct individual self-report.",
-      "uses": ["Country and culture comparison", "Language or persona audits", "Visualizing aggregate response patterns"],
-      "cautions": ["Assigning country-level coordinates to an individual model invites an ecological fallacy.", "Prompted answers do not recreate a representative national sample.", "Map positions depend on the survey variables and wave used."],
+      "lead": "A two-dimensional map of societies: Traditional versus Secular-Rational and Survival versus Self-Expression.",
+      "verdict": "Excellent for culture-level visualization; weak as an individual model-value profile because its coordinates are derived aggregates.",
+      "scope": {"unit": "Societies and survey populations", "construct": "Aggregate cultural orientation", "output": "2 derived bipolar coordinates", "evidence": "Established cross-national descriptive model"},
+      "numbers": [{"value": "2", "label": "aggregate axes"}, {"value": "WVS", "label": "primary survey source"}],
+      "measurement": "Coordinates are derived from selected cross-national survey patterns. They are not two direct self-report sliders and should not be assigned to individual models by analogy.",
+      "uses": ["Country and culture comparison", "Language or persona audits", "Aggregate response maps"],
+      "cautions": ["Country-to-model assignment creates an ecological fallacy.", "Map positions depend on survey variables and wave.", "A model may imitate cultural stereotypes rather than distributions."],
+      "ai_evidence": [{"title": "WorldValuesBench", "meta": "LREC-COLING 2024", "detail": "Provides question-level population distributions from which culture-level patterns can be studied without pretending the survey itself is a two-axis model.", "url": "https://aclanthology.org/2024.lrec-main.1539/"}],
       "related": ["world-values-survey-item-space", "hofstede-cultural-dimensions-6", "globe-cultural-dimensions-9"]
     },
     "hofstede-cultural-dimensions-6": {
-      "group": "cultural", "short_title": "Hofstede-6", "classification": "Aggregate cultural framework", "discipline": "Cross-cultural and organizational research", "widget": "radar",
+      "group": "cultural", "short_title": "Hofstede-6", "classification": "Aggregate cultural framework", "discipline": "Cross-cultural organizational research", "widget": "profile-bars",
       "lead": "Six country-level dimensions used to describe broad cultural differences, including Power Distance, Individualism, and Uncertainty Avoidance.",
-      "measurement": "The Value Survey Module and related country indices were designed for aggregate comparison. Exact edition and index construction should be reported.",
-      "uses": ["Cultural prompt and language audits", "Country-level comparison", "Studying stereotyped cultural simulation"],
-      "cautions": ["Country scores are not individual personality or value scores.", "Dimensions and national averages can encourage essentialist interpretation.", "LLM outputs may reflect stereotypes rather than population values."],
+      "verdict": "Widely recognized and directly used in LLM cultural audits, but country scores must never be presented as individual traits.",
+      "scope": {"unit": "Countries and cultural aggregates", "construct": "Organizational and societal culture", "output": "6 country-level indices", "evidence": "Established but debated aggregate framework"},
+      "numbers": [{"value": "6", "label": "dimensions"}, {"value": "3", "label": "LLMs in Hofstede CAT study"}, {"value": "3", "label": "regional settings in that study"}],
+      "measurement": "The Value Survey Module and country indices were designed for aggregate comparison. Exact edition, aggregation, reference countries, language, and prompt persona belong in the method.",
+      "uses": ["Cultural prompt and language audits", "Country-level response comparison", "Testing stereotyped cultural simulation"],
+      "cautions": ["Country indices are not individual personality scores.", "National averages can encourage essentialism.", "An LLM can reproduce a cultural stereotype without matching population variance."],
+      "ai_evidence": [
+        {"title": "Cultural Alignment in Large Language Models", "meta": "COLING 2025", "detail": "Applies a Hofstede Cultural Alignment Test to Llama 2, GPT-3.5, and GPT-4 across US, Chinese, and Arab settings and tests prompting and language fine-tuning.", "url": "https://aclanthology.org/2025.coling-main.567/"},
+        {"title": "How Well Do LLMs Represent Values Across Cultures?", "meta": "KDD 2025 / arXiv 2024", "detail": "Evaluates cultural representation across dimensions, countries, personas, and languages.", "url": "https://arxiv.org/abs/2406.14805"}
+      ],
       "related": ["globe-cultural-dimensions-9", "inglehart-welzel-cultural-map", "world-values-survey-item-space"]
     },
     "globe-cultural-dimensions-9": {
-      "group": "cultural", "short_title": "GLOBE-9", "classification": "Aggregate cultural framework", "discipline": "Cross-cultural organizational research", "widget": "radar",
-      "lead": "Nine dimensions for comparing cultural practices and values, with separate attention to what societies are and what respondents believe they should be.",
-      "measurement": "GLOBE survey instruments distinguish practices from values. AI studies should preserve that distinction instead of collapsing both into one cultural profile.",
-      "uses": ["Cross-cultural model evaluation", "Practices-versus-values comparison", "Organizational and leadership context"],
-      "cautions": ["The unit is normally cultural aggregation, not an individual model.", "Several dimensions overlap in name with Hofstede but are not identical measurements.", "Nine dimensions require adequate evidence rather than one prompt per axis."],
-      "related": ["hofstede-cultural-dimensions-6", "inglehart-welzel-cultural-map", "validity-and-reporting"]
+      "group": "cultural", "short_title": "GLOBE-9", "classification": "Aggregate cultural framework", "discipline": "Cross-cultural organizational research", "widget": "practices-values",
+      "lead": "Nine culture-level dimensions with an unusually valuable distinction between practices—what is—and values—what should be.",
+      "verdict": "The clearest cultural analogue to stated-versus-observed separation; richer than Hofstede for that question, but still aggregate.",
+      "scope": {"unit": "Societies and organizations", "construct": "Cultural practices and desired values", "output": "9 dimensions × two perspectives", "evidence": "Large cross-cultural organizational program; early AI adoption"},
+      "numbers": [{"value": "9", "label": "dimensions"}, {"value": "2", "label": "practices / values views"}, {"value": "17k", "label": "managers in original program"}, {"value": "60+", "label": "societies"}],
+      "measurement": "Preserve the separate ‘as is’ and ‘should be’ item batteries. Combining both erases the framework’s most informative measurement distinction.",
+      "uses": ["Cultural model evaluation", "Practices-versus-values comparison", "Organizational and leadership contexts"],
+      "cautions": ["The unit is a cultural aggregate, not an individual assistant.", "Names shared with Hofstede do not imply equivalent measurements.", "Nine dimensions require more than one prompt per label."],
+      "ai_evidence": [{"title": "LLM-GLOBE", "meta": "arXiv 2024", "detail": "Builds a benchmark around GLOBE cultural values embedded in model outputs, establishing a direct AI operationalization.", "url": "https://arxiv.org/abs/2411.06032"}],
+      "related": ["hofstede-cultural-dimensions-6", "inglehart-welzel-cultural-map", "measurement-interfaces"]
     },
     "rokeach-value-system-36": {
-      "group": "human", "short_title": "Rokeach Value System", "classification": "General value inventory", "discipline": "Social psychology", "widget": "rank",
-      "lead": "Thirty-six named values divided into eighteen desired end states and eighteen preferred modes of conduct, traditionally measured through rank ordering.",
-      "measurement": "The classic instrument asks respondents to rank terminal and instrumental values. Rating adaptations change the response process and should be described as adaptations.",
-      "uses": ["Priority-order elicitation", "Terminal-versus-instrumental comparison", "Historical comparison with later value theories"],
-      "cautions": ["Ranks preserve order but not distance.", "Forced full ranking can amplify small or unstable differences.", "The 36-item vocabulary reflects its historical and cultural context."],
+      "group": "human", "short_title": "Rokeach Value System", "classification": "General individual-value inventory", "discipline": "Social psychology", "widget": "terminal-instrumental",
+      "lead": "Thirty-six values split into eighteen desired end states and eighteen preferred modes of conduct, traditionally rank ordered.",
+      "verdict": "Historically foundational and genuinely broad, but its fixed vocabulary and full-ranking task have much thinner modern AI adoption than Schwartz.",
+      "scope": {"unit": "Individual priority order", "construct": "Terminal goals and instrumental conduct", "output": "Two rankings of 18 values", "evidence": "Classic human instrument; sparse direct LLM evidence"},
+      "numbers": [{"value": "36", "label": "values"}, {"value": "18", "label": "terminal"}, {"value": "18", "label": "instrumental"}],
+      "measurement": "The classic task rank-orders two lists. Rating adaptations change the response process: ranks encode order, while ratings also imply magnitude and allow ties.",
+      "uses": ["Priority-order elicitation", "Ends-versus-means analysis", "Historical comparison with later theories"],
+      "cautions": ["Ranks preserve order but not distance.", "Forced full ranking magnifies near-ties and order effects.", "The vocabulary reflects its historical and cultural context."],
+      "ai_evidence": [{"title": "Measuring Human-AI Value Alignment in Large Language Models", "meta": "AIES 2024", "detail": "Uses a hybrid taxonomy drawing on Rokeach alongside Schwartz, Life Values Inventory, and WVS; it is not a pure Rokeach replication.", "url": "https://doi.org/10.1609/aies.v7i1.31703"}],
       "related": ["schwartz-tbv-10", "functional-theory-human-values-18", "measurement-interfaces"]
     },
     "social-value-orientation": {
-      "group": "moral-social", "short_title": "Social Value Orientation", "classification": "Social preference construct", "discipline": "Social psychology and behavioral economics", "widget": "continuum",
-      "lead": "A focused construct describing how people trade off outcomes for themselves and others in allocation tasks.",
-      "measurement": "The Slider Measure estimates an SVO angle from several allocation choices. The wiki visualization shows the geometry only and intentionally does not imitate the official scoring procedure.",
+      "group": "moral-social", "short_title": "Social Value Orientation", "classification": "Behavioral social-preference construct", "discipline": "Social psychology and behavioral economics", "widget": "svo-angle",
+      "lead": "A focused construct describing how people trade off outcomes for themselves and another person in allocation tasks.",
+      "verdict": "A strong behavioral analogue for conflict choice, but far too narrow to serve as a complete value profile.",
+      "scope": {"unit": "Individual allocation preference", "construct": "Self–other outcome trade-off", "output": "Continuous SVO angle / preference class", "evidence": "Established behavioral measure; little direct LLM validation"},
+      "numbers": [{"value": "6", "label": "primary Slider items"}, {"value": "9", "label": "optional secondary items"}, {"value": "1", "label": "continuous angle"}],
+      "measurement": "The SVO Slider Measure estimates an angle from repeated allocation choices. A single dilemma or a verbal claim of altruism is not an SVO score.",
       "uses": ["Resource-allocation behavior", "Prosocial versus individualistic preference", "Behavioral-game evaluation"],
-      "cautions": ["SVO is not a broad inventory of human values.", "One hypothetical allocation is not an SVO score.", "Task incentives and framing can alter observed choices."],
+      "cautions": ["SVO covers allocation, not broad human values.", "Hypothetical and incentivized choices can differ.", "Framing, recipient identity, and payoff ranges can shift choices."],
+      "ai_evidence": [{"title": "Current evidence gap", "meta": "Atlas assessment", "detail": "The literature contains many multi-agent and social-preference tasks, but no comparably established LLM measurement line that validates the canonical SVO Slider as a stable model construct.", "url": "https://www.cambridge.org/core/journals/judgment-and-decision-making/article/measuring-social-value-orientation/78981D731BFB89AFCFC789D40FD8C11F"}],
       "related": ["moral-foundations-theory", "measurement-interfaces", "validity-and-reporting"]
     },
     "functional-theory-human-values-18": {
-      "group": "human", "short_title": "Functional Theory", "classification": "General value theory", "discipline": "Psychology", "widget": "functional-matrix",
-      "lead": "Eighteen marker values organized into six subfunctions by crossing personal, central, and social orientation with materialistic and humanitarian motivators.",
-      "measurement": "Questionnaire items estimate the six subfunctions and their marker values. The two-by-three structure should be retained when aggregating profiles.",
-      "uses": ["Alternative named value profiling", "Testing structure beyond Schwartz", "Cross-framework convergent evidence"],
-      "cautions": ["Its six subfunctions are not a relabeling of Schwartz higher-order values.", "Mapping requires empirical validation rather than lexical similarity alone.", "It is less commonly operationalized in LLM studies, limiting direct comparability."],
+      "group": "human", "short_title": "Functional Theory", "classification": "General individual-value theory", "discipline": "Psychology", "widget": "functional-matrix",
+      "lead": "Eighteen marker values form six subfunctions by crossing goal orientation—personal, central, social—with motivator—materialistic or humanitarian.",
+      "verdict": "The most structured broad human-theory alternative to Schwartz for a robustness study; direct LLM validation is still a clear research gap.",
+      "scope": {"unit": "Individual value profile", "construct": "Broad value functions", "output": "18 markers grouped into 6 subfunctions", "evidence": "Validated human theory; nearly absent as an LLM benchmark"},
+      "numbers": [{"value": "18", "label": "marker values"}, {"value": "6", "label": "subfunctions"}, {"value": "2×3", "label": "organizing structure"}],
+      "measurement": "BVS-18 estimates Excitement, Promotion, Existence, Suprapersonal, Interactive, and Normative subfunctions. The 2×3 structure should survive aggregation and cross-framework analysis.",
+      "uses": ["Full-profile alternative to Schwartz", "Cross-framework convergent evidence", "Testing whether LLM structure is theory-dependent"],
+      "cautions": ["The six subfunctions are not Schwartz-4 under new names.", "Lexical crosswalks require empirical validation.", "Limited LLM adoption means new results would be novel but less directly comparable."],
+      "ai_evidence": [{"title": "Direct LLM benchmark gap", "meta": "Atlas assessment", "detail": "No dedicated, widely used LLM benchmark based on the full Functional Theory was identified in the current corpus; this is a substantive opportunity, not evidence of inferiority.", "url": "https://doi.org/10.1016/j.paid.2013.12.012"}],
       "related": ["schwartz-tbv-10", "rokeach-value-system-36", "choosing-a-framework"]
     },
     "gpla-five-factor": {
-      "group": "ai-native", "short_title": "GPLA-5", "classification": "AI-native induced value system", "discipline": "AI research and psycholexical modeling", "widget": "factors",
-      "lead": "Five interpretable factors induced from 123 atomic value terms measured across LLM subjects using a generative psycho-lexical pipeline.",
-      "measurement": "Atomic value evidence is collected first; factor analysis then induces broader dimensions. The resulting factors depend on the term inventory, elicitation, and model panel.",
-      "uses": ["Constructing an LLM-native value system", "Reducing many value terms to interpretable factors", "Comparing model-level factor profiles"],
-      "cautions": ["Induced factors are empirical results, not timeless universal categories.", "New model families or term banks may yield different structures.", "Factor labels are interpretations of loading patterns."],
-      "related": ["univar-latent-value-space", "gpv-open-value-space", "schwartz-tbv-10"]
+      "group": "ai-native", "short_title": "GPLA-5", "classification": "LLM-native induced value system", "discipline": "AI and computational psychometrics", "widget": "factor-structure",
+      "lead": "Five interpretable factors induced from 123 atomic values measured across LLM outputs with a generative psycho-lexical pipeline.",
+      "verdict": "The strongest named LLM-native competitor to Schwartz, with promising predictive validation but only one young construction lineage.",
+      "scope": {"unit": "Language model", "construct": "Induced LLM value tendencies", "output": "5 factor scores", "evidence": "Peer-reviewed AI-native construction; limited independent replication"},
+      "numbers": [{"value": "123", "label": "atomic values"}, {"value": "5", "label": "induced factors"}, {"value": "3", "label": "validation task families"}, {"value": "87±9%", "label": "reported safety prediction"}],
+      "measurement": "A Perception Parser extracts value-laden propositions, a Value Generator proposes atomic values, and a Value Evaluator scores them before factor analysis induces broader dimensions.",
+      "uses": ["Full named robustness space for LLMs", "Safety prediction", "LLM value alignment and factor-profile comparison"],
+      "cautions": ["Factors depend on model panel, term bank, prompts, parser, and evaluator.", "Labels interpret loading patterns rather than discover timeless categories.", "Reported superiority to Schwartz is task- and construction-specific until independently replicated."],
+      "ai_evidence": [{"title": "Generative Psycho-Lexical Approach for Constructing Value Systems in LLMs", "meta": "ACL 2025", "detail": "Reports better fit and 87±9% safety-prediction accuracy versus 81±15% for Schwartz-4 and 74±16% for Schwartz-10 baselines in its setup.", "url": "https://aclanthology.org/2025.acl-long.585/"}],
+      "related": ["schwartz-tbv-10", "univar-latent-value-space", "gpv-open-value-space"]
     },
     "univar-latent-value-space": {
-      "group": "ai-native", "short_title": "UniVaR", "classification": "AI-native latent representation", "discipline": "Representation learning", "widget": "latent",
-      "lead": "A continuous representation learned from sets of value-eliciting question–answer pairs, designed to encode model–language value patterns without fixed named axes.",
-      "measurement": "An encoder maps response sets into embeddings. Comparison is based on learned distance or downstream probing rather than a named ten- or nineteen-value profile.",
-      "uses": ["Model–language similarity", "Cross-lingual value representation", "Clustering and downstream prediction"],
-      "cautions": ["Individual embedding coordinates do not have stable human-readable meanings.", "A visualization is only a projection of a higher-dimensional space.", "Distance reflects the training objective and elicitation bank."],
+      "group": "ai-native", "short_title": "UniVaR", "classification": "LLM-native latent representation", "discipline": "AI and representation learning", "widget": "latent-map",
+      "lead": "A high-dimensional encoder learned from value-relevant question–answer sets, designed to compare model–language patterns without fixed named axes.",
+      "verdict": "Powerful for identity, clustering, and cross-lingual similarity; unsuitable when the result must say which named value increased.",
+      "scope": {"unit": "Model–language response set", "construct": "Latent value-distribution similarity", "output": "Dense embedding and distances", "evidence": "Peer-reviewed AI-native method; one main lineage"},
+      "numbers": [{"value": "137M", "label": "encoder parameters"}, {"value": "8", "label": "source LLMs"}, {"value": "15", "label": "evaluation LLMs"}, {"value": "25", "label": "languages / cultures"}],
+      "measurement": "The encoder maps sets of value-eliciting answers to a dense representation. Comparison uses distance, clustering, or downstream probes—not direct interpretation of coordinate 17 or 83.",
+      "uses": ["Model–language identity", "Cross-lingual clustering", "Latent robustness check alongside named spaces"],
+      "cautions": ["Coordinates have no stable named meaning.", "A 2D plot is only a projection.", "Distance inherits the elicitation bank and contrastive training objective."],
+      "ai_evidence": [{"title": "High-Dimension Human Value Representation in Large Language Models", "meta": "NAACL 2025", "detail": "Learns from 8 source LLMs and evaluates 15 open and commercial LLMs across 25 languages and cultures.", "url": "https://aclanthology.org/2025.naacl-long.274/"}],
       "related": ["gpla-five-factor", "gpv-open-value-space", "scorers-and-mappers"]
     },
     "value-kaleidoscope-ontology": {
-      "group": "ai-native", "short_title": "Value Kaleidoscope", "classification": "Contextual value ontology", "discipline": "AI and knowledge representation", "widget": "ontology",
-      "lead": "A contextual ontology connecting values, rights, and duties to situations and stakeholders instead of forcing every concept into one fixed vector.",
-      "measurement": "The associated resource links approximately 218,000 values, rights, and duties to about 31,000 situations with relevance and valence information.",
-      "uses": ["Pluralistic contextual reasoning", "Generating and explaining relevant principles", "Representing support, opposition, and ambiguity"],
-      "cautions": ["An ontology is not automatically a numeric profile.", "Contextual relevance should not be collapsed into global endorsement.", "Generated concepts and relations require quality and coverage checks."],
+      "group": "ai-native", "short_title": "Value Kaleidoscope", "classification": "Contextual value ontology", "discipline": "Pluralistic AI alignment", "widget": "ontology",
+      "lead": "A contextual ontology connects values, rights, duties, situations, valence, and stakeholders instead of forcing all evidence into one global vector.",
+      "verdict": "Best fit for explaining contextual L2/L3 conflicts; complementary to—not a replacement for—a stable model-level profile.",
+      "scope": {"unit": "Situation and response", "construct": "Contextually relevant values, rights, and duties", "output": "Typed concepts, relevance, and valence", "evidence": "Peer-reviewed resource with human acceptance validation"},
+      "numbers": [{"value": "31k", "label": "situations"}, {"value": "218k", "label": "value/right/duty records"}, {"value": "91%", "label": "reported human acceptance"}],
+      "measurement": "Relevant concepts are generated and linked to situations with support, opposition, or ambiguity. The result is relational and contextual rather than one normalized profile.",
+      "uses": ["Explain value conflicts", "Generate contextual principles", "Audit L2 choice and L3 framing"],
+      "cautions": ["Contextual relevance is not global endorsement.", "An ontology is not automatically a numeric profile.", "Generated concepts and relations still require coverage and quality audits."],
+      "ai_evidence": [{"title": "Value Kaleidoscope: Engaging AI with Pluralistic Human Values, Rights, and Duties", "meta": "AAAI 2024", "detail": "Introduces the contextual ontology and ValuePrism resource, with reported 91% human acceptance of generated concepts.", "url": "https://doi.org/10.1609/aaai.v38i18.29970"}],
       "related": ["gpv-open-value-space", "constitutional-principle-space", "measurement-interfaces"]
     },
     "hhh-principles": {
-      "group": "principles", "short_title": "HHH", "classification": "Normative alignment target", "discipline": "AI alignment", "widget": "principles",
-      "lead": "Helpful, Honest, and Harmless are broad behavioral objectives used to organize assistant training and evaluation.",
-      "measurement": "Operationalization requires task definitions, rubrics, preference data, or evaluators. The three words alone do not define a complete measurement instrument.",
-      "uses": ["Assistant preference modeling", "Behavioral evaluation", "High-level alignment objectives"],
-      "cautions": ["HHH is not a comprehensive descriptive theory of values.", "The objectives can conflict in concrete situations.", "Evaluator and policy choices determine how each principle is interpreted."],
+      "group": "principles", "short_title": "HHH", "classification": "Normative alignment target", "discipline": "AI alignment", "widget": "hhh-triangle",
+      "lead": "Helpful, Honest, and Harmless are broad assistant objectives used in training and evaluation—not a comprehensive descriptive theory of values.",
+      "verdict": "Useful policy shorthand and evaluation target; too underspecified to serve as a value ontology without task rubrics and conflict rules.",
+      "scope": {"unit": "Assistant response or policy", "construct": "Desired behavior", "output": "Rubric, preference, or reward signals", "evidence": "Widely used alignment target"},
+      "numbers": [{"value": "3", "label": "headline objectives"}, {"value": "many", "label": "possible operationalizations"}],
+      "measurement": "Each objective needs task definitions, preference data, rubrics, or evaluators. The words themselves do not specify trade-offs when helpfulness conflicts with harmlessness or honesty.",
+      "uses": ["Preference modeling", "Assistant behavioral evaluation", "High-level policy organization"],
+      "cautions": ["HHH is prescriptive, not a measured latent profile.", "Objectives conflict in concrete cases.", "Evaluator and policy choices determine the effective meaning."],
+      "ai_evidence": [{"title": "A General Language Assistant as a Laboratory for Alignment", "meta": "arXiv 2021", "detail": "Operationalizes helpful, honest, and harmless behavior through preference-modeling and assistant evaluation experiments.", "url": "https://arxiv.org/abs/2112.00861"}],
       "related": ["constitutional-principle-space", "value-kaleidoscope-ontology", "validity-and-reporting"]
     },
     "constitutional-principle-space": {
       "group": "principles", "short_title": "Constitutional AI", "classification": "Configurable normative target", "discipline": "AI alignment", "widget": "constitution",
-      "lead": "A collection of natural-language principles used to critique, revise, or prefer model outputs. Its contents are configurable rather than a fixed universal axiology.",
-      "measurement": "The constitution, critique prompt, revision procedure, preference model, and training stage jointly determine the operational target.",
-      "uses": ["Self-critique and response revision", "AI-feedback preference construction", "Policy-based steering"],
-      "cautions": ["A constitution states desired behavior; it does not reveal a model's latent values.", "Different principle sets create different targets.", "Compliance scores depend on evaluator interpretation and conflict resolution."],
+      "lead": "A configurable collection of natural-language principles used to critique, revise, and prefer model outputs.",
+      "verdict": "A steering mechanism and policy artifact, not evidence of a model’s intrinsic or stable values.",
+      "scope": {"unit": "Response, critique, preference, or policy", "construct": "Desired normative constraints", "output": "Revisions and AI-feedback preferences", "evidence": "Established training paradigm; constitution-specific effects"},
+      "numbers": [{"value": "open", "label": "principle count"}, {"value": "2", "label": "critique / revision stages"}],
+      "measurement": "Constitution text, critique prompt, revision prompt, preference-model procedure, and training stage jointly define the operational target.",
+      "uses": ["Self-critique and revision", "AI-feedback preference construction", "Policy-based steering"],
+      "cautions": ["A constitution declares desired behavior; it does not reveal latent identity.", "Changing principles changes the target.", "Compliance depends on evaluator interpretation and conflict resolution."],
+      "ai_evidence": [{"title": "Constitutional AI: Harmlessness from AI Feedback", "meta": "arXiv 2022", "detail": "Introduces supervised self-critique/revision followed by reinforcement learning from AI feedback under a written principle set.", "url": "https://arxiv.org/abs/2212.08073"}],
       "related": ["hhh-principles", "value-kaleidoscope-ontology", "measurement-interfaces"]
     },
     "gpv-open-value-space": {
-      "group": "ai-native", "short_title": "GPV open space", "classification": "Open measurement space", "discipline": "Generative psychometrics", "widget": "open",
-      "lead": "Values are supplied dynamically at measurement time, allowing text to be tested against concepts beyond a fixed inventory.",
-      "measurement": "A generative scorer estimates whether and how a supplied value is expressed. Applications may later aggregate results into Schwartz, Hofstede, or another named space.",
-      "uses": ["Context-specific value scoring", "Open-vocabulary measurement", "Mapping generated text into chosen value systems"],
-      "cautions": ["The supplied definition and prompt determine what is being measured.", "Scores for different value prompts may not share one calibrated scale.", "Sentence splitting, evidence coverage, and scorer choice can change results."],
+      "group": "ai-native", "short_title": "GPV open space", "classification": "Open-vocabulary measurement pipeline", "discipline": "Generative psychometrics", "widget": "open-pipeline",
+      "lead": "GPV separates text into value-laden perceptions and evaluates dynamically supplied values, so it is a measurement pipeline rather than one fixed axiology.",
+      "verdict": "The most relevant open-vocabulary scoring design for free text; it still needs an explicit value list or ontology and a validated evaluator.",
+      "scope": {"unit": "Text proposition / perception", "construct": "Expression of supplied value concepts", "output": "Perception-by-value evidence and aggregates", "evidence": "Peer-reviewed method; scorer-dependent"},
+      "numbers": [{"value": "2", "label": "core stages: split / score"}, {"value": "open", "label": "value vocabulary"}, {"value": "1→N", "label": "text to perceptions"}],
+      "measurement": "First split long outputs into atomic perceptions without changing meaning; then score every relevant perception against supplied value definitions. Aggregation, zero-evidence, contradiction, and coverage rules determine the final profile.",
+      "uses": ["Free-text L3 scoring", "Open-vocabulary value detection", "Mapping one response into multiple named spaces"],
+      "cautions": ["GPV is not itself a five- or ten-value ontology.", "A parser can lose negation, speaker attribution, or context.", "Scores from separately prompted values may not share a calibrated scale."],
+      "ai_evidence": [
+        {"title": "Measuring Human and AI Values Based on Generative Psychometrics", "meta": "AAAI 2025", "detail": "Formalizes perception extraction before value evaluation and supports supplied value concepts beyond a single fixed theory.", "url": "https://ojs.aaai.org/index.php/AAAI/article/view/34839"},
+        {"title": "GPLA", "meta": "ACL 2025", "detail": "Reuses the perception-parser idea as the first stage of constructing an LLM-native value system, showing that parsing and axiology construction are distinct steps.", "url": "https://aclanthology.org/2025.acl-long.585/"}
+      ],
       "related": ["gpla-five-factor", "univar-latent-value-space", "scorers-and-mappers"]
     }
   }

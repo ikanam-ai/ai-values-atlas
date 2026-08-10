@@ -14,7 +14,7 @@
 
 The Atlas separates value theories, measurement interfaces, benchmarks, scorers, model behavior, and alignment targets instead of treating them as one interchangeable construct.
 
-The [interactive Wiki](https://ikanam-ai.github.io/ai-values-atlas/learn/) gives every mapped value space a stable reference page with its structure, measurement assumptions, AI uses, cautions, primary sources, and a small visual example.
+The [research Wiki](https://ikanam-ai.github.io/ai-values-atlas/learn/) gives every mapped value space a stable evidence page: construct and unit of analysis, numerical structure, measurement protocol, AI literature, cautions, primary sources, and a structural diagram.
 
 ## 🧭 Field map
 
@@ -43,14 +43,14 @@ An axiology is not the questionnaire, prompt, scorer, or benchmark used to measu
 | [Schwartz Theory of Basic Human Values](https://doi.org/10.1016/S0065-2601(08)60281-6) | 🧭 Basic human values | **10 values** | questionnaires, scenarios, text scoring, value conflict |
 | [Schwartz higher-order dimensions](https://doi.org/10.1016/S0065-2601(08)60281-6) | 🧭 Basic human values | **4 groups** | aggregated profiles and trade-off analysis |
 | [Refined Schwartz Theory](https://doi.org/10.1037/a0029393) | 🧭 Basic human values | **19 values** | higher-granularity human and AI profiling |
-| [Moral Foundations Theory](https://doi.org/10.1037/a0015141) | ⚖️ Moral values | **6 foundations**; original model: **5** | moral-language classification and profiling |
+| [Moral Foundations Theory](https://doi.org/10.1037/a0015141) | ⚖️ Moral framework | **5 in MFQ-1**; **6 in MFQ-2**; Liberty is a separate extension | moral-language classification and profiling |
 | [World Values Survey](https://www.worldvaluessurvey.org/) | 🌍 Cultural values | open item space; **7 waves**, **300+ indicators** in Wave 7 | human–AI comparison and political attitudes |
 | [Inglehart–Welzel Cultural Map](https://www.worldvaluessurvey.org/WVSContents.jsp) | 🌍 Cultural values | **2 dimensions** | country- and culture-level comparison |
 | [Hofstede cultural dimensions](https://geerthofstede.com/research-and-vsm/dimension-data-matrix/) | 🌍 Cultural values | **6 dimensions** | cultural alignment and language/persona audits |
 | [GLOBE cultural dimensions](https://globeproject.com/study_2004_2007) | 🌍 Cultural values | **9 dimensions** | cross-cultural model evaluation |
 | [Rokeach Value System](https://psycnet.apa.org/record/2011-15663-000) | 🧭 Basic human values | **36 values**: 18 terminal + 18 instrumental | ranked value priorities |
 | [Social Value Orientation](https://doi.org/10.1002/ejsp.1773) | 🤝 Social preferences | **1 continuum**; **6 primary items** | allocation choices and behavioral games |
-| [Functional Theory of Human Values](https://doi.org/10.1016/j.paid.2013.07.043) | 🧭 Basic human values | **18 values**, **6 subfunctions** | alternative named human-value profiling |
+| [Functional Theory of Human Values](https://doi.org/10.1016/j.paid.2013.12.012) | 🧭 Basic human values | **18 values**, **6 subfunctions** | alternative named human-value profiling |
 | [GPLA](https://aclanthology.org/2025.acl-long.585/) | 🧠 AI-native values | **123 atomic values → 5 factors** | AI-native value-system construction |
 | [UniVaR](https://aclanthology.org/2025.naacl-long.274/) | 🧠 AI-native values | latent space; **8 source LLMs**, **15 evaluated models**, **25 languages/cultures** | model–language embeddings and comparison |
 | [Value Kaleidoscope](https://doi.org/10.1609/aaai.v38i18.29970) | 📜 Rights, duties & principles | **3 entity types** | pluralistic reasoning and conflict-aware alignment |
@@ -64,7 +64,7 @@ An axiology is not the questionnaire, prompt, scorer, or benchmark used to measu
 - **Schwartz-10:** Self-Direction, Stimulation, Hedonism, Achievement, Power, Security, Conformity, Tradition, Benevolence, Universalism.
 - **Schwartz-4:** Openness to Change, Conservation, Self-Enhancement, Self-Transcendence.
 - **Refined Schwartz-19:** Self-Direction–Thought, Self-Direction–Action, Stimulation, Hedonism, Achievement, Power–Dominance, Power–Resources, Face, Security–Personal, Security–Societal, Tradition, Conformity–Rules, Conformity–Interpersonal, Humility, Benevolence–Dependability, Benevolence–Caring, Universalism–Concern, Universalism–Nature, Universalism–Tolerance.
-- **Moral Foundations Theory:** Care/Harm, Fairness/Cheating, Loyalty/Betrayal, Authority/Subversion, Sanctity/Degradation, Liberty/Oppression. The original formulation used the first five.
+- **Moral Foundations Theory:** classic MFQ-1 uses Care/Harm, Fairness/Cheating, Loyalty/Betrayal, Authority/Subversion, and Purity/Degradation. Liberty/Oppression is a proposed extension. The 36-item MFQ-2 instead uses Care, Equality, Proportionality, Loyalty, Authority, and Purity.
 - **World Values Survey:** a changing multilingual item bank rather than a fixed vector; seven completed waves since 1981, coverage of almost 120 countries/societies, and 300+ indicators in Wave 7.
 - **Inglehart–Welzel:** Traditional ↔ Secular-Rational; Survival ↔ Self-Expression.
 - **Hofstede-6:** Power Distance, Individualism, Masculinity, Uncertainty Avoidance, Long-Term Orientation, Indulgence.
