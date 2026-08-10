@@ -6,7 +6,7 @@
 
 **A field guide to how values are represented, measured, expressed, chosen, and steered in AI systems.**
 
-[Explore the atlas](https://ikanam-ai.github.io/ai-values-atlas/) · [Field map](#-field-map) · [Axiologies](#-axiologies-and-value-spaces) · [Literature](#-literature-by-research-domain) · [Datasets & benchmarks](#-datasets-benchmarks-and-instruments) · [Contribute](CONTRIBUTING.md)
+[Explore the atlas](https://ikanam-ai.github.io/ai-values-atlas/) · [Visual guide](https://ikanam-ai.github.io/ai-values-atlas/learn/) · [Field map](#-field-map) · [Axiologies](#-axiologies-and-value-spaces) · [Literature](#-literature-by-research-domain) · [Datasets & benchmarks](#-datasets-benchmarks-and-instruments) · [Contribute](CONTRIBUTING.md)
 
 **701 works · 10 research domains · 1,013 source links · 94 standalone resources**
 

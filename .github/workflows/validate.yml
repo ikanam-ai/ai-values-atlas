@@ -14,3 +14,4 @@ jobs:
           python-version: "3.12"
       - run: python3 scripts/validate_public.py
       - run: node --check site/app.js
+      - run: node --check site/learn/app.js

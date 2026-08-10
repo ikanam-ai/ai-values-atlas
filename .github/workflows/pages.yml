@@ -24,6 +24,7 @@ jobs:
           python-version: "3.12"
       - run: python3 scripts/validate_public.py
       - run: node --check site/app.js
+      - run: node --check site/learn/app.js
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
