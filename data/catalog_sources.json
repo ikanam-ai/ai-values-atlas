@@ -123,6 +123,15 @@
       "include_heading_patterns": ["papers / value misalignment / ethics and morality"],
       "exclude_heading_patterns": [],
       "license_status": "unclear"
+    },
+    {
+      "id": "atlas-primary-literature-curation",
+      "name": "Atlas primary-literature curation",
+      "kind": "local_bibliography_snapshot",
+      "seed_file": "data/seed/atlas_primary_literature_links.jsonl",
+      "scope_tier_guess": "core",
+      "license_status": "bibliographic facts",
+      "notes": "Primary publications and official artifacts added through targeted full-paper curation."
     }
   ]
 }

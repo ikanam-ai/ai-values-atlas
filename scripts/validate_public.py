@@ -12,6 +12,7 @@ import urllib.parse
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 WORKS_PATH = ROOT / "data" / "works.jsonl"
 RESOURCES_PATH = ROOT / "data" / "resources.jsonl"
+RAW_LINKS_PATH = ROOT / "data" / "raw" / "catalog_links.jsonl"
 SITE_DATA_PATH = ROOT / "site" / "data.json"
 
 
@@ -36,13 +37,14 @@ def main() -> int:
     errors: list[str] = []
     works = read_jsonl(WORKS_PATH)
     resources = read_jsonl(RESOURCES_PATH)
+    source_links = read_jsonl(RAW_LINKS_PATH)
     site_data = json.loads(SITE_DATA_PATH.read_text())
     readme = (ROOT / "README.md").read_text()
 
-    if len(works) != 701:
-        errors.append(f"Expected 701 research works, found {len(works)}")
-    if len(resources) != 94:
-        errors.append(f"Expected 94 independent resources, found {len(resources)}")
+    if not works:
+        errors.append("No research works found")
+    if not resources:
+        errors.append("No independent resources found")
 
     work_ids = [row.get("id") for row in works]
     resource_ids = [row.get("id") for row in resources]
@@ -108,14 +110,14 @@ def main() -> int:
 
     stats = site_data.get("stats", {})
     expected_stats = {
-        "research_works": 701,
-        "domains": 10,
-        "source_links": 1013,
-        "work_resource_relations": 943,
-        "standalone_resources": 94,
+        "research_works": len(works),
+        "domains": len(domains),
+        "source_links": len(source_links),
+        "work_resource_relations": sum(len(row.get("links", [])) for row in works),
+        "standalone_resources": len(resources),
     }
     if stats != expected_stats:
-        errors.append(f"Site statistics differ from the frozen public release: {stats}")
+        errors.append(f"Site statistics differ from curated public data: {stats}")
 
     required_sections = (
         "## 🧭 Field map",

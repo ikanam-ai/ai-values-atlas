@@ -2,10 +2,10 @@
   "title": "AI Values Atlas",
   "tagline": "Research on how values are represented, measured, expressed, chosen, and steered in AI systems.",
   "stats": {
-    "research_works": 701,
+    "research_works": 703,
     "domains": 10,
-    "source_links": 1013,
-    "work_resource_relations": 943,
+    "source_links": 1019,
+    "work_resource_relations": 953,
     "standalone_resources": 94
   },
   "domains": [
@@ -21,7 +21,7 @@
       "name": "Measurement and profiling",
       "icon": "📏",
       "question": "How are AI values elicited and summarized?",
-      "work_count": 107
+      "work_count": 106
     },
     {
       "id": "measurement-validity",
@@ -35,7 +35,7 @@
       "name": "Moral and value understanding",
       "icon": "⚖️",
       "question": "Can systems identify, explain, or reason about values and norms?",
-      "work_count": 71
+      "work_count": 72
     },
     {
       "id": "choice-action-behavior",
@@ -49,7 +49,7 @@
       "name": "Culture, opinions, and social representation",
       "icon": "🌍",
       "question": "Whose cultures, opinions, and social perspectives are represented?",
-      "work_count": 264
+      "work_count": 265
     },
     {
       "id": "pluralism-aggregation",
@@ -63,14 +63,14 @@
       "name": "Alignment and steering",
       "icon": "🧰",
       "question": "How are normative targets used to train or steer systems?",
-      "work_count": 104
+      "work_count": 105
     },
     {
       "id": "representations-internals",
       "name": "Value representations and model internals",
       "icon": "📐",
       "question": "How is value information represented, learned, or causally encoded?",
-      "work_count": 39
+      "work_count": 43
     },
     {
       "id": "reviews-governance",
@@ -5354,6 +5354,28 @@
       ]
     },
     {
+      "id": "acl:2024.emnlp-main.918",
+      "title": "Intrinsic Self-correction for Enhanced Morality: An Analysis of Internal Mechanisms and the Superficial Hypothesis",
+      "year": 2024,
+      "venue": "EMNLP",
+      "publication_status": "published",
+      "scope": "adjacent",
+      "domains": [
+        "moral-value-understanding",
+        "representations-internals"
+      ],
+      "contribution_types": [
+        "empirical-study",
+        "representation-method"
+      ],
+      "links": [
+        {
+          "label": "paper",
+          "url": "https://aclanthology.org/2024.emnlp-main.918/"
+        }
+      ]
+    },
+    {
       "id": "arxiv:2402.13231",
       "title": "Investigating Cultural Alignment of Large Language Models",
       "year": 2024,
@@ -8150,11 +8172,13 @@
       "scope": "core",
       "domains": [
         "measurement-profiling",
-        "alignment-steering"
+        "alignment-steering",
+        "representations-internals"
       ],
       "contribution_types": [
         "alignment-method",
-        "measurement-method"
+        "measurement-method",
+        "representation-method"
       ],
       "links": [
         {
@@ -8992,27 +9016,6 @@
       ]
     },
     {
-      "id": "arxiv:2509.24319",
-      "title": "Dual Mechanisms of Value Expression: Intrinsic vs. Prompted Values in Large Language Models",
-      "year": 2025,
-      "venue": "arXiv",
-      "publication_status": "preprint",
-      "scope": "core",
-      "domains": [
-        "measurement-profiling"
-      ],
-      "contribution_types": [
-        "measurement-method",
-        "model-scorer"
-      ],
-      "links": [
-        {
-          "label": "paper",
-          "url": "https://arxiv.org/abs/2509.24319"
-        }
-      ]
-    },
-    {
       "id": "arxiv:2505.12792",
       "title": "EAVIT: Efficient and Accurate Human Value Identification from Text data via LLMs",
       "year": 2025,
@@ -9779,6 +9782,10 @@
         {
           "label": "preprint",
           "url": "https://arxiv.org/abs/2507.11316"
+        },
+        {
+          "label": "code",
+          "url": "https://github.com/hr-jin/ConVA"
         }
       ]
     },
@@ -11613,6 +11620,32 @@
       ]
     },
     {
+      "id": "acl:2025.emnlp-main.743",
+      "title": "The discordance between embedded ethics and cultural inference in large language models",
+      "year": 2025,
+      "venue": "EMNLP",
+      "publication_status": "published",
+      "scope": "core",
+      "domains": [
+        "culture-opinions-society",
+        "representations-internals"
+      ],
+      "contribution_types": [
+        "empirical-study",
+        "representation-method"
+      ],
+      "links": [
+        {
+          "label": "paper",
+          "url": "https://aclanthology.org/2025.emnlp-main.743/"
+        },
+        {
+          "label": "code",
+          "url": "https://github.com/AidaRamezani/ethics_culture"
+        }
+      ]
+    },
+    {
       "id": "arxiv:2512.03026",
       "title": "The Moral Consistency Pipeline: Continuous Ethical Evaluation for Large Language Models",
       "year": 2025,
@@ -13390,6 +13423,36 @@
         {
           "label": "paper",
           "url": "https://arxiv.org/abs/2603.10588"
+        }
+      ]
+    },
+    {
+      "id": "arxiv:2509.24319",
+      "title": "Dual Mechanisms of Value Expression: Intrinsic vs. Prompted Values in Large Language Models",
+      "year": 2026,
+      "venue": "ICML",
+      "publication_status": "published",
+      "scope": "core",
+      "domains": [
+        "alignment-steering",
+        "representations-internals"
+      ],
+      "contribution_types": [
+        "alignment-method",
+        "representation-method"
+      ],
+      "links": [
+        {
+          "label": "paper",
+          "url": "https://arxiv.org/abs/2509.24319"
+        },
+        {
+          "label": "code",
+          "url": "https://github.com/holi-lab/ValueMechanism"
+        },
+        {
+          "label": "project",
+          "url": "https://holi-lab.github.io/ValueMechanism/"
         }
       ]
     },
@@ -16464,7 +16527,7 @@
     },
     {
       "year": 2024,
-      "count": 188
+      "count": 189
     },
     {
       "year": 2025,
@@ -16472,7 +16535,7 @@
     },
     {
       "year": 2026,
-      "count": 159
+      "count": 160
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "generated_at": "2026-08-08T11:19:08.369813+00:00",
+  "generated_at": "2026-08-11T15:01:29+00:00",
   "sources": [
     {
       "id": "stonic-manuscript-bibliography",
@@ -69,6 +69,11 @@
       "repo": "https://github.com/tjunlp-lab/Awesome-LLM-Safety-Papers.git",
       "commit": "6749bf77aa508e549451671fe00cc1f2afa725a0",
       "commit_date": "2024-12-25T00:15:03+08:00"
+    },
+    {
+      "id": "atlas-primary-literature-curation",
+      "kind": "local_bibliography_snapshot",
+      "path": "data/seed/atlas_primary_literature_links.jsonl"
     }
   ]
 }

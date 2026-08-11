@@ -36,4 +36,5 @@ itself establish scientific importance.
 - Keep theories, instruments, scorers, model outputs, and observed behavior as
   separate entities.
 - Explain proposed domain or taxonomy changes with concrete scientific evidence.
+- After changing public works or resources, run `python3 scripts/build_public.py`.
 - Run `python3 scripts/validate_public.py` and `node --check site/app.js`.

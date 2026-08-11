@@ -8,7 +8,7 @@
 
 [Explore the atlas](https://ikanam-ai.github.io/ai-values-atlas/) · [Wiki](https://ikanam-ai.github.io/ai-values-atlas/learn/) · [Field map](#-field-map) · [Axiologies](#-axiologies-and-value-spaces) · [Literature](#-literature-by-research-domain) · [Datasets & benchmarks](#-datasets-benchmarks-and-instruments) · [Contribute](CONTRIBUTING.md)
 
-**701 works · 10 research domains · 1,013 source links · 94 standalone resources**
+**703 works · 10 research domains · 1,019 source links · 94 standalone resources**
 
 </div>
 
@@ -21,14 +21,14 @@ The [research Wiki](https://ikanam-ai.github.io/ai-values-atlas/learn/) gives ev
 | Domain | Research question | Works |
 |---|---|---:|
 | 🧭 **Value theory and axiologies** | Which values exist, and how are they structured? | 4 |
-| 📏 **Measurement and profiling** | How are AI values elicited and summarized? | 107 |
+| 📏 **Measurement and profiling** | How are AI values elicited and summarized? | 106 |
 | 🔬 **Reliability, validity, and auditing** | When is a reported value result stable and valid? | 19 |
-| ⚖️ **Moral and value understanding** | Can systems identify, explain, or reason about values and norms? | 71 |
+| ⚖️ **Moral and value understanding** | Can systems identify, explain, or reason about values and norms? | 72 |
 | 🎯 **Choice, action, and behavior** | Which values govern choices and behavior under conflict? | 17 |
-| 🌍 **Culture, opinions, and social representation** | Whose cultures, opinions, and social perspectives are represented? | 264 |
+| 🌍 **Culture, opinions, and social representation** | Whose cultures, opinions, and social perspectives are represented? | 265 |
 | 🗣️ **Pluralism and preference aggregation** | How should heterogeneous values and preferences be represented or aggregated? | 57 |
-| 🧰 **Alignment and steering** | How are normative targets used to train or steer systems? | 104 |
-| 📐 **Value representations and model internals** | How is value information represented, learned, or causally encoded? | 39 |
+| 🧰 **Alignment and steering** | How are normative targets used to train or steer systems? | 105 |
+| 📐 **Value representations and model internals** | How is value information represented, learned, or causally encoded? | 43 |
 | 🗺️ **Field reviews, reporting, and governance** | How is the field organized, documented, and governed? | 50 |
 
 ## 🧠 Axiologies and value spaces
@@ -108,6 +108,14 @@ These are computational components, not value theories. Their output only has
 meaning together with the prompt, input unit, value space, aggregation policy,
 coverage, and validation evidence.
 
+Hidden-state probes and interventions provide a complementary evidence family:
+[structural value features](https://aclanthology.org/2025.findings-acl.1188/),
+[controlled value vectors](https://aclanthology.org/2025.acl-long.1326/), and
+[value neurons](https://aclanthology.org/2025.findings-emnlp.501/) inspect or alter
+internal representations instead of inferring values only from outputs. Linear
+decodability is correlational evidence; causal claims additionally need held-out
+transfer, matched and random-label controls, and checks for collateral output shifts.
+
 | Tool | Scale and construction | Exact output | Links |
 |---|---|---|---|
 | ValueLlama-3-8B | **8B-parameter** Llama-3 model fine-tuned on ValueBench and ValuePrism; English | **2 tasks:** binary relevance, then **3-way valence** (supports / opposes / neutral-context-dependent) for any supplied value | [[model](https://huggingface.co/Value4AI/ValueLlama-3-8B)] [[code](https://github.com/Value4AI/gpv)] |
@@ -179,7 +187,6 @@ How are AI values elicited and summarized?
 - 📄 Deep Value Benchmark: Measuring Whether Models Generalize Deep Values or Shallow Preferences, arXiv, 2025, [[paper](https://arxiv.org/abs/2511.02109)]
 - 📄 Do Language Models Think Consistently? A Study of Value Preferences Across Varying Response Lengths, arXiv, 2025, [[paper](https://arxiv.org/abs/2506.02481)]
 - 📄 Do Role-Playing Agents Practice What They Preach? Belief-Behavior Consistency in LLM-Based Simulations of Human Trust, arXiv, 2025, [[paper](https://arxiv.org/abs/2507.02197)]
-- 📄 Dual Mechanisms of Value Expression: Intrinsic vs. Prompted Values in Large Language Models, arXiv, 2025, [[paper](https://arxiv.org/abs/2509.24319)]
 - ⭐ Fairness through Difference Awareness: Measuring Desired Group Discrimination in LLMs, ACL Best Paper, 2025, [[paper](https://arxiv.org/abs/2502.01926)]
 - 📄 Following the Whispers of Values: Unraveling Neural Mechanisms Behind Value-Oriented Behaviors in LLMs, arXiv, 2025, [[paper](https://arxiv.org/abs/2504.04994)]
 - 📄 From Stability to Inconsistency: A Study of Moral Preferences in LLMs, arXiv, 2025, [[paper](https://arxiv.org/abs/2504.06324)]
@@ -295,6 +302,7 @@ Can systems identify, explain, or reason about values and norms?
 - ⭐ Exploring and steering the moral compass of Large Language Models, ICPR, 2024, [[paper](https://arxiv.org/abs/2405.17345)]
 - ⭐ Extended Japanese Commonsense Morality Dataset with Masked Token and Label Enhancement, CIKM '24 (Short Paper), ACM Digital Library, 2024, [[paper](https://dl.acm.org/doi/abs/10.1145/3627673.3679924)]
 - 📄 Inducing Human-like Biases in Moral Reasoning Language Models, arXiv, 2024, [[paper](https://arxiv.org/abs/2411.15386)]
+- ⭐ Intrinsic Self-correction for Enhanced Morality: An Analysis of Internal Mechanisms and the Superficial Hypothesis, EMNLP, 2024, [[paper](https://aclanthology.org/2024.emnlp-main.918/)]
 - 📄 Language Model Alignment in Multilingual Trolley Problems, arXiv, 2024, [[paper](https://arxiv.org/abs/2407.02273)]
 - 📄 Large-scale moral machine experiment on large language models, arXiv, 2024, [[paper](https://arxiv.org/abs/2411.06790)]
 - 📄 LLMs as mirrors of societal moral standards: reflection of cultural divergence and agreement across ethical topics, arXiv, 2024, [[paper](https://arxiv.org/abs/2412.00962)]
@@ -514,6 +522,7 @@ Whose cultures, opinions, and social perspectives are represented?
 - 📄 SynthesizeMe! Inducing Persona-Guided Prompts for Personalized Reward Models in LLMs, arXiv, 2025, [[paper](https://arxiv.org/abs/2506.05598)]
 - 📄 Teaching Language Models to Evolve with Users: Dynamic Profile Modeling for Personalized Alignment, arXiv, 2025, [[paper](https://arxiv.org/abs/2505.15456)]
 - ⭐ The AI Gap: How Socioeconomic Status Affects Language Technology Interactions, ACL Best Social Impact Paper, 2025, [[paper](https://arxiv.org/abs/2505.12158)]
+- ⭐ The discordance between embedded ethics and cultural inference in large language models, EMNLP, 2025, [[paper](https://aclanthology.org/2025.emnlp-main.743/)] [[code](https://github.com/AidaRamezani/ethics_culture)]
 - 📄 Toward Multi-Session Personalized Conversation: A Large-Scale Dataset and Hierarchical Tree Framework for Implicit Reasoning, arXiv, 2025, [[paper](https://arxiv.org/abs/2503.07018)]
 - 📄 Towards Faithful and Controllable Personalization via Critique-Post-Edit Reinforcement Learning, arXiv, 2025, [[paper](https://arxiv.org/abs/2510.18849)]
 - ⭐ Towards Realistic Evaluation of Cultural Value Alignment: Diversity Enhancement for Survey Simulation, Elsevier journal or book, 2025, [[paper](https://sciencedirect.com/science/article/abs/pii/S030645732500041X)]
@@ -708,6 +717,7 @@ How are normative targets used to train or steer systems?
 - 📄 Constitutional Value Potentials: reading and steering internal priority margins in language models, arXiv, 2026, [[paper](https://arxiv.org/abs/2606.15420)]
 - 📄 Controllable Value Alignment in Large Language Models through Neuron-Level Editing, arXiv, 2026, [[paper](https://arxiv.org/abs/2602.07356)]
 - 📄 Does LLM Alignment Really Need Diversity? An Empirical Study of Adapting RLVR Methods for Moral Reasoning, arXiv, 2026, [[paper](https://arxiv.org/abs/2603.10588)]
+- ⭐ Dual Mechanisms of Value Expression: Intrinsic vs. Prompted Values in Large Language Models, ICML, 2026, [[paper](https://arxiv.org/abs/2509.24319)] [[code](https://github.com/holi-lab/ValueMechanism)] [[project](https://holi-lab.github.io/ValueMechanism/)]
 - 📄 Parametric Social Identity Injection and Diversification in Public Opinion Simulation, arXiv, 2026, [[paper](https://arxiv.org/abs/2603.16142)]
 - 📄 Position: Align AI to Our Aspirations, Not Our Flaws, arXiv, 2026, [[paper](https://arxiv.org/abs/2606.13755)]
 - 📄 Position: The Alignment Community is Unintentionally Building a Censor's Toolkit, OpenReview, 2026, [[paper](https://openreview.net/forum?id=dy2HwmOvFX)]
@@ -723,7 +733,7 @@ How are normative targets used to train or steer systems?
 - 📄 Diverse Human Value Alignment for Large Language Models via Ethical Reasoning, arXiv, 2025, [[paper](https://arxiv.org/abs/2511.00379)]
 - 📄 EVALUESTEER: Measuring Reward Model Steerability Towards Values and Preferences, arXiv, 2025, [[paper](https://arxiv.org/abs/2510.06370)]
 - 📄 Improving the Distributional Alignment of LLMs using Supervision, arXiv, 2025, [[paper](https://arxiv.org/abs/2507.00439)]
-- ⭐ Internal Value Alignment in Large Language Models through Controlled Value Vector Activation, ACL, 2025, [[paper](https://aclanthology.org/2025.acl-long.1326/)] [[preprint](https://arxiv.org/abs/2507.11316)]
+- ⭐ Internal Value Alignment in Large Language Models through Controlled Value Vector Activation, ACL, 2025, [[paper](https://aclanthology.org/2025.acl-long.1326/)] [[preprint](https://arxiv.org/abs/2507.11316)] [[code](https://github.com/hr-jin/ConVA)]
 - 📄 Justifications for Democratizing AI Alignment and Their Prospects, arXiv, 2025, [[paper](https://arxiv.org/abs/2507.19548)]
 - ⭐ Language Model Fine-Tuning on Scaled Survey Data for Predicting Distributions of Public Opinions, ACL, 2025, [[paper](https://aclanthology.org/2025.acl-long.1028/)] [[preprint](https://arxiv.org/abs/2502.16761)]
 - ⭐ Language Models Resist Alignment: Evidence From Data Compression, ACL Best Paper, 2025, [[paper](https://arxiv.org/abs/2406.06144)]
@@ -813,6 +823,7 @@ How is value information represented, learned, or causally encoded?
 - 📄 A Method for Learning Value Systems in Generative AI, arXiv, 2026, [[paper](https://arxiv.org/abs/2607.16903)]
 - 📄 Beyond Independent Labels: Schwartz-Geometry Decoding for Human Value Detection, arXiv, 2026, [[paper](https://arxiv.org/abs/2607.05052)]
 - 📄 Do Schwartz Higher-Order Values Help Sentence-Level Human Value Detection? A Study of Hierarchical Gating and Calibration, arXiv, 2026, [[paper](https://arxiv.org/abs/2602.00913)]
+- ⭐ Dual Mechanisms of Value Expression: Intrinsic vs. Prompted Values in Large Language Models, ICML, 2026, [[paper](https://arxiv.org/abs/2509.24319)] [[code](https://github.com/holi-lab/ValueMechanism)] [[project](https://holi-lab.github.io/ValueMechanism/)]
 - 📄 Growth First, Care Second? Tracing the Landscape of LLM Value Preferences in Everyday Dilemmas, arXiv, 2026, [[paper](https://arxiv.org/abs/2602.04456)]
 - 📄 Human Values in a Single Sentence: Moral Presence, Hierarchies, and Transformer Ensembles on the Schwartz Continuum, arXiv, 2026, [[paper](https://arxiv.org/abs/2601.14172)]
 - 📄 Identifying and Understanding Human Values in Text: A Tailorable LLM-based Architecture, arXiv, 2026, [[paper](https://arxiv.org/abs/2605.27373)]
@@ -824,6 +835,7 @@ How is value information represented, learned, or causally encoded?
 - 📄 Tracing Moral Foundations in Large Language Models, arXiv, 2026, [[paper](https://arxiv.org/abs/2601.05437)]
 - 📄 VALUEFLOW: Toward Pluralistic and Steerable Value-based Alignment in Large Language Models, arXiv, 2026, [[paper](https://arxiv.org/abs/2602.03160)]
 - 📄 Which Values Do LLMs Confuse? A Schwartz-Based Recognition Study, arXiv, 2026, [[paper](https://arxiv.org/abs/2607.20270)]
+- ⭐ Are the Values of LLMs Structurally Aligned with Humans? A Causal Perspective, Findings of ACL, 2025, [[paper](https://aclanthology.org/2025.findings-acl.1188/)] [[preprint](https://arxiv.org/abs/2501.00581)]
 - 📄 EAVIT: Efficient and Accurate Human Value Identification from Text data via LLMs, arXiv, 2025, [[paper](https://arxiv.org/abs/2505.12792)]
 - 📄 Emergent Moral Representations in Large Language Models Aligns with Human Conceptual, Neural, and Behavioral Moral Structure, Research Square, 2025, [[paper](https://doi.org/10.21203/rs.3.rs-8270539/v1)]
 - ⭐ Generative Psycho-Lexical Approach for Constructing Value Systems in Large Language Models, ACL, 2025, [[paper](https://aclanthology.org/2025.acl-long.585/)] [[preprint](https://arxiv.org/abs/2502.02444)] [[code](https://github.com/ValueByte-AI/gpv)] [[dataset](https://github.com/ValueByte-AI/ValueBench)] [[dataset](https://huggingface.co/datasets/PKU-Alignment/BeaverTails)] [[model](https://huggingface.co/Value4AI/ValueLlama-3-8B)]
@@ -831,6 +843,7 @@ How is value information represented, learned, or causally encoded?
 - 📄 Learning the Value Systems of Societies from Preferences, arXiv, 2025, [[paper](https://arxiv.org/abs/2507.20728)]
 - 📄 MoVa: Towards Generalizable Classification of Human Morals and Values, arXiv, 2025, [[paper](https://arxiv.org/abs/2509.24216)]
 - 📄 SOLAR: Towards Characterizing Subjectivity of Individuals through Modeling Value Conflicts and Trade-offs, arXiv, 2025, [[paper](https://arxiv.org/abs/2504.12633)]
+- ⭐ The discordance between embedded ethics and cultural inference in large language models, EMNLP, 2025, [[paper](https://aclanthology.org/2025.emnlp-main.743/)] [[code](https://github.com/AidaRamezani/ethics_culture)]
 - 📄 The Value of Nothing: Multimodal Extraction of Human Values Expressed by TikTok Influencers, arXiv, 2025, [[paper](https://arxiv.org/abs/2501.11770)]
 - ⭐ Understanding How Value Neurons Shape the Generation of Specified Values in LLMs, Findings of EMNLP, 2025, [[paper](https://aclanthology.org/2025.findings-emnlp.501/)] [[preprint](https://arxiv.org/abs/2505.17712)]
 - 📄 Utility Engineering: Analyzing and Controlling Emergent Value Systems in AIs, arXiv, 2025, [[paper](https://arxiv.org/abs/2502.08640)]
@@ -839,6 +852,7 @@ How is value information represented, learned, or causally encoded?
 - 📄 Values in the Wild: Discovering and Analyzing Values in Real-World Language Model Interactions, arXiv, 2025, [[paper](https://arxiv.org/abs/2504.15236)]
 - 📄 Whose Values? Measuring the (Subjective) Expression of Basic Human Values in Social Media, arXiv, 2025, [[paper](https://arxiv.org/abs/2511.08453)]
 - ⭐ High-Dimension Human Value Representation in Large Language Models, NAACL, 2024, [[paper](https://aclanthology.org/2025.naacl-long.274/)] [[preprint](https://arxiv.org/abs/2404.07900)] [[code](https://github.com/HLTCHKUST/UniVaR)]
+- ⭐ Intrinsic Self-correction for Enhanced Morality: An Analysis of Internal Mechanisms and the Superficial Hypothesis, EMNLP, 2024, [[paper](https://aclanthology.org/2024.emnlp-main.918/)]
 - 📄 Investigating Human Values in Online Communities, arXiv, 2024, [[paper](https://arxiv.org/abs/2402.14177)]
 - 📄 MoralBERT: A Fine-Tuned Language Model for Capturing Moral Values in Social Discussions, arXiv, 2024, [[paper](https://arxiv.org/abs/2403.07678)]
 - 📄 Morality is Non-Binary: Building a Pluralist Moral Sentence Embedding Space using Contrastive Learning, arXiv, 2024, [[paper](https://arxiv.org/abs/2401.17228)]
